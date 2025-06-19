@@ -451,6 +451,28 @@ feat(package): brief description
 
 ## Import Guidelines
 
+### File Extensions in Import/Export Statements
+
+**IMPORTANT: Do NOT use file extensions in import/export statements**
+
+```typescript
+// ✅ Good - No file extensions
+export { ListBuilder, ListChain } from './builder';
+import { UserService } from './user-service';
+import { validateEmail } from '../validators';
+
+// ❌ Bad - With file extensions
+export { ListBuilder, ListChain } from './builder.js';
+import { UserService } from './user-service.ts';
+import { validateEmail } from '../validators.js';
+```
+
+**Rationale:**
+- TypeScript and modern bundlers handle module resolution automatically
+- File extensions can cause issues with different build targets (ESM vs CommonJS)
+- Cleaner, more maintainable import statements
+- Consistent with TypeScript best practices
+
 ### Use Package-Based Imports Instead of Relative Paths
 
 #### Absolute Package Imports
