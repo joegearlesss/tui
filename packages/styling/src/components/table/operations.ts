@@ -237,11 +237,11 @@ export namespace Table {
     const columnWidths = table.headers.map((header, colIndex) => {
       let maxWidth = header.length;
 
-      table.rows.forEach((row) => {
+      for (const row of table.rows) {
         if (row[colIndex]) {
           maxWidth = Math.max(maxWidth, row[colIndex].length);
         }
-      });
+      }
 
       return maxWidth + 2; // Add padding
     });

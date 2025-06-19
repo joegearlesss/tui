@@ -45,7 +45,11 @@ export namespace BorderValidation {
    * @throws ZodError if validation fails
    */
   export const validateCustomBorderConfig = (data: unknown): CustomBorderConfig => {
-    return CustomBorderConfigSchema.parse(data);
+    const parsed = CustomBorderConfigSchema.parse(data);
+    return {
+      chars: parsed.chars,
+      ...(parsed.sides && { sides: parsed.sides }),
+    } as CustomBorderConfig;
   };
 
   /**

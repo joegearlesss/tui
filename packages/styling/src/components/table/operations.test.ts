@@ -8,7 +8,7 @@
 import { describe, expect, test } from 'bun:test';
 import { Border } from '../../border/presets';
 import { Style } from '../../style/style';
-import { Table, TableBuilder, type TableConfig, TableRender } from './index';
+import { Table, TableBuilder, type TableChain, type TableConfig, TableRender } from './index';
 
 describe('Table Component', () => {
   describe('Table.create', () => {
@@ -272,7 +272,8 @@ describe('Table Component', () => {
     });
 
     test('should support pipe operations', () => {
-      const addTestData = (builder: any) => builder.headers('Name', 'Age').addRow(['John', '25']);
+      const addTestData = (builder: TableChain) =>
+        builder.headers('Name', 'Age').addRow(['John', '25']);
 
       const table = TableBuilder.create().pipe(addTestData).build();
 

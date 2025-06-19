@@ -260,7 +260,7 @@ export namespace TableRender {
   const getBorderChars = (border: BorderConfig) => {
     // Extract border characters from border config
     // This assumes the border config has a chars property
-    const chars = (border as any).chars || {};
+    const chars = (border as { chars?: Record<string, string> }).chars || {};
 
     return {
       top: chars.top || '─',

@@ -272,10 +272,10 @@ describe('Border Presets', () => {
 
       for (const border of borders) {
         // Check that all characters are single Unicode characters
-        Object.values(border.chars).forEach((char) => {
+        for (const char of Object.values(border.chars)) {
           expect(char.length).toBeGreaterThan(0);
           expect(char.length).toBeLessThanOrEqual(2);
-        });
+        }
       }
     });
 

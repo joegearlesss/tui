@@ -105,6 +105,7 @@ export const BorderSidesSchema = z
     z.boolean().describe('Whether to show the bottom border'),
     z.boolean().describe('Whether to show the left border'),
   ])
+  .readonly()
   .describe('Array indicating which border sides should be visible [top, right, bottom, left]');
 
 /**

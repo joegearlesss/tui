@@ -322,7 +322,7 @@ export class ListChain {
    * Converts to ListBuilder for additional operations
    */
   toBuilder(): ListBuilder {
-    return new ListBuilder(this.config);
+    return ListBuilder.create([...this.config.items]);
   }
 
   /**

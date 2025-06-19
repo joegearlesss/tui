@@ -13,10 +13,11 @@ function toRoman(num: number): string {
   const symbols = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
 
   let result = '';
+  let remaining = num;
   for (let i = 0; i < values.length; i++) {
-    while (num >= values[i]) {
+    while (remaining >= values[i]) {
       result += symbols[i];
-      num -= values[i];
+      remaining -= values[i];
     }
   }
 

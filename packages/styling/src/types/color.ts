@@ -109,6 +109,7 @@ export type ANSI256Color = z.infer<typeof ANSI256ColorSchema>;
  */
 export const CompleteColorSchema = z
   .object({
+    hex: HexColorSchema.optional().describe('Hexadecimal color representation'),
     trueColor: HexColorSchema.optional().describe('24-bit true color value - highest quality'),
     ansi256: ANSI256ColorSchema.optional().describe(
       '256-color palette index - medium quality fallback'
