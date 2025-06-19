@@ -23,6 +23,7 @@
 - **Functions**: Pure functions in namespaces, immutable operations, max 20 lines
 - **Formatting**: 2 spaces, single quotes, semicolons, 100 char line width
 - **Naming**: kebab-case files, PascalCase namespaces, camelCase functions, UPPER_CASE constants
+- **FORBIDDEN**: Classes, `!` operator, `any` type, `null` (use `undefined`), file extensions in imports
 
 ## Project Structure
 - Monorepo with packages in `packages/` (currently only `styling`)
