@@ -1,7 +1,7 @@
 /**
  * Table Component Demo
  *
- * Demonstrates the table component functionality matching OVERVIEW-v2 examples.
+ * Demonstrates the table component functionality matching OVERVIEW examples.
  */
 
 import { Border, Style, Table, TableBuilder, TableRender } from './src';

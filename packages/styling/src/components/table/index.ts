@@ -1,7 +1,7 @@
 /**
  * Table Component Index
  *
- * Main exports for the table component following the OVERVIEW-v2 specification.
+ * Main exports for the table component following the OVERVIEW specification.
  * Provides both functional API and builder pattern for table creation and manipulation.
  */
 
@@ -47,6 +47,6 @@ export {
   TableValidationResultSchema,
 } from './validation';
 
-// Convenience function for direct rendering (matches OVERVIEW-v2 API)
+// Convenience function for direct rendering (matches OVERVIEW API)
 import { TableRender } from './rendering';
 export const render = TableRender.render;

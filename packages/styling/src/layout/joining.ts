@@ -2,7 +2,7 @@
  * Layout Joining and Placement Functions
  *
  * Implementation of Layout.joinHorizontal(), Layout.joinVertical(), and Layout.place()
- * functions as specified in OVERVIEW-v2.internal.md Section 4.
+ * functions as specified in OVERVIEW.internal.md Section 4.
  */
 
 import type { HorizontalPosition, VerticalPosition } from '@tui/styling/types';

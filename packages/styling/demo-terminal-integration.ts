@@ -101,7 +101,7 @@ async function demonstrateTerminalIntegration() {
   console.log();
 
   console.log('✅ Terminal integration demo complete!');
-  console.log('🎯 All OVERVIEW-v2 terminal integration requirements are now implemented.');
+  console.log('🎯 All OVERVIEW terminal integration requirements are now implemented.');
 }
 
 // Run the demo

@@ -1,6 +1,6 @@
 /**
  * Comprehensive example demonstrating the functional style system
- * Based on OVERVIEW-v2.internal.md examples
+ * Based on OVERVIEW.internal.md examples
  */
 
 import { Color, Style, StyleBuilder, type StyleProperties } from '@tui/styling';
@@ -281,7 +281,7 @@ namespace Examples {
 // Run all examples
 export const runExamples = (): void => {
   console.log('🎨 TUI Styling Package - Functional Design Examples\n');
-  console.log('Based on OVERVIEW-v2.internal.md functional architecture\n');
+  console.log('Based on OVERVIEW.internal.md functional architecture\n');
 
   Examples.basicStyling();
   Examples.styleInheritance();

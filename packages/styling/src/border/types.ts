@@ -2,7 +2,7 @@
  * Border System Types
  *
  * Defines the core types for the border system following functional programming principles.
- * Based on OVERVIEW-v2 Section 3 (Border System) specification.
+ * Based on OVERVIEW Section 3 (Border System) specification.
  */
 
 import { z } from 'zod';

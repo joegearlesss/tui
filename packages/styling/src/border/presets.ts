@@ -2,7 +2,7 @@
  * Border Preset Configurations
  *
  * Provides predefined border styles following functional programming principles.
- * Based on OVERVIEW-v2 Section 3 specification with Unicode box-drawing characters.
+ * Based on OVERVIEW Section 3 specification with Unicode box-drawing characters.
  */
 
 import type { BorderConfig, CustomBorderConfig } from './types';

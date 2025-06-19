@@ -2,7 +2,7 @@
  * Table Component Types
  *
  * Defines the core types and interfaces for the table component system.
- * Based on OVERVIEW-v2.internal.md Section 5 (Component System) specification.
+ * Based on OVERVIEW.internal.md Section 5 (Component System) specification.
  */
 
 import type { BorderConfig } from '../../border/types';
