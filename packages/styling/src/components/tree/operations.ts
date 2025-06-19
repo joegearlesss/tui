@@ -521,10 +521,10 @@ namespace TreeEnumerator {
    */
   export const LINES: TreeEnumeratorFunction = (node, depth, isLast, hasChildren) => {
     if (depth === 0) {
-      return hasChildren ? (node.expanded ? '┬ ' : '├ ') : '  ';
+      return '';
     }
 
-    const connector = isLast ? '└─' : '├─';
+    const connector = isLast ? '└──' : '├──';
     return `${connector} `;
   };
 

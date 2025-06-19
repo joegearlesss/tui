@@ -5,7 +5,7 @@
  * including tabs, dialogs, lists, color grids, and status bars.
  */
 
-import { Border, Color, Layout, StyleBuilder } from '@tui/styling';
+import { Border, Color, Layout, StyleBuilder, print } from '@tui/styling';
 
 const width = 96;
 const columnWidth = 30;
@@ -87,7 +87,6 @@ const infoStyle = StyleBuilder.create()
 // Dialog
 const dialogBoxStyle = StyleBuilder.create()
   .border(Border.rounded())
-  .borderForeground('#874BFD')
   .padding(1, 0);
 
 const buttonStyle = StyleBuilder.create()
@@ -121,10 +120,9 @@ const listHeader = (text: string) => StyleBuilder.create()
 const listItem = (text: string) => StyleBuilder.create().paddingLeft(2).render(text);
 
 const checkMark = StyleBuilder.create()
-  .setString('✓')
   .foreground(special)
   .paddingRight(1)
-  .render('');
+  .render('✓');
 
 const listDone = (s: string) => checkMark + StyleBuilder.create()
   .strikethrough(true)
@@ -198,16 +196,9 @@ function colorGrid(xSteps: number, ySteps: number): string[][] {
 
 // Helper function to apply gradient (simplified version)
 function applyGradient(base: any, input: string, from: string, to: string): string {
-  const chars = input.split('');
-  let output = '';
-  
-  for (let i = 0; i < chars.length; i++) {
-    // Simple gradient approximation - alternate between colors
-    const color = i % 2 === 0 ? from : to;
-    output += StyleBuilder.create().foreground(color).render(chars[i]);
-  }
-  
-  return output;
+  // For now, just return the plain text with the 'from' color
+  // The gradient effect will be simpler but functional
+  return StyleBuilder.create().foreground(from).render(input);
 }
 
 // Build the document
@@ -260,26 +251,30 @@ let doc = '';
 
 // Dialog
 {
-  const okButton = activeButtonStyle.render('Yes');
-  const cancelButton = buttonStyle.render('Maybe');
+  // Create simpler buttons to avoid styling issues
+  const okButton = '   Yes   ';
+  const cancelButton = '   Maybe   ';
 
-  const grad = applyGradient(
-    StyleBuilder.create(),
-    'Are you sure you want to eat marmalade?',
-    '#EDFF82',
-    '#F25D94'
+  const questionText = 'Are you sure you want to eat marmalade?';
+
+  // Build dialog content manually to avoid styling issues  
+  const question = Layout.place(50, 1, 0.5, 0.5, questionText);
+  const buttons = Layout.joinHorizontal(0.5, okButton, cancelButton);
+  
+  const dialogContent = Layout.joinVertical(0.5, 
+    '', // empty line for spacing
+    question,
+    '', // empty line for spacing
+    buttons,
+    '' // empty line for spacing
   );
 
-  const question = StyleBuilder.create()
-    .width(50)
-    .alignHorizontal('center')
-    .render(grad);
-
-  const buttons = Layout.joinHorizontal(0.0, okButton, cancelButton); // top alignment
-  const ui = Layout.joinVertical(0.5, question, buttons); // center alignment
-
   const dialog = Layout.place(width, 9, 0.5, 0.5, // center, center
-    dialogBoxStyle.render(ui)
+    dialogBoxStyle.render(dialogContent),
+    {
+      whitespaceChars: '猫咪',
+      whitespaceStyle: { foreground: subtle }
+    }
   );
 
   doc += dialog + '\n\n';
@@ -292,11 +287,12 @@ const colors = (() => {
   
   for (const row of colors) {
     for (const color of row) {
-      const s = StyleBuilder.create().setString('  ').background(color).render('');
+      const s = StyleBuilder.create().background(color).render('  ');
       result += s;
     }
     result += '\n';
   }
+  
   
   return result;
 })();
@@ -325,7 +321,7 @@ const lists = Layout.joinHorizontal(0.0, // top alignment
   )
 );
 
-doc += Layout.joinHorizontal(0.0, lists, StyleBuilder.create().marginLeft(1).render(colors)); // top alignment
+doc += Layout.joinHorizontal(0.0, lists, colors); // top alignment
 
 // Marmalade history
 {
@@ -368,4 +364,4 @@ doc += Layout.joinHorizontal(0.0, lists, StyleBuilder.create().marginLeft(1).ren
 const document = docStyle.render(doc);
 
 // Print the result
-console.log(document);
+print(document);

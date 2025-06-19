@@ -5,7 +5,7 @@
  * showing styled headers, alternating row colors, and cell alignment.
  */
 
-import { Border, Table, TableBuilder } from '@tui/styling';
+import { Border, Table, TableBuilder, print } from '@tui/styling';
 
 const purple = '#9966CC';    // Color 99 approximation
 const gray = '#8A8A8A';      // Color 245 approximation
@@ -23,6 +23,7 @@ function main() {
   const t = TableBuilder
     .create()
     .border(Border.thick())
+    .borderColumn(true)
     .styleFunc((row: number, col: number) => {
       // Note: In our API, row -1 represents header row
       if (row === Table.HEADER_ROW) {
@@ -31,6 +32,7 @@ function main() {
           bold: true,
           padding: { top: 0, right: 1, bottom: 0, left: 1 },
           width: 14,
+          horizontalAlignment: 'center',
         };
       }
       
@@ -51,7 +53,7 @@ function main() {
 
       // Arabic is a right-to-left language, so right align the text
       if (row < rows.length && rows[row][0] === 'Arabic' && col !== 0) {
-        style.alignHorizontal = 'right';
+        style.horizontalAlignment = 'right';
       }
 
       return style;
@@ -61,7 +63,7 @@ function main() {
     .addRow(['English', 'You look absolutely fabulous.', "How's it going?"])
     .build();
 
-  console.log(Table.render(t));
+  print(Table.render(t));
 }
 
 main();

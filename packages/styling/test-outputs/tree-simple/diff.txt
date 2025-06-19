@@ -1,7 +1,7 @@
---- /Users/alexeypolitov/LocalProjects/GitHub/tui/packages/styling/test-outputs/tree-simple/go_output.txt	2025-06-20 07:14:27
-+++ /Users/alexeypolitov/LocalProjects/GitHub/tui/packages/styling/test-outputs/tree-simple/ts_output.txt	2025-06-20 07:14:27
-@@ -1,9 +1,4 @@
--.
+--- /Users/alexeypolitov/LocalProjects/GitHub/tui/packages/styling/test-outputs/tree-simple/go_output.txt	2025-06-20 07:30:38
++++ /Users/alexeypolitov/LocalProjects/GitHub/tui/packages/styling/test-outputs/tree-simple/ts_output.txt	2025-06-20 07:30:38
+@@ -1,9 +1,9 @@
+ .
 -├── macOS
 -├── Linux
 -│   ├── NixOS
@@ -10,7 +10,11 @@
 -└── BSD
 -    ├── FreeBSD
 -    └── OpenBSD
-+┬ .
-+  ├─ macOS
-+  ├─ Linux
-+  └─ BSD
++├── macOS
++├── Linux
++│   ├── NixOS
++│   ├── Arch Linux (btw)
++│   └── Void Linux
++└── BSD
++    ├── FreeBSD
++    └── OpenBSD

@@ -58,14 +58,14 @@ export namespace TableRender {
 
     // Header row
     if (table.headers.length > 0) {
-      const headerRow = renderRow(
+      const headerRowLines = renderRow(
         table.headers,
         columnWidths,
         Table.HEADER_ROW,
         table,
         renderOptions
       );
-      parts.push(headerRow);
+      parts.push(...headerRowLines);
 
       // Header separator
       if (renderOptions.includeBorders && table.border) {
@@ -75,8 +75,8 @@ export namespace TableRender {
 
     // Data rows
     table.rows.forEach((row, rowIndex) => {
-      const renderedRow = renderRow(row, columnWidths, rowIndex, table, renderOptions);
-      parts.push(renderedRow);
+      const renderedRowLines = renderRow(row, columnWidths, rowIndex, table, renderOptions);
+      parts.push(...renderedRowLines);
 
       // Row separator (except for last row)
       if (renderOptions.includeBorders && table.border && table.borderRow && rowIndex < table.rows.length - 1) {
@@ -93,15 +93,174 @@ export namespace TableRender {
   };
 
   /**
-   * Renders a single table row
+   * Renders a single table row with multi-row cell support
    * @param rowData - Array of cell values
    * @param columnWidths - Array of column widths
    * @param rowIndex - Row index (-1 for header)
    * @param table - Table configuration for styling
    * @param options - Render options
-   * @returns Rendered row as string
+   * @returns Array of rendered row strings (may be multiple lines)
    */
   const renderRow = (
+    rowData: readonly string[],
+    columnWidths: readonly number[],
+    rowIndex: number,
+    table: TableConfig,
+    options: TableRenderOptions
+  ): string[] => {
+    const borderChar = table.border ? getBorderChars(table.border).right : '';
+
+    // Headers should never wrap - use single line rendering
+    if (rowIndex === Table.HEADER_ROW) {
+      return [renderSingleLineRow(rowData, columnWidths, rowIndex, table, options)];
+    }
+
+    // First, get all wrapped lines for each cell
+    const cellLines: string[][] = [];
+    let maxLines = 1;
+
+    rowData.forEach((cellValue, colIndex) => {
+      const width = columnWidths[colIndex] ?? 10;
+      const cellStyle = options.applyStyling
+        ? Table.getCellStyle(table, rowIndex, colIndex)
+        : undefined;
+
+      const leftPadding = cellStyle?.padding?.left ?? 1;
+      const rightPadding = cellStyle?.padding?.right ?? 1;
+      const totalHorizontalPadding = leftPadding + rightPadding;
+      const contentWidth = width - totalHorizontalPadding;
+
+      const wrappedLines = wrapText(cellValue, contentWidth);
+
+      // Format each line as a cell
+      const formattedLines = wrappedLines.map(line => {
+        let content = line;
+
+        // Apply styling to raw content first, if provided
+        if (cellStyle) {
+          const styleForContent = { ...cellStyle };
+          delete styleForContent.padding;
+          delete styleForContent.width;
+          delete styleForContent.horizontalAlignment;
+          content = Style.render(styleForContent, content);
+        }
+
+        // Handle text alignment within the content width
+        const visibleLength = content.replace(/\x1b\[[0-9;]*m/g, '').length;
+        const paddingNeeded = contentWidth - visibleLength;
+        
+        if (paddingNeeded > 0) {
+          const alignment = cellStyle?.horizontalAlignment || 'left';
+          
+          switch (alignment) {
+            case 'center': {
+              const leftPadding = Math.floor(paddingNeeded / 2);
+              const rightPadding = paddingNeeded - leftPadding;
+              content = '\u00A0'.repeat(leftPadding) + content + '\u00A0'.repeat(rightPadding);
+              break;
+            }
+            case 'right': {
+              content = '\u00A0'.repeat(paddingNeeded) + content;
+              break;
+            }
+            case 'left':
+            default: {
+              content = content + '\u00A0'.repeat(paddingNeeded);
+              break;
+            }
+          }
+        }
+
+        // Add cell padding
+        const leftPad = '\u00A0'.repeat(leftPadding);
+        const rightPad = '\u00A0'.repeat(rightPadding);
+        return `${leftPad}${content}${rightPad}`;
+      });
+
+      cellLines.push(formattedLines);
+      maxLines = Math.max(maxLines, formattedLines.length);
+    });
+
+    // Now pad all cells to have the same number of lines
+    cellLines.forEach((formattedLines, colIndex) => {
+      const cellStyle = options.applyStyling
+        ? Table.getCellStyle(table, rowIndex, colIndex)
+        : undefined;
+
+      const leftPadding = cellStyle?.padding?.left ?? 1;
+      const rightPadding = cellStyle?.padding?.right ?? 1;
+      const width = columnWidths[colIndex] ?? 10;
+      const totalHorizontalPadding = leftPadding + rightPadding;
+      const contentWidth = width - totalHorizontalPadding;
+
+      // Pad with empty cells if needed
+      while (formattedLines.length < maxLines) {
+        let emptyContent = '';
+
+        // Apply styling to empty content if provided
+        if (cellStyle) {
+          const styleForContent = { ...cellStyle };
+          delete styleForContent.padding;
+          delete styleForContent.width;
+          delete styleForContent.horizontalAlignment;
+          emptyContent = Style.render(styleForContent, emptyContent);
+        }
+
+        // Handle alignment for empty content (just add spaces)
+        const visibleLength = emptyContent.replace(/\x1b\[[0-9;]*m/g, '').length;
+        const paddingNeeded = contentWidth - visibleLength;
+        if (paddingNeeded > 0) {
+          emptyContent = emptyContent + '\u00A0'.repeat(paddingNeeded);
+        }
+
+        // Add cell padding
+        const leftPad = '\u00A0'.repeat(leftPadding);
+        const rightPad = '\u00A0'.repeat(rightPadding);
+        formattedLines.push(`${leftPad}${emptyContent}${rightPad}`);
+      }
+    });
+
+    // Now build each row line
+    const rowLines: string[] = [];
+    for (let lineIndex = 0; lineIndex < maxLines; lineIndex++) {
+      const lineCells: string[] = [];
+
+      // Left border
+      if (table.border) {
+        lineCells.push(borderChar);
+      }
+
+      // Add each cell for this line
+      cellLines.forEach((cellLineArray, colIndex) => {
+        lineCells.push(cellLineArray[lineIndex]);
+
+        // Column separator (except for last column)
+        if (table.border && table.borderColumn && colIndex < cellLines.length - 1) {
+          lineCells.push(borderChar);
+        }
+      });
+
+      // Right border
+      if (table.border) {
+        lineCells.push(borderChar);
+      }
+
+      rowLines.push(lineCells.join(''));
+    }
+
+    return rowLines;
+  };
+
+  /**
+   * Renders a single line row (used for headers and non-wrapping rows)
+   * @param rowData - Array of cell values
+   * @param columnWidths - Array of column widths
+   * @param rowIndex - Row index (-1 for header)
+   * @param table - Table configuration for styling
+   * @param options - Render options
+   * @returns Single rendered row string
+   */
+  const renderSingleLineRow = (
     rowData: readonly string[],
     columnWidths: readonly number[],
     rowIndex: number,
@@ -141,6 +300,47 @@ export namespace TableRender {
   };
 
   /**
+   * Wraps text to fit within a specified width, breaking on word boundaries
+   * @param text - Text to wrap
+   * @param width - Maximum width per line
+   * @returns Array of wrapped lines
+   */
+  const wrapText = (text: string, width: number): string[] => {
+    if (text.length <= width) {
+      return [text];
+    }
+
+    const lines: string[] = [];
+    let currentLine = '';
+    const words = text.split(' ');
+
+    for (const word of words) {
+      // If adding this word would exceed the width
+      if (currentLine.length + word.length + (currentLine.length > 0 ? 1 : 0) > width) {
+        if (currentLine.length > 0) {
+          lines.push(currentLine);
+          currentLine = word;
+        } else {
+          // Word is longer than width, break it
+          lines.push(word.substring(0, width));
+          currentLine = word.substring(width);
+        }
+      } else {
+        if (currentLine.length > 0) {
+          currentLine += ' ';
+        }
+        currentLine += word;
+      }
+    }
+
+    if (currentLine.length > 0) {
+      lines.push(currentLine);
+    }
+
+    return lines;
+  };
+
+  /**
    * Renders a single table cell
    * @param value - Cell value
    * @param width - Cell width
@@ -155,24 +355,51 @@ export namespace TableRender {
     
     const contentWidth = width - totalHorizontalPadding;
 
-    let content =
-      value.length > contentWidth ? `${value.substring(0, contentWidth - 3)}...` : value;
+    // For single-line cells, truncate with ellipsis if too long
+    let content = value.length > contentWidth 
+      ? `${value.substring(0, contentWidth - 3)}...` 
+      : value;
 
-    // Pad to content width
-    content = content.padEnd(contentWidth);
-
-    // Add padding
-    const leftPad = ' '.repeat(leftPadding);
-    const rightPad = ' '.repeat(rightPadding);
-    const paddedContent = `${leftPad}${content}${rightPad}`;
-
-    // Apply styling if provided (but padding is already handled above)
+    // Apply styling to raw content first, if provided
     if (style) {
-      // Create a style without padding since we handled it manually
-      const styleWithoutPadding = { ...style };
-      delete styleWithoutPadding.padding;
-      return Style.render(styleWithoutPadding, paddedContent);
+      // Create a style without padding, width, and alignment since we handle those manually
+      const styleForContent = { ...style };
+      delete styleForContent.padding;
+      delete styleForContent.width;
+      delete styleForContent.horizontalAlignment;
+      content = Style.render(styleForContent, content);
     }
+
+    // Handle text alignment within the content width
+    const visibleLength = content.replace(/\x1b\[[0-9;]*m/g, '').length;
+    const paddingNeeded = contentWidth - visibleLength;
+    
+    if (paddingNeeded > 0) {
+      const alignment = style?.horizontalAlignment || 'left';
+      
+      switch (alignment) {
+        case 'center': {
+          const leftPadding = Math.floor(paddingNeeded / 2);
+          const rightPadding = paddingNeeded - leftPadding;
+          content = '\u00A0'.repeat(leftPadding) + content + '\u00A0'.repeat(rightPadding);
+          break;
+        }
+        case 'right': {
+          content = '\u00A0'.repeat(paddingNeeded) + content;
+          break;
+        }
+        case 'left':
+        default: {
+          content = content + '\u00A0'.repeat(paddingNeeded);
+          break;
+        }
+      }
+    }
+
+    // Add cell padding
+    const leftPad = '\u00A0'.repeat(leftPadding);
+    const rightPad = '\u00A0'.repeat(rightPadding);
+    const paddedContent = `${leftPad}${content}${rightPad}`;
 
     return paddedContent;
   };
@@ -271,6 +498,40 @@ export namespace TableRender {
     // Extract border characters from border config
     const chars = border.chars;
 
+    // Determine junction characters based on border type
+    let junctionChars;
+    switch (border.type) {
+      case 'thick':
+        junctionChars = {
+          topJunction: '┳',
+          bottomJunction: '┻',
+          leftJunction: '┣',
+          rightJunction: '┫',
+          middleJunction: '╋',
+        };
+        break;
+      case 'double':
+        junctionChars = {
+          topJunction: '╦',
+          bottomJunction: '╩',
+          leftJunction: '╠',
+          rightJunction: '╣',
+          middleJunction: '╬',
+        };
+        break;
+      case 'normal':
+      case 'rounded':
+      default:
+        junctionChars = {
+          topJunction: '┬',
+          bottomJunction: '┴',
+          leftJunction: '├',
+          rightJunction: '┤',
+          middleJunction: '┼',
+        };
+        break;
+    }
+
     return {
       top: chars.top || '─',
       right: chars.right || '│',
@@ -280,11 +541,7 @@ export namespace TableRender {
       topRight: chars.topRight || '┐',
       bottomLeft: chars.bottomLeft || '└',
       bottomRight: chars.bottomRight || '┘',
-      topJunction: '┬', // Use default since not in BorderChars
-      bottomJunction: '┴', // Use default since not in BorderChars
-      leftJunction: '├', // Use default since not in BorderChars
-      rightJunction: '┤', // Use default since not in BorderChars
-      middleJunction: '┼', // Use default since not in BorderChars
+      ...junctionChars,
     };
   };
 

@@ -13,6 +13,8 @@ import type { HorizontalPosition, VerticalPosition } from '@tui/styling/types';
 export interface PlaceOptions {
   readonly whitespace?: boolean;
   readonly tabWidth?: number;
+  readonly whitespaceChars?: string;
+  readonly whitespaceStyle?: import('../style/types').StyleProperties;
 }
 
 /**
@@ -133,13 +135,23 @@ export namespace Layout {
     hAlign: HorizontalPosition | number,
     vAlign: VerticalPosition | number,
     content: string,
-    _options?: PlaceOptions
+    options?: PlaceOptions
   ): string => {
     if (width <= 0 || height <= 0) return '';
 
     const lines = content.split('\n');
     const contentHeight = lines.length;
     const _contentWidth = Math.max(...lines.map((line) => getDisplayWidth(line)));
+
+    // Get whitespace characters and styling
+    const whitespaceChars = options?.whitespaceChars || ' ';
+    let whitespaceUnit = whitespaceChars;
+    
+    // Apply styling to whitespace if provided
+    if (options?.whitespaceStyle && whitespaceChars !== ' ') {
+      const { Style } = require('../style/style');
+      whitespaceUnit = Style.render(options.whitespaceStyle, whitespaceChars);
+    }
 
     // Normalize alignment values
     const hAlignValue =
@@ -160,6 +172,31 @@ export namespace Layout {
             : 1
         : Math.max(0, Math.min(1, vAlign));
 
+    // Helper function to repeat whitespace pattern
+    const repeatWhitespace = (count: number): string => {
+      if (count <= 0) return '';
+      if (whitespaceChars === ' ') return ' '.repeat(count);
+      
+      // For custom whitespace patterns, repeat the pattern to fill the space
+      const pattern = whitespaceUnit;
+      const patternLength = getDisplayWidth(whitespaceChars);
+      const fullRepeats = Math.floor(count / patternLength);
+      const remainder = count % patternLength;
+      
+      let result = pattern.repeat(fullRepeats);
+      if (remainder > 0) {
+        // Add partial pattern for remainder
+        result += whitespaceChars.slice(0, remainder);
+        if (options?.whitespaceStyle && whitespaceChars !== ' ') {
+          const { Style } = require('../style/style');
+          const partialPattern = Style.render(options.whitespaceStyle, whitespaceChars.slice(0, remainder));
+          result = pattern.repeat(fullRepeats) + partialPattern;
+        }
+      }
+      
+      return result;
+    };
+
     // Calculate vertical positioning
     const verticalPadding = Math.max(0, height - contentHeight);
     const topPadding = Math.floor(verticalPadding * vAlignValue);
@@ -170,7 +207,7 @@ export namespace Layout {
 
     // Add top padding
     for (let i = 0; i < topPadding; i++) {
-      result.push(' '.repeat(width));
+      result.push(repeatWhitespace(width));
     }
 
     // Add content lines with horizontal alignment
@@ -180,13 +217,20 @@ export namespace Layout {
       const leftPadding = Math.floor(horizontalPadding * hAlignValue);
       const rightPadding = horizontalPadding - leftPadding;
 
-      const paddedLine = ' '.repeat(leftPadding) + line + ' '.repeat(rightPadding);
-      result.push(paddedLine.slice(0, width)); // Ensure exact width
+      const leftPad = repeatWhitespace(leftPadding);
+      const rightPad = repeatWhitespace(rightPadding);
+      const paddedLine = leftPad + line + rightPad;
+      
+      // Ensure exact width by truncating if necessary
+      const finalLine = getDisplayWidth(paddedLine) > width 
+        ? paddedLine.slice(0, width)
+        : paddedLine;
+      result.push(finalLine);
     }
 
     // Add bottom padding
     for (let i = 0; i < bottomPadding; i++) {
-      result.push(' '.repeat(width));
+      result.push(repeatWhitespace(width));
     }
 
     return result.slice(0, height).join('\n'); // Ensure exact height

@@ -48,8 +48,7 @@ namespace TreeRenderer {
       const styledValue = nodeStyle ? Style.render(nodeStyle, node.value) : node.value;
 
       // Build the full line
-      const indent = ' '.repeat(depth * tree.indentSize);
-      const line = `${parentPrefix}${indent}${styledEnumerator}${styledValue}`;
+      const line = `${parentPrefix}${styledEnumerator}${styledValue}`;
       lines.push(line);
 
       // Render children if expanded
@@ -218,7 +217,7 @@ const buildChildPrefix = (parentPrefix: string, depth: number, isLast: boolean):
     return parentPrefix;
   }
 
-  const connector = isLast ? '  ' : '│ ';
+  const connector = isLast ? '    ' : '│   ';
   return parentPrefix + connector;
 };
 

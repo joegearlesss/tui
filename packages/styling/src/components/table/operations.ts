@@ -259,21 +259,43 @@ export namespace Table {
     
     // Initialize column widths
     for (let colIndex = 0; colIndex < columnCount; colIndex++) {
-      let maxWidth = 0;
+      // First check if style function provides explicit width
+      let explicitWidth: number | undefined;
       
-      // Check header width if exists
-      if (table.headers.length > 0 && table.headers[colIndex]) {
-        maxWidth = Math.max(maxWidth, table.headers[colIndex].length);
-      }
-
-      // Check all row widths
-      for (const row of table.rows) {
-        if (row[colIndex]) {
-          maxWidth = Math.max(maxWidth, row[colIndex].length);
+      if (table.styleFunc) {
+        // Check first data row style for width (this is usually where widths are defined)
+        const firstRowStyle = table.styleFunc(0, colIndex);
+        if (firstRowStyle?.width) {
+          explicitWidth = firstRowStyle.width;
+        } else {
+          // Fallback to header style for width
+          const headerStyle = table.styleFunc(HEADER_ROW, colIndex);
+          if (headerStyle?.width) {
+            explicitWidth = headerStyle.width;
+          }
         }
       }
+      
+      if (explicitWidth) {
+        columnWidths.push(explicitWidth);
+      } else {
+        // Fall back to content-based width calculation
+        let maxWidth = 0;
+        
+        // Check header width if exists
+        if (table.headers.length > 0 && table.headers[colIndex]) {
+          maxWidth = Math.max(maxWidth, table.headers[colIndex].length);
+        }
 
-      columnWidths.push(maxWidth + 2); // Add padding
+        // Check all row widths
+        for (const row of table.rows) {
+          if (row[colIndex]) {
+            maxWidth = Math.max(maxWidth, row[colIndex].length);
+          }
+        }
+
+        columnWidths.push(maxWidth + 2); // Add padding
+      }
     }
 
     // Calculate row heights (assuming single line cells for now)

@@ -40,7 +40,7 @@ export namespace ListRenderer {
     lines: string[]
   ): void {
     // For root level (depth 0), use config.indentLevel. For nested levels, use indentPerLevel per depth
-    const itemIndent =
+    const baseIndent =
       depth === 0
         ? ' '.repeat(config.indentLevel || 0)
         : ' '.repeat(options.indentPerLevel * depth);
@@ -59,19 +59,38 @@ export namespace ListRenderer {
         const itemText =
           config.itemStyle && options.applyItemStyling ? config.itemStyle(item) : item;
 
+        // Special handling for Roman numerals - right-align within the indent space
+        let fullPrefix = '';
+        if (styledEnumerator && styledEnumerator.match(/^[IVX]+\./)) {
+          // For Roman numerals, right-align within the available indent space
+          // Use 6 spaces total width to match Go lipgloss behavior
+          const totalIndentWidth = 6;
+          if (totalIndentWidth > 0) {
+            // Calculate padding needed to right-align the Roman numeral
+            const enumLength = styledEnumerator.length;
+            const paddingNeeded = Math.max(0, totalIndentWidth - enumLength);
+            const paddedEnum = ' '.repeat(paddingNeeded) + styledEnumerator;
+            fullPrefix = `${paddedEnum} `;
+          } else {
+            fullPrefix = `${styledEnumerator} `;
+          }
+        } else {
+          // For other enumerators, use normal indent + enumerator
+          const prefix = styledEnumerator ? `${styledEnumerator} ` : '';
+          fullPrefix = `${baseIndent}${prefix}`;
+        }
+
         // Handle text wrapping if maxWidth is specified
         if (config.maxWidth && item.length > config.maxWidth) {
           const wrappedLines = wrapText(itemText, config.maxWidth);
-          const enumeratorPadding = ' '.repeat(styledEnumerator.length + 1);
+          const enumeratorPadding = ' '.repeat(fullPrefix.length);
 
           for (let j = 0; j < wrappedLines.length; j++) {
-            const prefix =
-              j === 0 ? (styledEnumerator ? `${styledEnumerator} ` : '') : enumeratorPadding;
-            lines.push(`${itemIndent}${prefix}${wrappedLines[j]}`);
+            const linePrefix = j === 0 ? fullPrefix : enumeratorPadding;
+            lines.push(`${linePrefix}${wrappedLines[j]}`);
           }
         } else {
-          const prefix = styledEnumerator ? `${styledEnumerator} ` : '';
-          lines.push(`${itemIndent}${prefix}${itemText}`);
+          lines.push(`${fullPrefix}${itemText}`);
         }
       } else {
         // Render nested list directly without container enumerator
