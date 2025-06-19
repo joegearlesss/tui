@@ -6,6 +6,8 @@
  */
 
 import { z } from 'zod';
+import type { BorderConfig } from '../../border/types';
+import type { TableConfig, TableValidationResult, TableStyleFunction } from './types';
 
 /**
  * Schema for table cell position validation
@@ -162,14 +164,12 @@ export const TableMetricsSchema = z
 export const TableConfigSchema = z
   .object({
     headers: z
-      .array(z.string().min(1, 'Header cannot be empty').describe('Individual column header text'))
-      .min(1, 'Table must have at least one header')
+      .array(z.string().describe('Individual column header text'))
       .describe('Array of column headers displayed at the top of the table'),
     rows: z
       .array(
         z
           .array(z.string().describe('Individual cell value as string'))
-          .min(1, 'Row must have at least one cell')
           .describe('Individual row data as array of cell values')
       )
       .describe('Array of table rows, where each row is an array of cell values'),
@@ -254,6 +254,286 @@ export const TableBorderRendererSchema = z
     })
   )
   .describe('Function that generates border strings for table rendering');
+
+/**
+ * Table validation namespace with comprehensive validation functions
+ */
+export namespace TableValidation {
+  /**
+   * Validates a complete table configuration
+   */
+  export const validateTableConfig = (config: TableConfig): TableValidationResult => {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+
+    // Validate basic structure
+    if (!Array.isArray(config.headers)) {
+      errors.push('Headers must be an array');
+    }
+
+    if (!Array.isArray(config.rows)) {
+      errors.push('Rows must be an array');
+    }
+
+    if (config.width !== undefined && config.width <= 0) {
+      errors.push('Width must be a positive number');
+    }
+
+    if (config.height !== undefined && config.height <= 0) {
+      errors.push('Height must be a positive number');
+    }
+
+    if (config.styleFunc !== undefined && typeof config.styleFunc !== 'function') {
+      errors.push('Style function must be a function');
+    }
+
+    // Validate headers
+    if (Array.isArray(config.headers)) {
+      const headerValidation = validateHeaders(config.headers);
+      errors.push(...headerValidation.errors);
+      warnings.push(...headerValidation.warnings);
+    }
+
+    // Validate rows
+    if (Array.isArray(config.rows) && Array.isArray(config.headers)) {
+      const rowValidation = validateRows(config.rows, config.headers.length);
+      errors.push(...rowValidation.errors);
+      warnings.push(...rowValidation.warnings);
+    }
+
+    // Validate border
+    if (config.border !== undefined) {
+      const borderValidation = validateBorderConfig(config.border);
+      errors.push(...borderValidation.errors);
+      warnings.push(...borderValidation.warnings);
+    }
+
+    // Validate style function
+    if (config.styleFunc !== undefined) {
+      const styleFuncValidation = validateStyleFunction(config.styleFunc);
+      errors.push(...styleFuncValidation.errors);
+      warnings.push(...styleFuncValidation.warnings);
+    }
+
+    // Validate overall structure
+    const structureValidation = validateTableStructure(config);
+    errors.push(...structureValidation.errors);
+    warnings.push(...structureValidation.warnings);
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings,
+    };
+  };
+
+  /**
+   * Validates table headers
+   */
+  export const validateHeaders = (headers: readonly string[]): TableValidationResult => {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+
+    headers.forEach((header, index) => {
+      if (typeof header !== 'string') {
+        errors.push(`Header at index ${index} must be a string`);
+      } else {
+        if (header === '') {
+          warnings.push(`Header at index ${index} is empty`);
+        }
+        if (header.length > 50) {
+          warnings.push(`Header at index ${index} is very long (${header.length} characters)`);
+        }
+      }
+    });
+
+    // Check for duplicates
+    const seen = new Set<string>();
+    headers.forEach((header) => {
+      if (typeof header === 'string') {
+        if (seen.has(header)) {
+          errors.push(`Duplicate header found: ${header}`);
+        }
+        seen.add(header);
+      }
+    });
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings,
+    };
+  };
+
+  /**
+   * Validates table rows
+   */
+  export const validateRows = (rows: readonly (readonly string[])[], expectedColumnCount: number): TableValidationResult => {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+
+    rows.forEach((row, rowIndex) => {
+      if (!Array.isArray(row)) {
+        errors.push(`Row at index ${rowIndex} must be an array`);
+        return;
+      }
+
+      if (row.length !== expectedColumnCount) {
+        errors.push(`Row ${rowIndex} has ${row.length} columns, expected ${expectedColumnCount}`);
+      }
+
+      row.forEach((cell, cellIndex) => {
+        if (typeof cell !== 'string') {
+          errors.push(`Cell at row ${rowIndex}, column ${cellIndex} must be a string`);
+        } else if (cell.length > 100) {
+          warnings.push(`Cell at row ${rowIndex}, column ${cellIndex} is very long (${cell.length} characters)`);
+        }
+      });
+    });
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings,
+    };
+  };
+
+  /**
+   * Validates border configuration
+   */
+  export const validateBorderConfig = (border: BorderConfig | undefined): TableValidationResult => {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+
+    if (border === undefined) {
+      return { isValid: true, errors, warnings };
+    }
+
+    if (typeof border !== 'object' || border === null) {
+      errors.push('Border configuration must be an object');
+      return { isValid: false, errors, warnings };
+    }
+
+    const validTypes = ['normal', 'rounded', 'thick', 'double', 'custom'];
+    if (!validTypes.includes(border.type)) {
+      errors.push(`Invalid border type: ${border.type}`);
+    }
+
+    if (!border.chars) {
+      errors.push('Border chars configuration is required');
+    } else {
+      const requiredChars = ['top', 'right', 'bottom', 'left', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
+      requiredChars.forEach((charName) => {
+        if (!(charName in border.chars)) {
+          errors.push(`Missing border character: ${charName}`);
+        } else if (typeof border.chars[charName as keyof typeof border.chars] !== 'string') {
+          errors.push(`Border character ${charName} must be a string`);
+        }
+      });
+    }
+
+    if (!Array.isArray(border.sides) || border.sides.length !== 4) {
+      errors.push('Sides array must have exactly 4 elements');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings,
+    };
+  };
+
+  /**
+   * Validates style function
+   */
+  export const validateStyleFunction = (styleFunc: TableStyleFunction | undefined): TableValidationResult => {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+
+    if (styleFunc === undefined) {
+      return { isValid: true, errors, warnings };
+    }
+
+    if (typeof styleFunc !== 'function') {
+      errors.push('Style function must be a function');
+      return { isValid: false, errors, warnings };
+    }
+
+    try {
+      const result = styleFunc(0, 0);
+      if (typeof result !== 'object' || result === null) {
+        errors.push('Style function must return an object');
+      }
+    } catch (error) {
+      errors.push(`Style function throws an error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings,
+    };
+  };
+
+  /**
+   * Validates overall table structure
+   */
+  export const validateTableStructure = (config: TableConfig): TableValidationResult => {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+
+    // Check for large tables that might impact performance
+    if (config.headers.length > 20) {
+      warnings.push(`Table has a large number of columns (${config.headers.length}), which may impact performance`);
+    }
+
+    if (config.rows.length > 500) {
+      warnings.push(`Table has a large number of rows (${config.rows.length}), which may impact performance`);
+    }
+
+    // Check for circular references (basic check)
+    try {
+      JSON.stringify(config);
+    } catch (error) {
+      errors.push('Circular reference detected in table structure');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings,
+    };
+  };
+
+  /**
+   * Validates enumerator function (for compatibility with tree validation pattern)
+   */
+  export const validateEnumeratorFunction = (enumerator: unknown): TableValidationResult => {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+
+    if (typeof enumerator !== 'function') {
+      errors.push('Enumerator must be a function');
+      return { isValid: false, errors, warnings };
+    }
+
+    try {
+      const testNode = { value: 'test', children: [], style: undefined, expanded: true };
+      const result = (enumerator as any)(testNode, 0, false, false);
+      if (typeof result !== 'string') {
+        errors.push('Enumerator function must return a string');
+      }
+    } catch (error) {
+      errors.push(`Enumerator function throws an error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings,
+    };
+  };
+}
 
 /**
  * Type inference helpers for TypeScript integration

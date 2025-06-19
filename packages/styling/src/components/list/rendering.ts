@@ -152,7 +152,7 @@ export namespace ListRenderer {
     options: ListRenderOptions = DEFAULT_OPTIONS
   ): string[] {
     const rendered = render(config, options);
-    return rendered.split('\n');
+    return rendered === '' ? [] : rendered.split('\n');
   }
 
   /**
@@ -241,7 +241,7 @@ export namespace ListRenderer {
     lines: number;
   } {
     const lines = renderToLines(config, options);
-    const width = Math.max(...lines.map((line) => stripAnsi(line).length));
+    const width = lines.length > 0 ? Math.max(...lines.map((line) => stripAnsi(line).length)) : 0;
     const height = lines.length;
 
     return {
@@ -286,10 +286,14 @@ export namespace ListRenderer {
     options: ListRenderOptions = DEFAULT_OPTIONS
   ): string {
     const lines = renderToLines(config, options);
-    const maxWidth = Math.max(...lines.map((line) => stripAnsi(line).length));
+    const maxWidth = lines.length > 0 ? Math.max(...lines.map((line) => stripAnsi(line).length)) : 0;
 
     const topBorder = `┌${'─'.repeat(maxWidth + 2)}┐`;
     const bottomBorder = `└${'─'.repeat(maxWidth + 2)}┘`;
+
+    if (lines.length === 0) {
+      return `${topBorder}\n${bottomBorder}`;
+    }
 
     const borderedLines = [
       topBorder,
