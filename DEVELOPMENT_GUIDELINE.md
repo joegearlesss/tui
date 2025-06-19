@@ -1578,11 +1578,11 @@ bun run build
 bun run dev
 ```
 
-## Pipe Operator Pattern
+## Function Chaining Pattern
 
-### Functional Composition with Pipe-like Syntax
+### Functional Composition with Function Chaining
 
-Since we avoid classes but want fluent, readable APIs, use functional composition with pipe-like patterns:
+Since we avoid classes but want fluent, readable APIs, use functional composition with function chaining patterns:
 
 ```typescript
 // ❌ Bad - Class-based fluent API
@@ -1596,14 +1596,15 @@ const style = new Style()
 ```
 
 ```typescript
-// ✅ Good - Functional pipe-like composition
-const style = Style.create()
-  |> Style.bold(true)
-  |> Style.foreground('#FAFAFA')
-  |> Style.background('#7D56F4')
-  |> Style.paddingTop(2)
-  |> Style.paddingLeft(4)
-  |> Style.width(22);
+// ✅ Good - Function chaining pattern
+const style = StyleBuilder.create()
+  .bold(true)
+  .foreground('#FAFAFA')
+  .background('#7D56F4')
+  .paddingTop(2)
+  .paddingLeft(4)
+  .width(22)
+  .build();
 ```
 
 #### Implementation Pattern
@@ -1678,10 +1679,10 @@ namespace Style {
 }
 ```
 
-#### Alternative: Function Chaining Pattern
+#### Function Chaining Builder Pattern
 
 ```typescript
-// ✅ Alternative - Function chaining without pipe operator
+// ✅ Function chaining builder pattern
 namespace StyleBuilder {
   export const create = () => new StyleChain(Style.create());
 }
@@ -1736,10 +1737,10 @@ const style = StyleBuilder.create()
 #### Benefits of This Pattern
 
 1. **Immutable**: Each operation returns a new style object
-2. **Functional**: No classes in the core logic, just pure functions
+2. **Functional**: Core logic uses pure functions, builder provides fluent API
 3. **Composable**: Functions can be reused and combined
 4. **Type-safe**: Full TypeScript support with proper types
-5. **Readable**: Pipe-like syntax is clear and fluent
+5. **Readable**: Method chaining syntax is clear and fluent
 
 ## Remember: The Loop
 1. **Break down** the task in `.md` file
