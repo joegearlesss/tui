@@ -30,10 +30,10 @@ export namespace Layout {
     ...blocks: readonly string[]
   ): string => {
     if (blocks.length === 0) return '';
-    if (blocks.length === 1) return blocks[0];
+    if (blocks.length === 1) return blocks[0] ?? '';
 
     // Split each block into lines
-    const blockLines = blocks.map((block) => block.split('\n'));
+    const blockLines = blocks.map((block) => (block ?? '').split('\n'));
 
     // Find the maximum height
     const maxHeight = Math.max(...blockLines.map((lines) => lines.length));
@@ -82,10 +82,10 @@ export namespace Layout {
     ...blocks: readonly string[]
   ): string => {
     if (blocks.length === 0) return '';
-    if (blocks.length === 1) return blocks[0];
+    if (blocks.length === 1) return blocks[0] ?? '';
 
     // Split each block into lines and find max width
-    const blockLines = blocks.map((block) => block.split('\n'));
+    const blockLines = blocks.map((block) => (block ?? '').split('\n'));
     const maxWidth = Math.max(...blockLines.flat().map((line) => getDisplayWidth(line)));
 
     // Normalize alignment value

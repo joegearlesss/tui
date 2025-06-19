@@ -232,10 +232,12 @@ describe('Color palette generation', () => {
 
       // All hues should be the same (or close for red which can be 0 or 360)
       const firstHue = hues[0];
-      for (const hue of hues) {
-        expect(
-          hue === firstHue || Math.abs(hue - firstHue) < 5 || Math.abs(hue - firstHue) > 355
-        ).toBe(true);
+      if (firstHue !== undefined) {
+        for (const hue of hues) {
+          expect(
+            hue === firstHue || Math.abs(hue - firstHue) < 5 || Math.abs(hue - firstHue) > 355
+          ).toBe(true);
+        }
       }
     });
 
@@ -271,8 +273,10 @@ describe('Color palette generation', () => {
       });
 
       // Should be roughly 180 degrees apart
-      const diff = Math.abs(hues[1] - hues[0]);
-      expect(diff).toBeCloseTo(180, 0);
+      if (hues[0] !== undefined && hues[1] !== undefined) {
+        const diff = Math.abs(hues[1] - hues[0]);
+        expect(diff).toBeCloseTo(180, 0);
+      }
     });
   });
 

@@ -16,7 +16,7 @@ describe('StyleBuilder', () => {
     test('should create builder from existing properties', () => {
       const properties: StyleProperties = {
         bold: true,
-        foreground: Color.rgb(255, 0, 0),
+        foreground: '#FF0000',
       };
 
       const builder = StyleBuilder.from(properties);
@@ -48,8 +48,8 @@ describe('StyleBuilder', () => {
     });
 
     test('should chain color methods', () => {
-      const foregroundColor = Color.rgb(255, 0, 0);
-      const backgroundColor = Color.rgb(0, 255, 0);
+      const foregroundColor = '#FF0000';
+      const backgroundColor = '#00FF00';
 
       const style = StyleBuilder.create()
         .foreground(foregroundColor)
@@ -159,8 +159,8 @@ describe('StyleBuilder', () => {
 
     test('should unset colors', () => {
       const style = StyleBuilder.create()
-        .foreground(Color.rgb(255, 0, 0))
-        .background(Color.rgb(0, 255, 0))
+        .foreground('#FF0000')
+        .background('#00FF00')
         .unsetForeground()
         .unsetBackground()
         .build();
@@ -193,7 +193,7 @@ describe('StyleBuilder', () => {
     test('should inherit from parent style', () => {
       const parent: StyleProperties = {
         bold: true,
-        foreground: Color.rgb(255, 0, 0),
+        foreground: '#FF0000',
         padding: { top: 1, right: 1, bottom: 1, left: 1 },
       };
 
@@ -201,24 +201,24 @@ describe('StyleBuilder', () => {
 
       expect(style.bold).toBe(true);
       expect(style.italic).toBe(true);
-      expect(style.foreground).toEqual(Color.rgb(255, 0, 0));
+      expect(style.foreground).toEqual('#FF0000');
       expect(style.padding).toEqual({ top: 1, right: 1, bottom: 1, left: 1 });
     });
 
     test('should override parent properties', () => {
       const parent: StyleProperties = {
         bold: true,
-        foreground: Color.rgb(255, 0, 0),
+        foreground: '#FF0000',
       };
 
       const style = StyleBuilder.create()
         .inherit(parent)
         .bold(false)
-        .foreground(Color.rgb(0, 255, 0))
+        .foreground('#00FF00')
         .build();
 
       expect(style.bold).toBe(false);
-      expect(style.foreground).toEqual(Color.rgb(0, 255, 0));
+      expect(style.foreground).toEqual('#00FF00');
     });
   });
 
@@ -226,7 +226,7 @@ describe('StyleBuilder', () => {
     test('should render with chained styles', () => {
       const result = StyleBuilder.create()
         .bold(true)
-        .foreground(Color.rgb(255, 0, 0))
+        .foreground('#FF0000')
         .render('Hello World');
 
       expect(result).toContain('Hello World');
@@ -246,7 +246,7 @@ describe('StyleBuilder', () => {
     test('should create independent copy', () => {
       const original = StyleBuilder.create()
         .bold(true)
-        .foreground(Color.rgb(255, 0, 0));
+        .foreground('#FF0000');
 
       const copy = original.copy().italic(true);
 
@@ -264,15 +264,15 @@ describe('StyleBuilder', () => {
     test('should handle complex style composition', () => {
       const headerStyle = StyleBuilder.create()
         .bold(true)
-        .foreground(Color.adaptive(Color.parse('#0066CC'), Color.parse('#4A9EFF')))
+        .foreground(Color.adaptive('#0066CC', '#4A9EFF'))
         .padding(1, 2)
         .alignHorizontal('center')
         .build();
 
       expect(headerStyle.bold).toBe(true);
       expect(headerStyle.foreground).toEqual({
-        light: Color.parse('#0066CC'),
-        dark: Color.parse('#4A9EFF'),
+        light: '#0066CC',
+        dark: '#4A9EFF',
       });
       expect(headerStyle.padding).toEqual({ top: 1, right: 2, bottom: 1, left: 2 });
       expect(headerStyle.horizontalAlignment).toBe('center');
@@ -280,9 +280,9 @@ describe('StyleBuilder', () => {
 
     test('should demonstrate functional composition pattern', () => {
       // Base theme styles
-      const baseText = StyleBuilder.create().foreground(Color.parse('#333333'));
+      const baseText = StyleBuilder.create().foreground('#333333');
 
-      const emphasized = baseText.copy().bold(true).foreground(Color.parse('#000000'));
+      const emphasized = baseText.copy().bold(true).foreground('#000000');
 
       const header = emphasized.copy().padding(1, 0).alignHorizontal('center');
 
@@ -290,9 +290,9 @@ describe('StyleBuilder', () => {
       const emphasizedStyle = emphasized.build();
       const headerStyle = header.build();
 
-      expect(baseStyle.foreground).toEqual(Color.parse('#333333'));
+      expect(baseStyle.foreground).toEqual('#333333');
       expect(emphasizedStyle.bold).toBe(true);
-      expect(emphasizedStyle.foreground).toEqual(Color.parse('#000000'));
+      expect(emphasizedStyle.foreground).toEqual('#000000');
       expect(headerStyle.bold).toBe(true);
       expect(headerStyle.padding).toEqual({ top: 1, right: 0, bottom: 1, left: 0 });
       expect(headerStyle.horizontalAlignment).toBe('center');

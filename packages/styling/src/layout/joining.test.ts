@@ -4,6 +4,7 @@
 
 import { describe, expect, test } from 'bun:test';
 import { Layout, Measurement } from './joining';
+import { Position } from '@tui/styling/types';
 
 describe('Layout', () => {
   describe('joinHorizontal', () => {
@@ -11,7 +12,7 @@ describe('Layout', () => {
       const block1 = 'A\nB\nC';
       const block2 = 'X\nY';
 
-      const result = Layout.joinHorizontal('top', block1, block2);
+      const result = Layout.joinHorizontal(Position.TOP, block1, block2);
       expect(result).toBe('AX\nBY\nC');
     });
 
@@ -19,7 +20,7 @@ describe('Layout', () => {
       const block1 = 'A\nB\nC';
       const block2 = 'X\nY';
 
-      const result = Layout.joinHorizontal('bottom', block1, block2);
+      const result = Layout.joinHorizontal(Position.BOTTOM, block1, block2);
       expect(result).toBe('A\nBX\nCY');
     });
 
@@ -27,7 +28,7 @@ describe('Layout', () => {
       const block1 = 'A\nB\nC\nD\nE';
       const block2 = 'X\nY\nZ';
 
-      const result = Layout.joinHorizontal('middle', block1, block2);
+      const result = Layout.joinHorizontal(Position.MIDDLE, block1, block2);
       expect(result).toBe('A\nBX\nCY\nDZ\nE');
     });
 
@@ -40,12 +41,12 @@ describe('Layout', () => {
     });
 
     test('should handle empty blocks', () => {
-      expect(Layout.joinHorizontal('top')).toBe('');
-      expect(Layout.joinHorizontal('top', 'A')).toBe('A');
+      expect(Layout.joinHorizontal(Position.TOP)).toBe('');
+      expect(Layout.joinHorizontal(Position.TOP, 'A')).toBe('A');
     });
 
     test('should handle single line blocks', () => {
-      const result = Layout.joinHorizontal('top', 'Hello', ' ', 'World');
+      const result = Layout.joinHorizontal(Position.TOP, 'Hello', ' ', 'World');
       expect(result).toBe('Hello World');
     });
   });
@@ -55,7 +56,7 @@ describe('Layout', () => {
       const block1 = 'ABC';
       const block2 = 'XY';
 
-      const result = Layout.joinVertical('left', block1, block2);
+      const result = Layout.joinVertical(Position.LEFT, block1, block2);
       expect(result).toBe('ABC\nXY ');
     });
 
@@ -63,7 +64,7 @@ describe('Layout', () => {
       const block1 = 'ABC';
       const block2 = 'XY';
 
-      const result = Layout.joinVertical('right', block1, block2);
+      const result = Layout.joinVertical(Position.RIGHT, block1, block2);
       expect(result).toBe('ABC\n XY');
     });
 
@@ -71,7 +72,7 @@ describe('Layout', () => {
       const block1 = 'ABCDE';
       const block2 = 'XY';
 
-      const result = Layout.joinVertical('center', block1, block2);
+      const result = Layout.joinVertical(Position.CENTER, block1, block2);
       expect(result).toBe('ABCDE\n XY  ');
     });
 
@@ -87,29 +88,29 @@ describe('Layout', () => {
       const block1 = 'A\nBC';
       const block2 = 'XYZ';
 
-      const result = Layout.joinVertical('left', block1, block2);
+      const result = Layout.joinVertical(Position.LEFT, block1, block2);
       expect(result).toBe('A  \nBC \nXYZ');
     });
 
     test('should handle empty blocks', () => {
-      expect(Layout.joinVertical('left')).toBe('');
-      expect(Layout.joinVertical('left', 'A')).toBe('A');
+      expect(Layout.joinVertical(Position.LEFT)).toBe('');
+      expect(Layout.joinVertical(Position.LEFT, 'A')).toBe('A');
     });
   });
 
   describe('place', () => {
     test('should place content in top-left corner', () => {
-      const result = Layout.place(5, 3, 'left', 'top', 'Hi');
+      const result = Layout.place(5, 3, Position.LEFT, Position.TOP, 'Hi');
       expect(result).toBe('Hi   \n     \n     ');
     });
 
     test('should place content in center', () => {
-      const result = Layout.place(5, 3, 'center', 'middle', 'Hi');
+      const result = Layout.place(5, 3, Position.CENTER, Position.MIDDLE, 'Hi');
       expect(result).toBe('     \n Hi  \n     ');
     });
 
     test('should place content in bottom-right corner', () => {
-      const result = Layout.place(5, 3, 'right', 'bottom', 'Hi');
+      const result = Layout.place(5, 3, Position.RIGHT, Position.BOTTOM, 'Hi');
       expect(result).toBe('     \n     \n   Hi');
     });
 
@@ -119,19 +120,19 @@ describe('Layout', () => {
     });
 
     test('should handle multiline content', () => {
-      const result = Layout.place(5, 4, 'center', 'middle', 'A\nB');
+      const result = Layout.place(5, 4, Position.CENTER, Position.MIDDLE, 'A\nB');
       expect(result).toBe('     \n  A  \n  B  \n     ');
     });
 
     test('should handle content larger than container', () => {
-      const result = Layout.place(3, 2, 'left', 'top', 'Hello\nWorld');
+      const result = Layout.place(3, 2, Position.LEFT, Position.TOP, 'Hello\nWorld');
       expect(result).toBe('Hel\nWor');
     });
 
     test('should handle zero dimensions', () => {
-      expect(Layout.place(0, 0, 'left', 'top', 'Hi')).toBe('');
-      expect(Layout.place(5, 0, 'left', 'top', 'Hi')).toBe('');
-      expect(Layout.place(0, 3, 'left', 'top', 'Hi')).toBe('');
+      expect(Layout.place(0, 0, Position.LEFT, Position.TOP, 'Hi')).toBe('');
+      expect(Layout.place(5, 0, Position.LEFT, Position.TOP, 'Hi')).toBe('');
+      expect(Layout.place(0, 3, Position.LEFT, Position.TOP, 'Hi')).toBe('');
     });
   });
 });
@@ -183,7 +184,7 @@ describe('Layout integration', () => {
     const content = 'Content\nLine 2';
     const footer = 'Footer';
 
-    const layout = Layout.joinVertical('center', header, content, footer);
+    const layout = Layout.joinVertical(Position.CENTER, header, content, footer);
 
     expect(layout).toBe('HEADER \nContent\nLine 2 \nFooter ');
   });
@@ -192,15 +193,15 @@ describe('Layout integration', () => {
     const left = 'L1\nL2';
     const right = 'R1\nR2';
 
-    const horizontal = Layout.joinHorizontal('top', left, right);
-    const final = Layout.joinVertical('center', 'Title', horizontal);
+    const horizontal = Layout.joinHorizontal(Position.TOP, left, right);
+    const final = Layout.joinVertical(Position.CENTER, 'Title', horizontal);
 
     expect(final).toBe('Title\nL1R1 \nL2R2 ');
   });
 
   test('should work with placement and joining', () => {
-    const content = Layout.place(6, 3, 'center', 'middle', 'Hi');
-    const bordered = Layout.joinVertical('left', '------', content, '------');
+    const content = Layout.place(6, 3, Position.CENTER, Position.MIDDLE, 'Hi');
+    const bordered = Layout.joinVertical(Position.LEFT, '------', content, '------');
 
     expect(bordered).toBe('------\n      \n  Hi  \n      \n------');
   });

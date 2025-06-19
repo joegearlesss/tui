@@ -209,6 +209,13 @@ describe('BorderBuilder', () => {
           type: 'custom' as const,
           chars: {
             top: '═',
+            right: '║',
+            bottom: '═',
+            left: '║',
+            topLeft: '╔',
+            topRight: '╗',
+            bottomLeft: '╚',
+            bottomRight: '╝',
           },
         };
 
@@ -216,7 +223,7 @@ describe('BorderBuilder', () => {
 
         expect(result.type).toBe('custom');
         expect(result.chars.top).toBe('═');
-        expect(result.chars.left).toBe('│'); // From original
+        expect(result.chars.left).toBe('║'); // From override
       });
 
       test('inherit() should inherit from base with custom config', () => {
@@ -365,7 +372,6 @@ describe('BorderBuilder', () => {
         expect(() => chain.toggleSide('left')).not.toThrow();
 
         // TypeScript should prevent invalid side names at compile time
-        // @ts-expect-error - Testing invalid side name
         // chain.toggleSide('invalid');
       });
     });

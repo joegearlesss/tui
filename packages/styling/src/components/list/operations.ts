@@ -15,9 +15,13 @@ function toRoman(num: number): string {
   let result = '';
   let remaining = num;
   for (let i = 0; i < values.length; i++) {
-    while (remaining >= values[i]) {
-      result += symbols[i];
-      remaining -= values[i];
+    const value = values[i];
+    const symbol = symbols[i];
+    if (value === undefined || symbol === undefined) continue;
+    
+    while (remaining >= value) {
+      result += symbol;
+      remaining -= value;
     }
   }
 
@@ -67,7 +71,7 @@ export namespace List {
       }
       return (index: number, depth = 0) => {
         const enumerator = enumerators[depth % enumerators.length];
-        return enumerator(index, depth);
+        return enumerator?.(index) ?? '';
       };
     },
   } as const;
@@ -79,8 +83,17 @@ export namespace List {
     const config: ListConfig = {
       items: items.map(validateListItem),
       enumerator: Enumerator.BULLET,
-      indent: 0,
-      spacing: 0,
+      itemStyle: undefined,
+      enumeratorStyle: undefined,
+      hidden: false,
+      offset: undefined,
+      indentLevel: 0,
+      indentString: '  ',
+      showEnumerators: true,
+      enumeratorSpacing: 1,
+      maxWidth: undefined,
+      spacing: undefined,
+      indent: undefined,
     };
     return validateListConfig(config);
   }
@@ -113,9 +126,12 @@ export namespace List {
    * Sets the indentation for a list
    */
   export function withIndent(config: ListConfig, indent: number): ListConfig {
+    if (indent < 0 || indent > 20) {
+      throw new Error('Indent must be between 0 and 20');
+    }
     return validateListConfig({
       ...config,
-      indent,
+      indentLevel: indent,
     });
   }
 
@@ -126,6 +142,26 @@ export namespace List {
     return validateListConfig({
       ...config,
       spacing,
+    });
+  }
+
+  /**
+   * Sets the spacing between enumerator and item content
+   */
+  export function withEnumeratorSpacing(config: ListConfig, enumeratorSpacing: number): ListConfig {
+    return validateListConfig({
+      ...config,
+      enumeratorSpacing,
+    });
+  }
+
+  /**
+   * Sets the maximum width for text wrapping
+   */
+  export function withMaxWidth(config: ListConfig, maxWidth: number): ListConfig {
+    return validateListConfig({
+      ...config,
+      maxWidth,
     });
   }
 
@@ -152,16 +188,6 @@ export namespace List {
     return validateListConfig({
       ...config,
       enumeratorStyle,
-    });
-  }
-
-  /**
-   * Sets the maximum width for text wrapping
-   */
-  export function withMaxWidth(config: ListConfig, maxWidth: number): ListConfig {
-    return validateListConfig({
-      ...config,
-      maxWidth,
     });
   }
 
@@ -337,11 +363,13 @@ export namespace List {
     let totalLines = 0;
     let maxItemWidth = 0;
 
-    function processItems(items: ListItem[], depth = 0): void {
+    function processItems(items: readonly ListItem[], depth = 0): void {
       maxDepth = Math.max(maxDepth, depth);
 
       for (let i = 0; i < items.length; i++) {
         const item = items[i];
+        if (!item) continue;
+        
         totalItems++;
 
         if (typeof item === 'string') {
@@ -366,8 +394,10 @@ export namespace List {
     return {
       totalItems,
       maxDepth,
-      totalLines,
-      maxItemWidth,
+      totalWidth: maxItemWidth,
+      totalHeight: totalLines,
+      topLevelItems: config.items.length,
+      itemWidths: [maxItemWidth],
     };
   }
 
@@ -377,7 +407,7 @@ export namespace List {
   export function flatten(config: ListConfig): string[] {
     const result: string[] = [];
 
-    function processItems(items: ListItem[]): void {
+    function processItems(items: readonly ListItem[]): void {
       for (const item of items) {
         if (typeof item === 'string') {
           result.push(item);
@@ -405,11 +435,17 @@ export namespace List {
     return validateListConfig({
       items: [...config.items.map((item) => (typeof item === 'string' ? item : clone(item)))],
       enumerator: config.enumerator,
-      indent: config.indent,
-      spacing: config.spacing,
       itemStyle: config.itemStyle,
       enumeratorStyle: config.enumeratorStyle,
+      hidden: config.hidden,
+      offset: config.offset,
+      indentLevel: config.indentLevel,
+      indentString: config.indentString,
+      showEnumerators: config.showEnumerators,
+      enumeratorSpacing: config.enumeratorSpacing,
       maxWidth: config.maxWidth,
+      spacing: config.spacing,
+      indent: config.indent,
     });
   }
 

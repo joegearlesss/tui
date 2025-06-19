@@ -295,7 +295,7 @@ export namespace Table {
     }
 
     if (row >= 0 && row < table.rows.length) {
-      return table.rows[row][col] ?? '';
+      return table.rows[row]?.[col] ?? '';
     }
 
     return '';
@@ -350,7 +350,7 @@ export namespace Table {
     const [headerRow, ...dataRows] = data;
     return {
       ...create(),
-      headers: headerRow,
+      headers: headerRow ?? [],
       rows: dataRows,
     };
   };

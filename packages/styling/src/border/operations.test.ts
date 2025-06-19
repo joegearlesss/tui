@@ -17,7 +17,13 @@ describe('BorderOperations', () => {
         type: 'custom' as const,
         chars: {
           top: '═',
+          right: '║',
           bottom: '═',
+          left: '║',
+          topLeft: '╔',
+          topRight: '╗',
+          bottomLeft: '╚',
+          bottomRight: '╝',
         },
       };
 
@@ -26,8 +32,8 @@ describe('BorderOperations', () => {
       expect(merged.type).toBe('custom');
       expect(merged.chars.top).toBe('═');
       expect(merged.chars.bottom).toBe('═');
-      expect(merged.chars.left).toBe('│'); // From base
-      expect(merged.chars.right).toBe('│'); // From base
+      expect(merged.chars.left).toBe('║'); // From override
+      expect(merged.chars.right).toBe('║'); // From override
       expect(merged.sides).toEqual(base.sides);
     });
 
@@ -118,7 +124,7 @@ describe('BorderOperations', () => {
 
     test('should not modify original border', () => {
       const border = Border.normal();
-      const originalSides = [...border.sides];
+      const originalSides = [...border.sides] as readonly [boolean, boolean, boolean, boolean];
 
       BorderOperations.updateSides(border, [false, false, false, false]);
 

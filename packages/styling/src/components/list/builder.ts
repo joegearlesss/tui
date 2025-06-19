@@ -48,10 +48,10 @@ export class ListBuilder {
   }
 
   /**
-   * Sets the spacing between items
+   * Sets the spacing between enumerator and item content
    */
   spacing(spacing: number): ListBuilder {
-    return new ListBuilder(List.withSpacing(this.config, spacing));
+    return new ListBuilder(List.withEnumeratorSpacing(this.config, spacing));
   }
 
   /**
@@ -66,13 +66,6 @@ export class ListBuilder {
    */
   enumeratorStyle(enumeratorStyle: (text: string) => string): ListBuilder {
     return new ListBuilder(List.withEnumeratorStyle(this.config, enumeratorStyle));
-  }
-
-  /**
-   * Sets the maximum width for text wrapping
-   */
-  maxWidth(maxWidth: number): ListBuilder {
-    return new ListBuilder(List.withMaxWidth(this.config, maxWidth));
   }
 
   /**
@@ -252,7 +245,7 @@ export class ListChain {
    * Applies spacing
    */
   withSpacing(spacing: number): ListChain {
-    return new ListChain(List.withSpacing(this.config, spacing));
+    return new ListChain(List.withEnumeratorSpacing(this.config, spacing));
   }
 
   /**
@@ -267,13 +260,6 @@ export class ListChain {
    */
   withEnumeratorStyle(enumeratorStyle: (text: string) => string): ListChain {
     return new ListChain(List.withEnumeratorStyle(this.config, enumeratorStyle));
-  }
-
-  /**
-   * Applies maximum width
-   */
-  withMaxWidth(maxWidth: number): ListChain {
-    return new ListChain(List.withMaxWidth(this.config, maxWidth));
   }
 
   /**

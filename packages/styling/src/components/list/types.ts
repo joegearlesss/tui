@@ -13,9 +13,9 @@ import type { StyleProperties } from '../../style/style';
 export type ListItem = string | ListConfig;
 
 /**
- * Enumerator function type - takes items array and current index, returns enumeration string
+ * Enumerator function type - takes current index, returns enumeration string
  */
-export type EnumeratorFunction = (items: readonly ListItem[], index: number) => string;
+export type EnumeratorFunction = (index: number) => string;
 
 /**
  * List configuration interface with readonly properties for immutability
@@ -27,17 +27,17 @@ export interface ListConfig {
   /** Function that generates enumeration for each item */
   readonly enumerator: EnumeratorFunction;
 
-  /** Optional style configuration for list items */
-  readonly itemStyle: StyleProperties | undefined;
+  /** Optional style function for list items */
+  readonly itemStyle?: ((text: string) => string) | undefined;
 
-  /** Optional style configuration for enumerators */
-  readonly enumeratorStyle: StyleProperties | undefined;
+  /** Optional style function for enumerators */
+  readonly enumeratorStyle?: ((text: string) => string) | undefined;
 
   /** Whether the list should be hidden from rendering */
   readonly hidden: boolean;
 
   /** Optional offset for positioning [x, y] */
-  readonly offset: readonly [number, number] | undefined;
+  readonly offset?: readonly [number, number] | undefined;
 
   /** Indentation level for nested lists */
   readonly indentLevel: number;
@@ -50,6 +50,15 @@ export interface ListConfig {
 
   /** Spacing between enumerator and item content */
   readonly enumeratorSpacing: number;
+
+  /** Maximum width for text wrapping */
+  readonly maxWidth?: number;
+
+  /** Spacing between list items */
+  readonly spacing?: number;
+
+  /** Base indentation for the list */
+  readonly indent?: number;
 }
 
 /**

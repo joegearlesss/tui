@@ -36,49 +36,73 @@ export const ListConfigSchema: z.ZodType<ListConfig> = z
       .min(0, 'List can be empty')
       .describe('Array of list items, can be strings or nested list configurations'),
 
-    enumerator: EnumeratorFunctionSchema.optional().describe(
-      'Function to generate bullet points or numbering. Defaults to bullet points'
+    enumerator: EnumeratorFunctionSchema.describe(
+      'Function to generate bullet points or numbering'
     ),
 
-    indent: z
+    itemStyle: z
+      .any()
+      .optional()
+      .describe('Optional style configuration for list items'),
+
+    enumeratorStyle: z
+      .any()
+      .optional()
+      .describe('Optional style configuration for enumerators'),
+
+    hidden: z
+      .boolean()
+      .describe('Whether the list should be hidden from rendering'),
+
+    offset: z
+      .tuple([z.number(), z.number()])
+      .optional()
+      .describe('Optional offset for positioning [x, y]'),
+
+    indentLevel: z
       .number()
       .int()
       .min(0)
       .max(20)
+      .describe('Indentation level for nested lists'),
+
+    indentString: z
+      .string()
+      .describe('Custom indentation string (overrides default spacing)'),
+
+    showEnumerators: z
+      .boolean()
+      .describe('Whether to show enumerators for this list'),
+
+    enumeratorSpacing: z
+      .number()
+      .int()
+      .min(0)
+      .max(10)
+      .describe('Spacing between enumerator and item content'),
+
+    maxWidth: z
+      .number()
+      .int()
+      .min(1)
       .optional()
-      .describe('Number of spaces to indent the list. Defaults to 2'),
+      .describe('Maximum width for text wrapping'),
 
     spacing: z
       .number()
       .int()
       .min(0)
-      .max(5)
       .optional()
-      .describe('Number of blank lines between items. Defaults to 0'),
+      .describe('Spacing between list items'),
 
-    itemStyle: z
-      .function()
-      .args(z.string().describe('The text content of the list item'))
-      .returns(z.string().describe('The styled text content with formatting applied'))
-      .optional()
-      .describe('Style function to apply to each item text'),
-
-    enumeratorStyle: z
-      .function()
-      .args(z.string().describe('The enumerator symbol (e.g., "•", "1.", "a)")'))
-      .returns(z.string().describe('The styled enumerator symbol with formatting applied'))
-      .optional()
-      .describe('Style function to apply to enumerator symbols'),
-
-    maxWidth: z
+    indent: z
       .number()
       .int()
-      .min(10)
-      .max(1000)
+      .min(0)
       .optional()
-      .describe('Maximum width for text wrapping. Items longer than this will wrap'),
+      .describe('Base indentation for the list'),
   })
-  .describe('Configuration object for creating and styling lists');
+  .describe('Complete list configuration with items, styling, and layout options');
 
 /**
  * Validates list metrics containing calculated dimensions and properties
@@ -89,17 +113,27 @@ export const ListMetricsSchema: z.ZodType<ListMetrics> = z
 
     maxDepth: z.number().int().min(0).describe('Maximum nesting depth of the list'),
 
-    totalLines: z
+    totalWidth: z
       .number()
       .int()
       .min(0)
-      .describe('Total number of lines the rendered list will occupy'),
+      .describe('Total rendered width'),
 
-    maxItemWidth: z
+    totalHeight: z
       .number()
       .int()
       .min(0)
-      .describe('Width of the longest item text (excluding enumerator and indentation)'),
+      .describe('Total rendered height in lines'),
+
+    topLevelItems: z
+      .number()
+      .int()
+      .min(0)
+      .describe('Number of top-level items'),
+
+    itemWidths: z
+      .array(z.number().int().min(0))
+      .describe('Array of item widths'),
   })
   .describe('Calculated metrics and dimensions of a list');
 
@@ -108,18 +142,29 @@ export const ListMetricsSchema: z.ZodType<ListMetrics> = z
  */
 export const ListRenderOptionsSchema: z.ZodType<ListRenderOptions> = z
   .object({
-    includeAnsi: z
+    applyItemStyling: z
       .boolean()
-      .optional()
-      .describe('Whether to include ANSI escape sequences in output. Defaults to true'),
+      .describe('Whether to apply item styling'),
 
-    baseIndent: z
+    applyEnumeratorStyling: z
+      .boolean()
+      .describe('Whether to apply enumerator styling'),
+
+    maxDepth: z
       .number()
       .int()
       .min(0)
-      .max(50)
-      .optional()
-      .describe('Base indentation to apply to the entire list. Defaults to 0'),
+      .describe('Maximum depth for nested list rendering'),
+
+    indentPerLevel: z
+      .number()
+      .int()
+      .min(0)
+      .describe('Custom indentation per level'),
+
+    renderHidden: z
+      .boolean()
+      .describe('Whether to render hidden lists'),
   })
   .describe('Options for controlling list rendering output');
 
@@ -141,7 +186,21 @@ export function validateEnumeratorFunction(fn: unknown): EnumeratorFunction {
  * Validates a list configuration object
  */
 export function validateListConfig(config: unknown): ListConfig {
-  return ListConfigSchema.parse(config);
+  // Provide defaults for missing properties
+  const configWithDefaults = {
+    items: [],
+    enumerator: () => '•',
+    itemStyle: undefined,
+    enumeratorStyle: undefined,
+    hidden: false,
+    offset: undefined,
+    indentLevel: 0,
+    indentString: '  ',
+    showEnumerators: true,
+    enumeratorSpacing: 1,
+    ...(config as Partial<ListConfig>),
+  };
+  return ListConfigSchema.parse(configWithDefaults);
 }
 
 /**

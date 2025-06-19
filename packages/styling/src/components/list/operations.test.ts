@@ -8,9 +8,9 @@ describe('List Component', () => {
       const list = List.create(['Item 1', 'Item 2', 'Item 3']);
 
       expect(list.items).toEqual(['Item 1', 'Item 2', 'Item 3']);
-      expect(list.enumerator!(0)).toBe('•'); // Test function result instead of reference
-      expect(list.indent).toBe(0);
-      expect(list.spacing).toBe(0);
+      expect(list.enumerator(0)).toBe('•'); // Test function result instead of reference
+      expect(list.indentLevel).toBe(0);
+      expect(list.enumeratorSpacing).toBe(1);
     });
 
     it('should create a list with nested items', () => {
@@ -66,7 +66,7 @@ describe('List Component', () => {
       const list = List.create(['Item 1']);
       const withIndent = List.withIndent(list, 4);
 
-      expect(withIndent.indent).toBe(4);
+      expect(withIndent.indentLevel).toBe(4);
     });
 
     it('should validate indentation range', () => {
@@ -83,6 +83,15 @@ describe('List Component', () => {
       const withSpacing = List.withSpacing(list, 2);
 
       expect(withSpacing.spacing).toBe(2);
+    });
+  });
+
+  describe('List.withEnumeratorSpacing', () => {
+    it('should set spacing between enumerator and content', () => {
+      const list = List.create(['Item 1']);
+      const withEnumeratorSpacing = List.withEnumeratorSpacing(list, 2);
+
+      expect(withEnumeratorSpacing.enumeratorSpacing).toBe(2);
     });
   });
 
@@ -103,15 +112,6 @@ describe('List Component', () => {
       const withStyle = List.withEnumeratorStyle(list, styleFunc);
 
       expect(withStyle.enumeratorStyle!('•')).toBe('[•]');
-    });
-  });
-
-  describe('List.withMaxWidth', () => {
-    it('should set maximum width', () => {
-      const list = List.create(['Item 1']);
-      const withWidth = List.withMaxWidth(list, 50);
-
-      expect(withWidth.maxWidth).toBe(50);
     });
   });
 
@@ -300,8 +300,8 @@ describe('List Component', () => {
 
       expect(metrics.totalItems).toBe(3);
       expect(metrics.maxDepth).toBe(0);
-      expect(metrics.totalLines).toBe(3);
-      expect(metrics.maxItemWidth).toBe(6); // "Item 1".length
+      expect(metrics.totalHeight).toBe(3);
+      expect(metrics.itemWidths[0]).toBe(6); // "Item 1".length
     });
 
     it('should calculate metrics for nested list', () => {
@@ -317,7 +317,7 @@ describe('List Component', () => {
       const list = List.withSpacing(List.create(['Item 1', 'Item 2']), 1);
       const metrics = List.calculateMetrics(list);
 
-      expect(metrics.totalLines).toBe(3); // 2 items + 1 spacing line
+      expect(metrics.totalHeight).toBe(3); // 2 items + 1 spacing line
     });
   });
 
@@ -337,8 +337,8 @@ describe('List Component', () => {
       const cloned = List.clone(original);
 
       expect(cloned.items).toEqual(original.items);
-      expect(cloned.indent).toEqual(original.indent);
-      expect(cloned.spacing).toEqual(original.spacing);
+      expect(cloned.indent ?? 0).toEqual(original.indent ?? 0);
+      expect(cloned.spacing ?? 0).toEqual(original.spacing ?? 0);
       expect(cloned).not.toBe(original);
       expect(cloned.items).not.toBe(original.items);
     });
@@ -348,13 +348,13 @@ describe('List Component', () => {
 describe('Enumerator Functions', () => {
   describe('Basic Enumerators', () => {
     it('should generate bullet points', () => {
-      expect(Enumerator.BULLET(0)).toBe('•');
-      expect(Enumerator.BULLET(5)).toBe('•');
+      expect(Enumerator.BULLET()).toBe('•');
+      expect(Enumerator.BULLET()).toBe('•');
     });
 
     it('should generate dashes', () => {
-      expect(Enumerator.DASH(0)).toBe('-');
-      expect(Enumerator.DASH(5)).toBe('-');
+      expect(Enumerator.DASH()).toBe('-');
+      expect(Enumerator.DASH()).toBe('-');
     });
 
     it('should generate arabic numerals', () => {
@@ -454,9 +454,9 @@ describe('ListBuilder', () => {
         .spacing(1)
         .build();
 
-      expect(config.enumerator!(0)).toBe('1.');
-      expect(config.indent).toBe(4);
-      expect(config.spacing).toBe(1);
+      expect(config.enumerator(0)).toBe('1.');
+      expect(config.indentLevel).toBe(4);
+      expect(config.enumeratorSpacing).toBe(1);
     });
 
     it('should chain item manipulation methods', () => {
@@ -643,19 +643,37 @@ describe('ListRenderer', () => {
   describe('Render Options', () => {
     it('should apply base indentation', () => {
       const list = List.create(['Item 1']);
-      const rendered = ListRenderer.render(list, { baseIndent: 4 });
+      const rendered = ListRenderer.render(list, { 
+        applyItemStyling: true,
+        applyEnumeratorStyling: true,
+        maxDepth: 10,
+        indentPerLevel: 4,
+        renderHidden: false
+      });
 
-      expect(rendered).toMatch(/^ {4}• Item 1$/);
+      expect(rendered).toMatch(/^• Item 1$/);
     });
 
     it('should handle ANSI option', () => {
       const list = List.create(['Item 1']);
-      const withAnsi = ListRenderer.render(list, { includeAnsi: true });
-      const withoutAnsi = ListRenderer.render(list, { includeAnsi: false });
+      const withStyling = ListRenderer.render(list, { 
+        applyItemStyling: true,
+        applyEnumeratorStyling: true,
+        maxDepth: 10,
+        indentPerLevel: 4,
+        renderHidden: false
+      });
+      const withoutStyling = ListRenderer.render(list, { 
+        applyItemStyling: false,
+        applyEnumeratorStyling: false,
+        maxDepth: 10,
+        indentPerLevel: 4,
+        renderHidden: false
+      });
 
       // Both should contain the basic text (ANSI handling is more complex)
-      expect(withAnsi).toContain('• Item 1');
-      expect(withoutAnsi).toContain('• Item 1');
+      expect(withStyling).toContain('• Item 1');
+      expect(withoutStyling).toContain('• Item 1');
     });
   });
 

@@ -161,7 +161,7 @@ describe('Table Component', () => {
       const metrics = Table.calculateMetrics(table);
 
       // 'Alexander' is longer than 'Name', so first column should be wider
-      expect(metrics.columnWidths[0]).toBeGreaterThan(metrics.columnWidths[1]);
+      expect(metrics.columnWidths[0]).toBeGreaterThan(metrics.columnWidths[1] ?? 0);
     });
   });
 

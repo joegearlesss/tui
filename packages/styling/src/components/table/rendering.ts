@@ -259,8 +259,7 @@ export namespace TableRender {
    */
   const getBorderChars = (border: BorderConfig) => {
     // Extract border characters from border config
-    // This assumes the border config has a chars property
-    const chars = (border as { chars?: Record<string, string> }).chars || {};
+    const chars = border.chars;
 
     return {
       top: chars.top || '─',
@@ -271,11 +270,11 @@ export namespace TableRender {
       topRight: chars.topRight || '┐',
       bottomLeft: chars.bottomLeft || '└',
       bottomRight: chars.bottomRight || '┘',
-      topJunction: chars.topJunction || '┬',
-      bottomJunction: chars.bottomJunction || '┴',
-      leftJunction: chars.leftJunction || '├',
-      rightJunction: chars.rightJunction || '┤',
-      middleJunction: chars.middleJunction || '┼',
+      topJunction: '┬', // Use default since not in BorderChars
+      bottomJunction: '┴', // Use default since not in BorderChars
+      leftJunction: '├', // Use default since not in BorderChars
+      rightJunction: '┤', // Use default since not in BorderChars
+      middleJunction: '┼', // Use default since not in BorderChars
     };
   };
 

@@ -27,27 +27,24 @@ export namespace Enumerator {
   /**
    * Arabic numerals with period (1. 2. 3.)
    */
-  export const ARABIC: EnumeratorFunction = (items: readonly ListItem[], index: number) =>
+  export const ARABIC: EnumeratorFunction = (index: number) =>
     `${index + 1}.`;
 
   /**
    * Arabic numerals with parenthesis (1) 2) 3))
    */
-  export const ARABIC_PAREN: EnumeratorFunction = (items: readonly ListItem[], index: number) =>
+  export const ARABIC_PAREN: EnumeratorFunction = (index: number) =>
     `${index + 1})`;
 
   /**
    * Arabic numerals with both parentheses ((1) (2) (3))
    */
-  export const ARABIC_BOTH_PAREN: EnumeratorFunction = (
-    items: readonly ListItem[],
-    index: number
-  ) => `(${index + 1})`;
+  export const ARABIC_BOTH_PAREN: EnumeratorFunction = (index: number) => `(${index + 1})`;
 
   /**
    * Lowercase letters with period (a. b. c.)
    */
-  export const ALPHA_LOWER: EnumeratorFunction = (items: readonly ListItem[], index: number) => {
+  export const ALPHA_LOWER: EnumeratorFunction = (index: number) => {
     const letter = String.fromCharCode(97 + (index % 26)); // a-z
     return `${letter}.`;
   };
@@ -55,7 +52,7 @@ export namespace Enumerator {
   /**
    * Uppercase letters with period (A. B. C.)
    */
-  export const ALPHA_UPPER: EnumeratorFunction = (items: readonly ListItem[], index: number) => {
+  export const ALPHA_UPPER: EnumeratorFunction = (index: number) => {
     const letter = String.fromCharCode(65 + (index % 26)); // A-Z
     return `${letter}.`;
   };
@@ -63,10 +60,7 @@ export namespace Enumerator {
   /**
    * Lowercase letters with parenthesis (a) b) c))
    */
-  export const ALPHA_LOWER_PAREN: EnumeratorFunction = (
-    items: readonly ListItem[],
-    index: number
-  ) => {
+  export const ALPHA_LOWER_PAREN: EnumeratorFunction = (index: number) => {
     const letter = String.fromCharCode(97 + (index % 26));
     return `${letter})`;
   };
@@ -74,10 +68,7 @@ export namespace Enumerator {
   /**
    * Uppercase letters with parenthesis (A) B) C))
    */
-  export const ALPHA_UPPER_PAREN: EnumeratorFunction = (
-    items: readonly ListItem[],
-    index: number
-  ) => {
+  export const ALPHA_UPPER_PAREN: EnumeratorFunction = (index: number) => {
     const letter = String.fromCharCode(65 + (index % 26));
     return `${letter})`;
   };
@@ -85,7 +76,7 @@ export namespace Enumerator {
   /**
    * Roman numerals lowercase with period (i. ii. iii.)
    */
-  export const ROMAN_LOWER: EnumeratorFunction = (items: readonly ListItem[], index: number) => {
+  export const ROMAN_LOWER: EnumeratorFunction = (index: number) => {
     const roman = toRoman(index + 1).toLowerCase();
     return `${roman}.`;
   };
@@ -93,7 +84,7 @@ export namespace Enumerator {
   /**
    * Roman numerals uppercase with period (I. II. III.)
    */
-  export const ROMAN_UPPER: EnumeratorFunction = (items: readonly ListItem[], index: number) => {
+  export const ROMAN_UPPER: EnumeratorFunction = (index: number) => {
     const roman = toRoman(index + 1);
     return `${roman}.`;
   };
@@ -135,14 +126,14 @@ export namespace Enumerator {
     if (symbols.length === 0) {
       throw new Error('Cycle enumerator requires at least one symbol');
     }
-    return (items: readonly ListItem[], index: number) => symbols[index % symbols.length] ?? '';
+    return (index: number) => symbols[index % symbols.length] ?? '';
   }
 
   /**
    * Custom enumerator with a prefix and suffix
    */
   export function custom(prefix = '', suffix = ''): EnumeratorFunction {
-    return (items: readonly ListItem[], index: number) => `${prefix}${index + 1}${suffix}`;
+    return (index: number) => `${prefix}${index + 1}${suffix}`;
   }
 
   /**
@@ -152,9 +143,9 @@ export namespace Enumerator {
     if (enumerators.length === 0) {
       throw new Error('Depth-aware enumerator requires at least one enumerator function');
     }
-    return (items: readonly ListItem[], index: number, depth = 0) => {
+    return (index: number, depth = 0) => {
       const enumerator = enumerators[depth % enumerators.length];
-      return enumerator ? enumerator(items, index) : '';
+      return enumerator ? enumerator(index) : '';
     };
   }
 }
@@ -173,9 +164,13 @@ function toRoman(num: number): string {
   let result = '';
   let remaining = num;
   for (let i = 0; i < values.length; i++) {
-    while (remaining >= values[i]) {
-      result += symbols[i];
-      remaining -= values[i];
+    const value = values[i];
+    const symbol = symbols[i];
+    if (value !== undefined && symbol !== undefined) {
+      while (remaining >= value) {
+        result += symbol;
+        remaining -= value;
+      }
     }
   }
 

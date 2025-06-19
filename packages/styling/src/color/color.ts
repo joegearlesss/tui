@@ -596,7 +596,10 @@ export namespace Color {
    * @param dark - Color for dark theme
    * @returns Adaptive color object
    */
-  export const adaptive = (light: ColorValue, dark: ColorValue): AdaptiveColor => {
+  export const adaptive = (
+    light: string | number | CompleteColor, 
+    dark: string | number | CompleteColor
+  ): AdaptiveColor => {
     return { light, dark };
   };
 
@@ -640,7 +643,7 @@ export namespace Color {
    */
   export const hexToRgb = (hex: HexColor): RGBColor | undefined => {
     const match = hex.match(/^#([0-9A-Fa-f]{2})([0-9A-Fa-f]{2})([0-9A-Fa-f]{2})$/);
-    if (!match) {
+    if (!match || !match[1] || !match[2] || !match[3]) {
       return undefined;
     }
 
@@ -761,8 +764,9 @@ export namespace Color {
       }
 
       if ('r' in color && 'g' in color && 'b' in color) {
-        // RGB color object
-        const hex = rgbToHex(color);
+        // RGB color object - type guard ensures it's RGBColor
+        const rgbColor = color as RGBColor;
+        const hex = rgbToHex(rgbColor);
         return { ansi: undefined, hex };
       }
 

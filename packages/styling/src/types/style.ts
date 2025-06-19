@@ -91,3 +91,8 @@ export type BorderVisibility = z.infer<typeof BorderVisibilitySchema>;
  * Text transformation function type
  */
 export type TextTransform = (text: string) => string;
+
+/**
+ * Re-export StyleProperties from style module
+ */
+export type { StyleProperties } from '../style/style';

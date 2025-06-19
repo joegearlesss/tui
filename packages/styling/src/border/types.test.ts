@@ -110,7 +110,9 @@ describe('Border Types', () => {
       } catch (error) {
         expect(error).toBeInstanceOf(z.ZodError);
         const zodError = error as z.ZodError;
-        expect(zodError.errors[0].message).toContain('Top border character cannot be empty');
+        if (zodError.errors[0]) {
+          expect(zodError.errors[0].message).toContain('Top border character cannot be empty');
+        }
       }
     });
   });
@@ -295,8 +297,9 @@ describe('Border Types', () => {
       ];
 
       for (const field of charFields) {
-        expect(shape[field].description).toBeDefined();
-        expect(shape[field].description).toContain('Unicode character');
+        const fieldSchema = shape[field as keyof typeof shape];
+        expect(fieldSchema.description).toBeDefined();
+        expect(fieldSchema.description).toContain('Unicode character');
       }
     });
   });

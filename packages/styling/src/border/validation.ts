@@ -188,7 +188,10 @@ export namespace BorderValidation {
       const codePoint = char.codePointAt(0);
       if (codePoint === undefined) return false;
 
-      return boxDrawingRanges.some(([start, end]) => codePoint >= start && codePoint <= end);
+      return boxDrawingRanges.some(([start, end]) => {
+      if (start === undefined || end === undefined) return false;
+      return codePoint >= start && codePoint <= end;
+    });
     };
 
     return Object.values(chars).every(
