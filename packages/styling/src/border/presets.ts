@@ -89,6 +89,101 @@ export namespace Border {
   });
 
   /**
+   * Creates a block border using solid block characters
+   * @returns BorderConfig with block characters (█)
+   */
+  export const block = (): BorderConfig => ({
+    type: 'block',
+    chars: Object.freeze({
+      top: '█',
+      right: '█',
+      bottom: '█',
+      left: '█',
+      topLeft: '█',
+      topRight: '█',
+      bottomLeft: '█',
+      bottomRight: '█',
+    }),
+    sides: Object.freeze([true, true, true, true]) as readonly [boolean, boolean, boolean, boolean],
+  });
+
+  /**
+   * Creates an outer half-block border that sits outside the frame
+   * @returns BorderConfig with outer half-block characters
+   */
+  export const outerHalfBlock = (): BorderConfig => ({
+    type: 'outerHalfBlock',
+    chars: Object.freeze({
+      top: '▀',
+      right: '▐',
+      bottom: '▄',
+      left: '▌',
+      topLeft: '▛',
+      topRight: '▜',
+      bottomLeft: '▙',
+      bottomRight: '▟',
+    }),
+    sides: Object.freeze([true, true, true, true]) as readonly [boolean, boolean, boolean, boolean],
+  });
+
+  /**
+   * Creates an inner half-block border that sits inside the frame
+   * @returns BorderConfig with inner half-block characters
+   */
+  export const innerHalfBlock = (): BorderConfig => ({
+    type: 'innerHalfBlock',
+    chars: Object.freeze({
+      top: '▄',
+      right: '▌',
+      bottom: '▀',
+      left: '▐',
+      topLeft: '▗',
+      topRight: '▖',
+      bottomLeft: '▝',
+      bottomRight: '▘',
+    }),
+    sides: Object.freeze([true, true, true, true]) as readonly [boolean, boolean, boolean, boolean],
+  });
+
+  /**
+   * Creates an ASCII border using only ASCII characters
+   * @returns BorderConfig with ASCII characters (+, -, |)
+   */
+  export const ascii = (): BorderConfig => ({
+    type: 'ascii',
+    chars: Object.freeze({
+      top: '-',
+      right: '|',
+      bottom: '-',
+      left: '|',
+      topLeft: '+',
+      topRight: '+',
+      bottomLeft: '+',
+      bottomRight: '+',
+    }),
+    sides: Object.freeze([true, true, true, true]) as readonly [boolean, boolean, boolean, boolean],
+  });
+
+  /**
+   * Creates a markdown-style border for table formatting
+   * @returns BorderConfig with markdown table characters (|, -)
+   */
+  export const markdown = (): BorderConfig => ({
+    type: 'markdown',
+    chars: Object.freeze({
+      top: '-',
+      right: '|',
+      bottom: '-',
+      left: '|',
+      topLeft: '|',
+      topRight: '|',
+      bottomLeft: '|',
+      bottomRight: '|',
+    }),
+    sides: Object.freeze([true, true, true, true]) as readonly [boolean, boolean, boolean, boolean],
+  });
+
+  /**
    * Creates a custom border by merging user-provided characters with normal border defaults
    * @param config - Partial border configuration with custom characters
    * @returns BorderConfig with custom characters merged with normal border defaults
@@ -193,27 +288,22 @@ export namespace Border {
     withSides(border, false, false, false, false);
 
   /**
-   * Creates a hidden border (no visible sides, empty characters)
-   * @returns BorderConfig with no visible borders and empty characters
+   * Creates a hidden border that renders as spaces but maintains layout positioning
+   * @returns BorderConfig with space characters (useful for maintaining layout)
    */
   export const hidden = (): BorderConfig => ({
-    type: 'custom',
+    type: 'hidden',
     chars: Object.freeze({
-      top: '',
-      right: '',
-      bottom: '',
-      left: '',
-      topLeft: '',
-      topRight: '',
-      bottomLeft: '',
-      bottomRight: '',
+      top: ' ',
+      right: ' ',
+      bottom: ' ',
+      left: ' ',
+      topLeft: ' ',
+      topRight: ' ',
+      bottomLeft: ' ',
+      bottomRight: ' ',
     }),
-    sides: Object.freeze([false, false, false, false]) as readonly [
-      boolean,
-      boolean,
-      boolean,
-      boolean,
-    ],
+    sides: Object.freeze([true, true, true, true]) as readonly [boolean, boolean, boolean, boolean],
   });
 }
 
@@ -233,6 +323,24 @@ export namespace BorderPresets {
 
   /** Double-line box border */
   export const doubleBox = Border.double();
+
+  /** Block border with solid characters */
+  export const blockBox = Border.block();
+
+  /** Outer half-block border */
+  export const outerHalfBlockBox = Border.outerHalfBlock();
+
+  /** Inner half-block border */
+  export const innerHalfBlockBox = Border.innerHalfBlock();
+
+  /** ASCII-only border */
+  export const asciiBox = Border.ascii();
+
+  /** Markdown table border */
+  export const markdownBox = Border.markdown();
+
+  /** Hidden border (spaces) */
+  export const hiddenBox = Border.hidden();
 
   /** Horizontal line (top and bottom only) */
   export const horizontalLine = Border.horizontalOnly(Border.normal());

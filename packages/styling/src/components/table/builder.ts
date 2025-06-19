@@ -92,6 +92,24 @@ export class TableChain {
   }
 
   /**
+   * Enables or disables borders between rows
+   * @param enabled - Whether to show borders between rows (default: true)
+   * @returns New TableChain instance with updated borderRow setting
+   */
+  borderRow(enabled: boolean = true): TableChain {
+    return new TableChain(Table.borderRow(enabled)(this.config));
+  }
+
+  /**
+   * Enables or disables borders between columns
+   * @param enabled - Whether to show borders between columns (default: true)
+   * @returns New TableChain instance with updated borderColumn setting
+   */
+  borderColumn(enabled: boolean = true): TableChain {
+    return new TableChain(Table.borderColumn(enabled)(this.config));
+  }
+
+  /**
    * Sets the style function for the table
    * @param fn - Function that returns style config for specific cells
    * @returns New TableChain instance with style function

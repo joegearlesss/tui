@@ -4,7 +4,7 @@
  * This example demonstrates a chess board using a table with Unicode chess pieces.
  */
 
-import { Border, Layout, StyleBuilder, Table, TableBuilder } from '@tui/styling';
+import { Border, Layout, StyleBuilder, Table, TableBuilder, print } from '@tui/styling';
 
 function main() {
   const labelStyle = StyleBuilder.create().foreground('#6C6C6C'); // Color 241 approximation
@@ -23,8 +23,9 @@ function main() {
   const t = TableBuilder
     .create()
     .border(Border.normal())
-    .headers('', '', '', '', '', '', '', '') // Empty headers for chess board
-    .rows(...board)
+    .borderRow(true)
+    .borderColumn(true)
+    .rows(...board) // No headers - just rows like Go version
     .styleFunc((row: number, col: number) => {
       return {
         padding: { top: 0, right: 1, bottom: 0, left: 1 }
@@ -41,7 +42,7 @@ function main() {
     ranks
   ) + '\n';
 
-  console.log(result);
+  print(result);
 }
 
 main();

@@ -74,21 +74,8 @@ export namespace ListRenderer {
           lines.push(`${itemIndent}${prefix}${itemText}`);
         }
       } else {
-        // Render nested list
+        // Render nested list directly without container enumerator
         const nestedConfig = validateListConfig(item);
-
-        // Add enumerator for the nested list container if parent has one
-        if (config.enumerator) {
-          const enumerator = config.enumerator(i);
-          const styledEnumerator =
-            config.enumeratorStyle && options.applyEnumeratorStyling
-              ? config.enumeratorStyle(enumerator)
-              : enumerator;
-
-          if (styledEnumerator) {
-            lines.push(`${itemIndent}${styledEnumerator}`);
-          }
-        }
 
         // Render nested items with increased depth
         renderItems(nestedConfig.items, nestedConfig, depth + 1, options, lines);

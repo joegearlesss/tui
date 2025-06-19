@@ -6,7 +6,8 @@
  * This is the TypeScript/Bun equivalent of the Go lipgloss color standalone example.
  */
 
-import { Border, Color, Layout, StyleBuilder } from '@tui/styling';
+import { Border, Color, Layout, Position, StyleBuilder } from '@tui/styling';
+import { print } from '../../../src/output.js';
 
 async function main(): Promise<void> {
   // Query for the background color. We only need to do this once, and only
@@ -22,8 +23,8 @@ async function main(): Promise<void> {
   // Define some styles. lightDark() can be used to choose the
   // appropriate light or dark color based on the detected background color.
   const frameStyle = StyleBuilder.create()
-    .foreground(lightDark('#C5ADF9', '#864EFF'))
     .border(Border.rounded())
+    .borderForeground(lightDark('#C5ADF9', '#864EFF'))
     .padding(1, 3)
     .margin(1, 3)
     .build();
@@ -31,7 +32,7 @@ async function main(): Promise<void> {
   const paragraphStyle = StyleBuilder.create()
     .width(40)
     .marginBottom(1)
-    .alignHorizontal(0.5)
+    .alignHorizontal(Position.CENTER)
     .build();
   const textStyle = StyleBuilder.create().foreground(lightDark('#696969', '#bdbdbd')).build();
   const keywordStyle = StyleBuilder.create()
@@ -44,20 +45,19 @@ async function main(): Promise<void> {
     .background('#FF6AD2')
     .foreground('#FFFCC2')
     .build();
-  const inactiveButton = StyleBuilder.create()
-    .padding(0, 3)
+  const inactiveButton = StyleBuilder.from(activeButton)
     .background(lightDark('#988F95', '#978692'))
     .foreground(lightDark('#FDFCE3', '#FBFAE7'))
     .build();
 
   // Build layout.
   const text = StyleBuilder.from(paragraphStyle).render(
-    `${StyleBuilder.from(textStyle).render('Are you sure you want to eat that ')}${StyleBuilder.from(keywordStyle).render('moderately ripe')}${StyleBuilder.from(textStyle).render(' banana?')}`
+    `${StyleBuilder.from(textStyle).render('Are you sure you want to eat that ')}${StyleBuilder.from(keywordStyle).render('moderatly ripe')}${StyleBuilder.from(textStyle).render(' banana?')}`
   );
   const buttons = `${StyleBuilder.from(activeButton).render('Yes')}  ${StyleBuilder.from(inactiveButton).render('No')}`;
 
   // Create content and apply border using the new border integration
-  const content = Layout.joinVertical(0.5, text, buttons);
+  const content = Layout.joinVertical(Position.CENTER, text, buttons);
   const block = StyleBuilder.from(frameStyle).render(content);
 
   // Print the block to stdout. It's important to use proper output
@@ -66,7 +66,7 @@ async function main(): Promise<void> {
   // entirely.
   //
   // Note that in Bubble Tea downsampling happens automatically.
-  console.log(block);
+  print(block);
 }
 
 // Only run if this file is executed directly

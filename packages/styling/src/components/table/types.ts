@@ -21,6 +21,12 @@ export interface TableConfig {
   /** Optional border configuration for the table */
   readonly border: BorderConfig | undefined;
 
+  /** Whether to show borders between rows */
+  readonly borderRow: boolean;
+
+  /** Whether to show borders between columns */
+  readonly borderColumn: boolean;
+
   /** Optional style function that returns style config for specific cells */
   readonly styleFunc: ((row: number, col: number) => StyleProperties) | undefined;
 

@@ -4,6 +4,7 @@
  */
 
 export { ANSI } from './ansi/ansi';
+export { print, isOutputTTY, stripAllAnsi } from './output';
 // Border system exports
 export {
   Border,
@@ -13,15 +14,27 @@ export {
   BorderPresets,
   BorderRender,
   BorderValidation,
+  asciiBorder,
+  asciiBoxBorder,
+  blockBorder,
+  blockBoxBorder,
   bottomLineBorder,
   boxBorder,
   customBorder,
   doubleBorder,
   doubleBoxBorder,
+  hiddenBorder,
+  hiddenBoxBorder,
   horizontalLineBorder,
+  innerHalfBlockBorder,
+  innerHalfBlockBoxBorder,
   leftLineBorder,
+  markdownBorder,
+  markdownBoxBorder,
   // Convenience exports
   normalBorder,
+  outerHalfBlockBorder,
+  outerHalfBlockBoxBorder,
   rightLineBorder,
   roundedBorder,
   roundedBoxBorder,

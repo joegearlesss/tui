@@ -26,6 +26,8 @@ export namespace Table {
     headers: [],
     rows: [],
     border: undefined,
+    borderRow: false,
+    borderColumn: false,
     styleFunc: undefined,
     width: undefined,
     height: undefined,
@@ -100,6 +102,30 @@ export namespace Table {
     (table: TableConfig): TableConfig => ({
       ...table,
       border: undefined,
+    });
+
+  /**
+   * Enables or disables borders between rows
+   * @param enabled - Whether to show borders between rows
+   * @returns Function that takes a table config and returns new config with updated borderRow
+   */
+  export const borderRow =
+    (enabled: boolean = true) =>
+    (table: TableConfig): TableConfig => ({
+      ...table,
+      borderRow: enabled,
+    });
+
+  /**
+   * Enables or disables borders between columns
+   * @param enabled - Whether to show borders between columns
+   * @returns Function that takes a table config and returns new config with updated borderColumn
+   */
+  export const borderColumn =
+    (enabled: boolean = true) =>
+    (table: TableConfig): TableConfig => ({
+      ...table,
+      borderColumn: enabled,
     });
 
   /**
@@ -182,12 +208,12 @@ export namespace Table {
     }
 
     // Custom validation logic
-    if (table.headers.length === 0) {
-      errors.push('Table must have at least one header');
+    if (table.headers.length === 0 && table.rows.length === 0) {
+      errors.push('Table must have at least one header or one row');
     }
 
     // Check row consistency
-    if (table.rows.length > 0) {
+    if (table.rows.length > 0 && table.headers.length > 0) {
       const headerCount = table.headers.length;
       table.rows.forEach((row, index) => {
         if (row.length !== headerCount) {
@@ -225,21 +251,30 @@ export namespace Table {
    * @returns Table metrics including dimensions and counts
    */
   export const calculateMetrics = (table: TableConfig): TableMetrics => {
-    const columnCount = table.headers.length;
-    const rowCount = table.rows.length + 1; // +1 for header row
+    const columnCount = table.headers.length > 0 ? table.headers.length : (table.rows[0]?.length ?? 0);
+    const rowCount = table.rows.length + (table.headers.length > 0 ? 1 : 0); // +1 for header row if exists
 
     // Calculate column widths based on content
-    const columnWidths = table.headers.map((header, colIndex) => {
-      let maxWidth = header.length;
+    const columnWidths: number[] = [];
+    
+    // Initialize column widths
+    for (let colIndex = 0; colIndex < columnCount; colIndex++) {
+      let maxWidth = 0;
+      
+      // Check header width if exists
+      if (table.headers.length > 0 && table.headers[colIndex]) {
+        maxWidth = Math.max(maxWidth, table.headers[colIndex].length);
+      }
 
+      // Check all row widths
       for (const row of table.rows) {
         if (row[colIndex]) {
           maxWidth = Math.max(maxWidth, row[colIndex].length);
         }
       }
 
-      return maxWidth + 2; // Add padding
-    });
+      columnWidths.push(maxWidth + 2); // Add padding
+    }
 
     // Calculate row heights (assuming single line cells for now)
     const rowHeights = new Array(rowCount).fill(1);
@@ -311,7 +346,7 @@ export namespace Table {
    * @returns Number of columns
    */
   export const getColumnCount = (table: TableConfig): number => {
-    return table.headers.length;
+    return table.headers.length > 0 ? table.headers.length : (table.rows[0]?.length ?? 0);
   };
 
   /**

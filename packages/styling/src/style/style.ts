@@ -12,6 +12,7 @@ import type {
   VerticalAlignment,
   VerticalPosition,
 } from '@tui/styling/types';
+import { StringUtils } from '@tui/styling/utils';
 
 /**
  * Style properties interface for internal state management
@@ -886,6 +887,114 @@ export namespace Style {
   // Rendering functions
 
   /**
+   * Applies padding to content
+   * @param content - Content to pad
+   * @param padding - Padding dimensions
+   * @returns Content with padding applied
+   */
+  const applyPadding = (content: string, padding: BoxDimensions): string => {
+    if (!content) return '';
+    
+    const lines = content.split('\n');
+    const contentWidth = Math.max(...lines.map(line => StringUtils.displayWidth(line)));
+    
+    // Add horizontal padding to each line
+    const paddedLines = lines.map(line => {
+      const lineWidth = StringUtils.displayWidth(line);
+      const rightPadding = contentWidth - lineWidth + padding.right;
+      return ' '.repeat(padding.left) + line + ' '.repeat(rightPadding);
+    });
+    
+    // Add vertical padding
+    const emptyLine = ' '.repeat(contentWidth + padding.left + padding.right);
+    const topPadding = Array(padding.top).fill(emptyLine);
+    const bottomPadding = Array(padding.bottom).fill(emptyLine);
+    
+    return [...topPadding, ...paddedLines, ...bottomPadding].join('\n');
+  };
+
+  /**
+   * Applies margin to content
+   * @param content - Content to add margin to
+   * @param margin - Margin dimensions
+   * @returns Content with margin applied
+   */
+  const applyMargin = (content: string, margin: BoxDimensions): string => {
+    if (!content) return '';
+    
+    const lines = content.split('\n');
+    const contentWidth = Math.max(...lines.map(line => StringUtils.displayWidth(line)));
+    
+    // Add horizontal margin (indentation) to each line
+    const marginedLines = lines.map(line => {
+      const lineWidth = StringUtils.displayWidth(line);
+      const rightMargin = contentWidth - lineWidth + margin.right;
+      return ' '.repeat(margin.left) + line + ' '.repeat(rightMargin);
+    });
+    
+    // Add vertical margin
+    const emptyLine = ' '.repeat(contentWidth + margin.left + margin.right);
+    const topMargin = Array(margin.top).fill(emptyLine);
+    const bottomMargin = Array(margin.bottom).fill(emptyLine);
+    
+    return [...topMargin, ...marginedLines, ...bottomMargin].join('\n');
+  };
+
+  /**
+   * Applies size constraints and text alignment to content
+   * @param content - Content to size and align
+   * @param style - Style properties containing width and alignment settings
+   * @returns Content with size and alignment applied
+   */
+  const applySizeAndAlignment = (content: string, style: StyleProperties): string => {
+    if (!content) return '';
+    
+    let resultLines = content.split('\n');
+    
+    // Apply width constraint if specified
+    if (style.width !== undefined) {
+      const targetWidth = style.width;
+      const alignment = style.horizontalAlignment || 'left';
+      
+      // Wrap long lines to fit target width, then align all lines
+      const wrappedLines: string[] = [];
+      
+      for (const line of resultLines) {
+        const lineWidth = StringUtils.displayWidth(line);
+        
+        if (lineWidth <= targetWidth) {
+          // Line fits, just add it
+          wrappedLines.push(line);
+        } else {
+          // Line is too wide, wrap it using StringUtils.wrap
+          const wrapped = StringUtils.wrap(line, targetWidth);
+          wrappedLines.push(...wrapped);
+        }
+      }
+      
+      // Now align all lines to the target width
+      resultLines = wrappedLines.map(line => {
+        const lineWidth = StringUtils.displayWidth(line);
+        const padding = Math.max(0, targetWidth - lineWidth);
+        
+        switch (alignment) {
+          case 'center': {
+            const leftPadding = Math.floor(padding / 2);
+            const rightPadding = padding - leftPadding;
+            return ' '.repeat(leftPadding) + line + ' '.repeat(rightPadding);
+          }
+          case 'right':
+            return ' '.repeat(padding) + line;
+          default: // 'left'
+            return line + ' '.repeat(padding);
+        }
+      });
+    }
+    
+    return resultLines.join('\n');
+  };
+
+  /**
    * Renders border with styling around content
    * @param style - Style properties containing border configuration
    * @param content - Pre-styled content to wrap with border
@@ -1003,18 +1112,33 @@ export namespace Style {
     const text = content ?? style.content ?? '';
     const transformedText = style.transform ? style.transform(text) : text;
 
-    // Don't return early if we have a border, even with empty content
-    if (transformedText === '' && !style.border) {
+    // Don't return early if we have a border, padding, margin, width, or height, even with empty content
+    if (transformedText === '' && !style.border && !style.padding && !style.margin && !style.width && !style.height) {
       return '';
     }
 
     // Apply basic ANSI formatting first
     let result = applyAnsiFormatting(style, transformedText);
 
+    // Apply width and alignment constraints
+    if (style.width !== undefined || style.horizontalAlignment !== undefined) {
+      result = applySizeAndAlignment(result, style);
+    }
+
+    // Apply padding before border
+    if (style.padding) {
+      result = applyPadding(result, style.padding);
+    }
+
     // Apply border if specified
     if (style.border) {
       // Apply border with color support
       result = renderStyledBorder(style, result);
+    }
+
+    // Apply margin after everything else
+    if (style.margin) {
+      result = applyMargin(result, style.margin);
     }
 
     return result;

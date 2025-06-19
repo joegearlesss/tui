@@ -1,0 +1,17 @@
+--- /Users/alexeypolitov/LocalProjects/GitHub/tui/packages/styling/test-outputs/color-standalone/go_output.txt	2025-06-20 07:14:26
++++ /Users/alexeypolitov/LocalProjects/GitHub/tui/packages/styling/test-outputs/color-standalone/ts_output.txt	2025-06-20 07:14:26
+@@ -1,10 +1,10 @@
+                                                       
+    ╭──────────────────────────────────────────────╮   
+    │                                              │   
+-   │      Are you sure you want to eat that       │   
+-   │            moderatly ripe banana?            │   
+-   │                                              │   
+-   │                 Yes        No                │   
++   │      Are you sure you want to eat that       │   
++   │            moderatly ripe banana?            │   
+    │                                              │   
++   │                Yes        No                 │   
++   │                                              │   
+    ╰──────────────────────────────────────────────╯   
+                                                       

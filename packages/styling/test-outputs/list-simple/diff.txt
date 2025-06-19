@@ -1,0 +1,17 @@
+--- /Users/alexeypolitov/LocalProjects/GitHub/tui/packages/styling/test-outputs/list-simple/go_output.txt	2025-06-20 07:14:27
++++ /Users/alexeypolitov/LocalProjects/GitHub/tui/packages/styling/test-outputs/list-simple/ts_output.txt	2025-06-20 07:14:27
+@@ -1,7 +1,7 @@
+-• A
+-• B
+-• C
+-    I. D
+-   II. E
+-  III. F
+-• G
++• A
++• B
++• C
++    I. D
++    II. E
++    III. F
++• G
