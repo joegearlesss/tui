@@ -1578,6 +1578,169 @@ bun run build
 bun run dev
 ```
 
+## Pipe Operator Pattern
+
+### Functional Composition with Pipe-like Syntax
+
+Since we avoid classes but want fluent, readable APIs, use functional composition with pipe-like patterns:
+
+```typescript
+// ❌ Bad - Class-based fluent API
+const style = new Style()
+  .bold(true)
+  .foreground('#FAFAFA')
+  .background('#7D56F4')
+  .paddingTop(2)
+  .paddingLeft(4)
+  .width(22);
+```
+
+```typescript
+// ✅ Good - Functional pipe-like composition
+const style = Style.create()
+  |> Style.bold(true)
+  |> Style.foreground('#FAFAFA')
+  |> Style.background('#7D56F4')
+  |> Style.paddingTop(2)
+  |> Style.paddingLeft(4)
+  |> Style.width(22);
+```
+
+#### Implementation Pattern
+
+```typescript
+// Define the style type
+interface StyleConfig {
+  readonly bold: boolean;
+  readonly foreground: string | undefined;
+  readonly background: string | undefined;
+  readonly paddingTop: number;
+  readonly paddingLeft: number;
+  readonly width: number | undefined;
+}
+
+// Namespace with functional API
+namespace Style {
+  // Create initial empty style
+  export const create = (): StyleConfig => ({
+    bold: false,
+    foreground: undefined,
+    background: undefined,
+    paddingTop: 0,
+    paddingLeft: 0,
+    width: undefined,
+  });
+  
+  // Each function takes a style and returns a new style
+  export const bold = (value: boolean) => (style: StyleConfig): StyleConfig => ({
+    ...style,
+    bold: value,
+  });
+  
+  export const foreground = (color: string) => (style: StyleConfig): StyleConfig => ({
+    ...style,
+    foreground: color,
+  });
+  
+  export const background = (color: string) => (style: StyleConfig): StyleConfig => ({
+    ...style,
+    background: color,
+  });
+  
+  export const paddingTop = (value: number) => (style: StyleConfig): StyleConfig => ({
+    ...style,
+    paddingTop: value,
+  });
+  
+  export const paddingLeft = (value: number) => (style: StyleConfig): StyleConfig => ({
+    ...style,
+    paddingLeft: value,
+  });
+  
+  export const width = (value: number) => (style: StyleConfig): StyleConfig => ({
+    ...style,
+    width: value,
+  });
+  
+  // Render the final style
+  export const render = (style: StyleConfig): string => {
+    const parts: string[] = [];
+    
+    if (style.bold) parts.push('font-weight: bold');
+    if (style.foreground) parts.push(`color: ${style.foreground}`);
+    if (style.background) parts.push(`background: ${style.background}`);
+    if (style.paddingTop > 0) parts.push(`padding-top: ${style.paddingTop}px`);
+    if (style.paddingLeft > 0) parts.push(`padding-left: ${style.paddingLeft}px`);
+    if (style.width !== undefined) parts.push(`width: ${style.width}px`);
+    
+    return parts.join('; ');
+  };
+}
+```
+
+#### Alternative: Function Chaining Pattern
+
+```typescript
+// ✅ Alternative - Function chaining without pipe operator
+namespace StyleBuilder {
+  export const create = () => new StyleChain(Style.create());
+}
+
+class StyleChain {
+  constructor(private readonly config: StyleConfig) {}
+  
+  bold(value: boolean): StyleChain {
+    return new StyleChain(Style.bold(value)(this.config));
+  }
+  
+  foreground(color: string): StyleChain {
+    return new StyleChain(Style.foreground(color)(this.config));
+  }
+  
+  background(color: string): StyleChain {
+    return new StyleChain(Style.background(color)(this.config));
+  }
+  
+  paddingTop(value: number): StyleChain {
+    return new StyleChain(Style.paddingTop(value)(this.config));
+  }
+  
+  paddingLeft(value: number): StyleChain {
+    return new StyleChain(Style.paddingLeft(value)(this.config));
+  }
+  
+  width(value: number): StyleChain {
+    return new StyleChain(Style.width(value)(this.config));
+  }
+  
+  build(): StyleConfig {
+    return this.config;
+  }
+  
+  render(): string {
+    return Style.render(this.config);
+  }
+}
+
+// Usage
+const style = StyleBuilder.create()
+  .bold(true)
+  .foreground('#FAFAFA')
+  .background('#7D56F4')
+  .paddingTop(2)
+  .paddingLeft(4)
+  .width(22)
+  .build();
+```
+
+#### Benefits of This Pattern
+
+1. **Immutable**: Each operation returns a new style object
+2. **Functional**: No classes in the core logic, just pure functions
+3. **Composable**: Functions can be reused and combined
+4. **Type-safe**: Full TypeScript support with proper types
+5. **Readable**: Pipe-like syntax is clear and fluent
+
 ## Remember: The Loop
 1. **Break down** the task in `.md` file
 2. **Implement** one step at a time
