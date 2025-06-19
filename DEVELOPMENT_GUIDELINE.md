@@ -1648,7 +1648,7 @@ bun run dev
     }
   },
   "files": {
-    "includes": ["packages/**/*.ts", "packages/**/*.js"]
+    "include": ["packages/**/*.ts", "packages/**/*.js"]
   }
 }
 ```
