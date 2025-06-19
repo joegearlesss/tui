@@ -1568,6 +1568,7 @@ namespace UserUtils {
 - Generic `string` types when specific values are known (use union types)
 - Node.js APIs (use Bun equivalents)
 - `npm` or `yarn` (use `bun` only)
+- **Non-null assertion operator (`!`)** - Use explicit undefined checks instead
 
 ### Avoid
 - Deep nesting (max 3 levels)
