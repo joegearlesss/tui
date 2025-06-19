@@ -1,0 +1,47 @@
+{
+  "name": "@tui/styling",
+  "version": "1.0.0",
+  "description": "TypeScript/Bun reimplementation of Lip Gloss v2 - declarative terminal styling library",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./style": "./src/style/index.ts",
+    "./color": "./src/color/index.ts",
+    "./ansi": "./src/ansi/index.ts",
+    "./border": "./src/border/index.ts",
+    "./layout": "./src/layout/index.ts",
+    "./components": "./src/components/index.ts",
+    "./terminal": "./src/terminal/index.ts",
+    "./utils": "./src/utils/index.ts",
+    "./types": "./src/types/index.ts"
+  },
+  "scripts": {
+    "test": "bun test",
+    "test:unit": "bun test \"**/*.test.ts\"",
+    "test:performance": "bun test \"**/*.performance.test.ts\"",
+    "test:integration": "bun test \"**/integration/*.test.ts\"",
+    "test:coverage": "bun test --coverage",
+    "lint": "bun run biome check",
+    "format": "bun run biome format --write",
+    "check": "bun run lint && bun run test"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.4.1",
+    "@types/bun": "latest"
+  },
+  "keywords": [
+    "terminal",
+    "styling",
+    "tui",
+    "ansi",
+    "colors",
+    "lipgloss",
+    "bun",
+    "typescript"
+  ],
+  "author": "TUI Team",
+  "license": "MIT"
+}
