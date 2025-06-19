@@ -191,6 +191,30 @@ export namespace Border {
    */
   export const none = (border: BorderConfig): BorderConfig =>
     withSides(border, false, false, false, false);
+
+  /**
+   * Creates a hidden border (no visible sides, empty characters)
+   * @returns BorderConfig with no visible borders and empty characters
+   */
+  export const hidden = (): BorderConfig => ({
+    type: 'custom',
+    chars: Object.freeze({
+      top: '',
+      right: '',
+      bottom: '',
+      left: '',
+      topLeft: '',
+      topRight: '',
+      bottomLeft: '',
+      bottomRight: '',
+    }),
+    sides: Object.freeze([false, false, false, false]) as readonly [
+      boolean,
+      boolean,
+      boolean,
+      boolean,
+    ],
+  });
 }
 
 /**

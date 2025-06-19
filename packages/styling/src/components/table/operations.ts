@@ -7,6 +7,7 @@
 
 import type { BorderConfig } from '../../border/types';
 import type { StyleProperties } from '../../style/style';
+import { TableRender } from './rendering';
 import type { TableConfig, TableMetrics, TableStyleFunction, TableValidationResult } from './types';
 import { TableConfigSchema } from './validation';
 
@@ -359,5 +360,12 @@ export namespace Table {
       return table.rows;
     }
     return [table.headers, ...table.rows];
+  };
+
+  /**
+   * Renders a table to a string
+   */
+  export const render = (table: TableConfig): string => {
+    return TableRender.render(table);
   };
 }

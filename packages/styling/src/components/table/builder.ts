@@ -18,6 +18,13 @@ export namespace TableBuilder {
    * @returns New TableChain instance for method chaining
    */
   export const create = () => new TableChain(Table.create());
+
+  /**
+   * Creates a table builder from an existing table configuration
+   * @param config - Existing table configuration
+   * @returns New TableChain instance for method chaining
+   */
+  export const from = (config: TableConfig) => new TableChain(config);
 }
 
 /**

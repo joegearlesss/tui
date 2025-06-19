@@ -15,8 +15,15 @@ export class ListBuilder {
   /**
    * Creates a new ListBuilder with the specified items
    */
-  static create(items: ListItem[]): ListBuilder {
+  static create(items: ListItem[] = []): ListBuilder {
     return new ListBuilder(List.create(items));
+  }
+
+  /**
+   * Creates a ListBuilder from an existing list configuration
+   */
+  static from(config: ListConfig): ListBuilder {
+    return new ListBuilder(List.clone(config));
   }
 
   /**
@@ -38,6 +45,13 @@ export class ListBuilder {
    */
   enumerator(enumerator: EnumeratorFunction): ListBuilder {
     return new ListBuilder(List.withEnumerator(this.config, enumerator));
+  }
+
+  /**
+   * Sets the items for the list
+   */
+  items(...items: ListItem[]): ListBuilder {
+    return new ListBuilder(List.create(items));
   }
 
   /**
@@ -223,7 +237,7 @@ export class ListChain {
   /**
    * Creates a new ListChain with items
    */
-  static create(items: ListItem[]): ListChain {
+  static create(items: ListItem[] = []): ListChain {
     return new ListChain(List.create(items));
   }
 

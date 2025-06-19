@@ -1,4 +1,11 @@
-import type { EnumeratorFunction, ListConfig, ListItem, ListMetrics } from './types';
+import { ListRenderer } from './rendering';
+import type {
+  EnumeratorFunction,
+  ListConfig,
+  ListItem,
+  ListMetrics,
+  ListRenderOptions,
+} from './types';
 import { validateListConfig, validateListItem } from './validation';
 
 /**
@@ -79,7 +86,7 @@ export namespace List {
   /**
    * Creates a new list configuration with the specified items
    */
-  export function create(items: ListItem[]): ListConfig {
+  export function create(items: ListItem[] = []): ListConfig {
     const config: ListConfig = {
       items: items.map(validateListItem),
       enumerator: Enumerator.BULLET,
@@ -96,6 +103,16 @@ export namespace List {
       indent: undefined,
     };
     return validateListConfig(config);
+  }
+
+  /**
+   * Sets items on an existing list configuration
+   */
+  export function items(config: ListConfig, newItems: ListItem[]): ListConfig {
+    return {
+      ...config,
+      items: newItems.map(validateListItem),
+    };
   }
 
   /**
@@ -454,5 +471,12 @@ export namespace List {
    */
   export function validate(config: unknown): ListConfig {
     return validateListConfig(config);
+  }
+
+  /**
+   * Renders a list configuration to a string
+   */
+  export function render(config: ListConfig, options?: ListRenderOptions): string {
+    return ListRenderer.render(config, options);
   }
 }

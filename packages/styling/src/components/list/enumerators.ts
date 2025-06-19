@@ -117,6 +117,56 @@ export namespace Enumerator {
    */
   export const NONE: EnumeratorFunction = () => '';
 
+  // Convenience functions that return the enumerator functions
+  /**
+   * Returns the bullet enumerator function
+   */
+  export function bullet(): EnumeratorFunction {
+    return BULLET;
+  }
+
+  /**
+   * Returns the dash enumerator function
+   */
+  export function dash(): EnumeratorFunction {
+    return DASH;
+  }
+
+  /**
+   * Returns the asterisk enumerator function
+   */
+  export function asterisk(): EnumeratorFunction {
+    return ASTERISK;
+  }
+
+  /**
+   * Returns the plus enumerator function
+   */
+  export function plus(): EnumeratorFunction {
+    return PLUS;
+  }
+
+  /**
+   * Returns the arabic enumerator function
+   */
+  export function arabic(): EnumeratorFunction {
+    return ARABIC;
+  }
+
+  /**
+   * Returns the alphabet enumerator function (lowercase)
+   */
+  export function alphabet(): EnumeratorFunction {
+    return ALPHA_LOWER;
+  }
+
+  /**
+   * Returns the roman numerals enumerator function (lowercase)
+   */
+  export function roman(): EnumeratorFunction {
+    return ROMAN_LOWER;
+  }
+
   /**
    * Custom enumerator that cycles through multiple symbols
    */

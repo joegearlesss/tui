@@ -65,7 +65,7 @@ namespace StringUtils {
     let width = 0;
     for (let i = 0; i < cleanText.length; i++) {
       const char = cleanText[i];
-      const code = char.codePointAt(0);
+      const code = char?.codePointAt(0);
 
       if (code === undefined) continue;
 
@@ -314,7 +314,7 @@ namespace StringUtils {
       if (line.trim() === '') continue;
 
       const match = line.match(/^(\s*)/);
-      if (match) {
+      if (match?.[1]) {
         minIndent = Math.min(minIndent, match[1].length);
       }
     }
@@ -382,6 +382,7 @@ const truncateFromEnd = (text: string, maxWidth: number): string => {
 
   for (let i = 0; i < text.length; i++) {
     const char = text[i];
+    if (!char) continue;
     const charWidth = StringUtils.displayWidth(char);
 
     if (width + charWidth > maxWidth) {
@@ -401,6 +402,7 @@ const truncateFromStart = (text: string, maxWidth: number): string => {
 
   for (let i = text.length - 1; i >= 0; i--) {
     const char = text[i];
+    if (!char) continue;
     const charWidth = StringUtils.displayWidth(char);
 
     if (width + charWidth > maxWidth) {
@@ -424,6 +426,7 @@ const breakWord = (word: string, maxWidth: number): readonly string[] => {
 
   for (let i = 0; i < word.length; i++) {
     const char = word[i];
+    if (!char) continue;
     const testPart = currentPart + char;
 
     if (StringUtils.displayWidth(testPart) <= maxWidth) {

@@ -28,6 +28,11 @@ namespace TreeBuilder {
    */
   export const fromStrings = (data: readonly (string | readonly unknown[])[]) =>
     new TreeChain(Tree.fromStrings(data));
+
+  /**
+   * Creates a tree builder from an existing tree configuration
+   */
+  export const from = (config: TreeConfig) => new TreeChain(config);
 }
 
 /**
@@ -142,6 +147,13 @@ class TreeChain {
       ...this.config,
       root: node,
     });
+  }
+
+  /**
+   * Adds a child to the root node
+   */
+  child(value: string): TreeChain {
+    return new TreeChain(Tree.addChild(value)(this.config));
   }
 
   /**

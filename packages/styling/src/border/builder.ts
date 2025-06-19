@@ -86,12 +86,30 @@ export class BorderChain {
   }
 
   /**
+   * Sets the top border character (alias for topChar)
+   * @param char - Character for top border
+   * @returns New BorderChain with updated top character
+   */
+  top(char: string): BorderChain {
+    return this.topChar(char);
+  }
+
+  /**
    * Sets the right border character
    * @param char - Character for right border
    * @returns New BorderChain with updated right character
    */
   rightChar(char: string): BorderChain {
     return this.chars({ right: char });
+  }
+
+  /**
+   * Sets the right border character (alias for rightChar)
+   * @param char - Character for right border
+   * @returns New BorderChain with updated right character
+   */
+  right(char: string): BorderChain {
+    return this.rightChar(char);
   }
 
   /**
@@ -104,12 +122,30 @@ export class BorderChain {
   }
 
   /**
+   * Sets the bottom border character (alias for bottomChar)
+   * @param char - Character for bottom border
+   * @returns New BorderChain with updated bottom character
+   */
+  bottom(char: string): BorderChain {
+    return this.bottomChar(char);
+  }
+
+  /**
    * Sets the left border character
    * @param char - Character for left border
    * @returns New BorderChain with updated left character
    */
   leftChar(char: string): BorderChain {
     return this.chars({ left: char });
+  }
+
+  /**
+   * Sets the left border character (alias for leftChar)
+   * @param char - Character for left border
+   * @returns New BorderChain with updated left character
+   */
+  left(char: string): BorderChain {
+    return this.leftChar(char);
   }
 
   /**
@@ -312,5 +348,45 @@ export class BorderChain {
    */
   isEqual(other: BorderConfig): boolean {
     return BorderOperations.isEqual(this.config, other);
+  }
+
+  /**
+   * Sets the top border color (placeholder for future color support)
+   * @param color - Color for top border
+   * @returns New BorderChain (currently returns same chain)
+   */
+  topColor(_color: string): BorderChain {
+    // TODO: Implement color support when color system is integrated
+    return this;
+  }
+
+  /**
+   * Sets the right border color (placeholder for future color support)
+   * @param color - Color for right border
+   * @returns New BorderChain (currently returns same chain)
+   */
+  rightColor(_color: string): BorderChain {
+    // TODO: Implement color support when color system is integrated
+    return this;
+  }
+
+  /**
+   * Sets the bottom border color (placeholder for future color support)
+   * @param color - Color for bottom border
+   * @returns New BorderChain (currently returns same chain)
+   */
+  bottomColor(_color: string): BorderChain {
+    // TODO: Implement color support when color system is integrated
+    return this;
+  }
+
+  /**
+   * Sets the left border color (placeholder for future color support)
+   * @param color - Color for left border
+   * @returns New BorderChain (currently returns same chain)
+   */
+  leftColor(_color: string): BorderChain {
+    // TODO: Implement color support when color system is integrated
+    return this;
   }
 }

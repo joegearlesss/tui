@@ -1,4 +1,5 @@
 import type { StyleProperties } from '../../style/style';
+import { TreeRenderer } from './rendering';
 import type {
   TreeConfig,
   TreeEnumeratorFunction,
@@ -422,6 +423,28 @@ namespace Tree {
       count++;
     });
     return count;
+  };
+
+  /**
+   * Sets the root node of a tree
+   */
+  export const root = (tree: TreeConfig, value: string): TreeConfig => ({
+    ...tree,
+    root: createNode(value),
+  });
+
+  /**
+   * Renders a tree to a string
+   */
+  export const render = (tree: TreeConfig): string => {
+    return TreeRenderer.render(tree);
+  };
+
+  /**
+   * Adds a child to the root node
+   */
+  export const child = (tree: TreeConfig, value: string): TreeConfig => {
+    return addChild(value)(tree);
   };
 }
 
