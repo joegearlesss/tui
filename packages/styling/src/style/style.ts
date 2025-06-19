@@ -981,12 +981,12 @@ export namespace Style {
           case 'center': {
             const leftPadding = Math.floor(padding / 2);
             const rightPadding = padding - leftPadding;
-            return ' '.repeat(leftPadding) + line + ' '.repeat(rightPadding);
+            return '\u00A0'.repeat(leftPadding) + line + '\u00A0'.repeat(rightPadding);
           }
           case 'right':
-            return ' '.repeat(padding) + line;
+            return '\u00A0'.repeat(padding) + line;
           default: // 'left'
-            return line + ' '.repeat(padding);
+            return line + '\u00A0'.repeat(padding);
         }
       });
     }

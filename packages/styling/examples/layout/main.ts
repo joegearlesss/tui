@@ -5,7 +5,7 @@
  * including tabs, dialogs, lists, color grids, and status bars.
  */
 
-import { Border, Color, Layout, StyleBuilder, print } from '@tui/styling';
+import { Border, Color, Layout, StyleBuilder, Canvas, newLayer, print } from '@tui/styling';
 
 const width = 96;
 const columnWidth = 30;
@@ -363,5 +363,12 @@ doc += Layout.joinHorizontal(0.0, lists, colors); // top alignment
 // Render the document
 const document = docStyle.render(doc);
 
+// Surprise! Composite some bonus content on top of the document.
+const modal = floatingStyle.render('Now with Compositing!');
+const canvas = new Canvas(
+  newLayer(document),
+  newLayer(modal).x(58).y(44)
+);
+
 // Print the result
-print(document);
+print(canvas.render());

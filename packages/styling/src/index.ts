@@ -5,6 +5,8 @@
 
 export { ANSI } from './ansi/ansi';
 export { print, isOutputTTY, stripAllAnsi } from './output';
+// Canvas and Layer system exports
+export { Canvas, newCanvas, Layer, newLayer } from './canvas';
 // Border system exports
 export {
   Border,

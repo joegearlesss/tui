@@ -56,6 +56,7 @@ async function main(): Promise<void> {
   );
   const buttons = ` ${StyleBuilder.from(activeButton).render('Yes')}  ${StyleBuilder.from(inactiveButton).render('No')}`;
 
+
   // Create content and apply border using the new border integration
   const content = Layout.joinVertical(Position.CENTER, text, buttons);
   const block = StyleBuilder.from(frameStyle).render(content);
