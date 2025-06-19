@@ -29,7 +29,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.4.1",
+    "@biomejs/biome": "^2.0.0",
     "@types/bun": "latest"
   },
   "keywords": ["terminal", "styling", "tui", "ansi", "colors", "lipgloss", "bun", "typescript"],

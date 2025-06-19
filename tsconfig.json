@@ -16,18 +16,11 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@tui/core/*": ["packages/core/src/*"],      
+      "@tui/core/*": ["packages/core/src/*"],
       "@tui/styling/*": ["packages/styling/src/*"],
       "@tui/utils/*": ["packages/utils/src/*"]
     }
   },
-  "include": [    
-    "packages/*/src/**/*",
-    "packages/*/tests/**/*",
-    "packages/*/examples/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["packages/*/src/**/*", "packages/*/tests/**/*", "packages/*/examples/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
