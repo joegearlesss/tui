@@ -1,13 +1,13 @@
 /**
  * Border Builder
- * 
+ *
  * Provides a fluent API for building border configurations using function chaining.
  * Follows the development guidelines' function chaining pattern while maintaining functional principles.
  */
 
-import type { BorderConfig, BorderChars, CustomBorderConfig } from './types';
-import { Border } from './presets';
 import { BorderOperations } from './operations';
+import { Border } from './presets';
+import type { BorderChars, BorderConfig, CustomBorderConfig } from './types';
 
 /**
  * BorderBuilder namespace providing fluent API creation
@@ -56,7 +56,7 @@ export namespace BorderBuilder {
    * @param config - Custom border configuration
    * @returns BorderChain instance for fluent API usage
    */
-  export const custom = (config: CustomBorderConfig): BorderChain => 
+  export const custom = (config: CustomBorderConfig): BorderChain =>
     new BorderChain(Border.custom(config));
 }
 

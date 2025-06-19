@@ -1,18 +1,17 @@
 /**
  * Border Preset Configurations
- * 
+ *
  * Provides predefined border styles following functional programming principles.
  * Based on OVERVIEW-v2 Section 3 specification with Unicode box-drawing characters.
  */
 
-import type { BorderConfig, BorderChars, CustomBorderConfig } from './types';
+import type { BorderChars, BorderConfig, CustomBorderConfig } from './types';
 
 /**
  * Functional Border namespace providing preset border configurations
  * All functions are pure and return immutable border configurations
  */
 export namespace Border {
-  
   /**
    * Creates a normal border using standard box-drawing characters
    * @returns BorderConfig with standard Unicode box-drawing characters
@@ -96,14 +95,19 @@ export namespace Border {
    */
   export const custom = (config: CustomBorderConfig): BorderConfig => {
     const normalBorder = normal();
-    
+
     return {
       type: 'custom',
       chars: Object.freeze({
         ...normalBorder.chars,
         ...config.chars,
       }),
-      sides: Object.freeze(config.sides ?? normalBorder.sides) as readonly [boolean, boolean, boolean, boolean],
+      sides: Object.freeze(config.sides ?? normalBorder.sides) as readonly [
+        boolean,
+        boolean,
+        boolean,
+        boolean,
+      ],
     };
   };
 
@@ -111,7 +115,7 @@ export namespace Border {
    * Creates a border configuration with specific sides enabled/disabled
    * @param border - Base border configuration
    * @param top - Whether to show top border
-   * @param right - Whether to show right border  
+   * @param right - Whether to show right border
    * @param bottom - Whether to show bottom border
    * @param left - Whether to show left border
    * @returns BorderConfig with specified side visibility
@@ -124,7 +128,12 @@ export namespace Border {
     left: boolean
   ): BorderConfig => ({
     ...border,
-    sides: Object.freeze([top, right, bottom, left]) as readonly [boolean, boolean, boolean, boolean],
+    sides: Object.freeze([top, right, bottom, left]) as readonly [
+      boolean,
+      boolean,
+      boolean,
+      boolean,
+    ],
   });
 
   /**
@@ -132,7 +141,7 @@ export namespace Border {
    * @param border - Base border configuration
    * @returns BorderConfig with only top border visible
    */
-  export const topOnly = (border: BorderConfig): BorderConfig => 
+  export const topOnly = (border: BorderConfig): BorderConfig =>
     withSides(border, true, false, false, false);
 
   /**
@@ -140,7 +149,7 @@ export namespace Border {
    * @param border - Base border configuration
    * @returns BorderConfig with only bottom border visible
    */
-  export const bottomOnly = (border: BorderConfig): BorderConfig => 
+  export const bottomOnly = (border: BorderConfig): BorderConfig =>
     withSides(border, false, false, true, false);
 
   /**
@@ -148,7 +157,7 @@ export namespace Border {
    * @param border - Base border configuration
    * @returns BorderConfig with only left border visible
    */
-  export const leftOnly = (border: BorderConfig): BorderConfig => 
+  export const leftOnly = (border: BorderConfig): BorderConfig =>
     withSides(border, false, false, false, true);
 
   /**
@@ -156,7 +165,7 @@ export namespace Border {
    * @param border - Base border configuration
    * @returns BorderConfig with only right border visible
    */
-  export const rightOnly = (border: BorderConfig): BorderConfig => 
+  export const rightOnly = (border: BorderConfig): BorderConfig =>
     withSides(border, false, true, false, false);
 
   /**
@@ -164,7 +173,7 @@ export namespace Border {
    * @param border - Base border configuration
    * @returns BorderConfig with only horizontal borders visible
    */
-  export const horizontalOnly = (border: BorderConfig): BorderConfig => 
+  export const horizontalOnly = (border: BorderConfig): BorderConfig =>
     withSides(border, true, false, true, false);
 
   /**
@@ -172,7 +181,7 @@ export namespace Border {
    * @param border - Base border configuration
    * @returns BorderConfig with only vertical borders visible
    */
-  export const verticalOnly = (border: BorderConfig): BorderConfig => 
+  export const verticalOnly = (border: BorderConfig): BorderConfig =>
     withSides(border, false, true, false, true);
 
   /**
@@ -180,7 +189,7 @@ export namespace Border {
    * @param border - Base border configuration
    * @returns BorderConfig with no borders visible
    */
-  export const none = (border: BorderConfig): BorderConfig => 
+  export const none = (border: BorderConfig): BorderConfig =>
     withSides(border, false, false, false, false);
 }
 
@@ -189,34 +198,33 @@ export namespace Border {
  * These are ready-to-use border configurations following common design patterns
  */
 export namespace BorderPresets {
-  
   /** Standard box border with all sides */
   export const box = Border.normal();
-  
+
   /** Rounded corner box border */
   export const roundedBox = Border.rounded();
-  
+
   /** Thick/heavy box border */
   export const thickBox = Border.thick();
-  
+
   /** Double-line box border */
   export const doubleBox = Border.double();
-  
+
   /** Horizontal line (top and bottom only) */
   export const horizontalLine = Border.horizontalOnly(Border.normal());
-  
+
   /** Vertical line (left and right only) */
   export const verticalLine = Border.verticalOnly(Border.normal());
-  
+
   /** Top border only */
   export const topLine = Border.topOnly(Border.normal());
-  
+
   /** Bottom border only */
   export const bottomLine = Border.bottomOnly(Border.normal());
-  
+
   /** Left border only */
   export const leftLine = Border.leftOnly(Border.normal());
-  
+
   /** Right border only */
   export const rightLine = Border.rightOnly(Border.normal());
 }

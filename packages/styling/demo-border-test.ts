@@ -16,9 +16,7 @@ try {
 
   // Test border builder
   console.log('✅ Testing BorderBuilder:');
-  const roundedBorder = BorderBuilder.rounded()
-    .horizontalOnly()
-    .build();
+  const roundedBorder = BorderBuilder.rounded().horizontalOnly().build();
   console.log('Rounded horizontal border:', roundedBorder);
   console.log('');
 
@@ -30,7 +28,6 @@ try {
   console.log('');
 
   console.log('🎉 Border system is FULLY WORKING!');
-
 } catch (error) {
   console.error('❌ Border system error:', error);
 }

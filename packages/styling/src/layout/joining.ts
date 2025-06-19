@@ -1,6 +1,6 @@
 /**
  * Layout Joining and Placement Functions
- * 
+ *
  * Implementation of Layout.joinHorizontal(), Layout.joinVertical(), and Layout.place()
  * functions as specified in OVERVIEW-v2.internal.md Section 4.
  */
@@ -19,7 +19,6 @@ export interface PlaceOptions {
  * Layout utilities for joining and placing content blocks
  */
 export namespace Layout {
-  
   /**
    * Joins content blocks horizontally with specified vertical alignment
    * @param align - Vertical alignment ('top' | 'middle' | 'bottom') or numeric position (0.0-1.0)
@@ -34,40 +33,41 @@ export namespace Layout {
     if (blocks.length === 1) return blocks[0];
 
     // Split each block into lines
-    const blockLines = blocks.map(block => block.split('\n'));
-    
+    const blockLines = blocks.map((block) => block.split('\n'));
+
     // Find the maximum height
-    const maxHeight = Math.max(...blockLines.map(lines => lines.length));
-    
+    const maxHeight = Math.max(...blockLines.map((lines) => lines.length));
+
     // Normalize alignment value
-    const alignValue = typeof align === 'string' 
-      ? (align === 'top' ? 0 : align === 'middle' ? 0.5 : 1)
-      : Math.max(0, Math.min(1, align));
-    
+    const alignValue =
+      typeof align === 'string'
+        ? align === 'top'
+          ? 0
+          : align === 'middle'
+            ? 0.5
+            : 1
+        : Math.max(0, Math.min(1, align));
+
     // Pad each block to the same height based on alignment
-    const paddedBlocks = blockLines.map(lines => {
+    const paddedBlocks = blockLines.map((lines) => {
       const height = lines.length;
       const padding = maxHeight - height;
-      
+
       if (padding === 0) return lines;
-      
+
       const topPadding = Math.floor(padding * alignValue);
       const bottomPadding = padding - topPadding;
-      
-      return [
-        ...Array(topPadding).fill(''),
-        ...lines,
-        ...Array(bottomPadding).fill('')
-      ];
+
+      return [...Array(topPadding).fill(''), ...lines, ...Array(bottomPadding).fill('')];
     });
-    
+
     // Join lines horizontally
     const result: string[] = [];
     for (let i = 0; i < maxHeight; i++) {
-      const line = paddedBlocks.map(block => block[i] || '').join('');
+      const line = paddedBlocks.map((block) => block[i] || '').join('');
       result.push(line);
     }
-    
+
     return result.join('\n');
   };
 
@@ -85,33 +85,36 @@ export namespace Layout {
     if (blocks.length === 1) return blocks[0];
 
     // Split each block into lines and find max width
-    const blockLines = blocks.map(block => block.split('\n'));
-    const maxWidth = Math.max(
-      ...blockLines.flat().map(line => getDisplayWidth(line))
-    );
-    
+    const blockLines = blocks.map((block) => block.split('\n'));
+    const maxWidth = Math.max(...blockLines.flat().map((line) => getDisplayWidth(line)));
+
     // Normalize alignment value
-    const alignValue = typeof align === 'string'
-      ? (align === 'left' ? 0 : align === 'center' ? 0.5 : 1)
-      : Math.max(0, Math.min(1, align));
-    
+    const alignValue =
+      typeof align === 'string'
+        ? align === 'left'
+          ? 0
+          : align === 'center'
+            ? 0.5
+            : 1
+        : Math.max(0, Math.min(1, align));
+
     // Align each line within its block
-    const alignedBlocks = blockLines.map(lines => 
-      lines.map(line => {
+    const alignedBlocks = blockLines.map((lines) =>
+      lines.map((line) => {
         const width = getDisplayWidth(line);
         const padding = maxWidth - width;
-        
+
         if (padding === 0) return line;
-        
+
         const leftPadding = Math.floor(padding * alignValue);
         const rightPadding = padding - leftPadding;
-        
+
         return ' '.repeat(leftPadding) + line + ' '.repeat(rightPadding);
       })
     );
-    
+
     // Join all blocks vertically
-    return alignedBlocks.map(lines => lines.join('\n')).join('\n');
+    return alignedBlocks.map((lines) => lines.join('\n')).join('\n');
   };
 
   /**
@@ -133,49 +136,59 @@ export namespace Layout {
     options?: PlaceOptions
   ): string => {
     if (width <= 0 || height <= 0) return '';
-    
+
     const lines = content.split('\n');
     const contentHeight = lines.length;
-    const contentWidth = Math.max(...lines.map(line => getDisplayWidth(line)));
-    
+    const contentWidth = Math.max(...lines.map((line) => getDisplayWidth(line)));
+
     // Normalize alignment values
-    const hAlignValue = typeof hAlign === 'string'
-      ? (hAlign === 'left' ? 0 : hAlign === 'center' ? 0.5 : 1)
-      : Math.max(0, Math.min(1, hAlign));
-      
-    const vAlignValue = typeof vAlign === 'string'
-      ? (vAlign === 'top' ? 0 : vAlign === 'middle' ? 0.5 : 1)
-      : Math.max(0, Math.min(1, vAlign));
-    
+    const hAlignValue =
+      typeof hAlign === 'string'
+        ? hAlign === 'left'
+          ? 0
+          : hAlign === 'center'
+            ? 0.5
+            : 1
+        : Math.max(0, Math.min(1, hAlign));
+
+    const vAlignValue =
+      typeof vAlign === 'string'
+        ? vAlign === 'top'
+          ? 0
+          : vAlign === 'middle'
+            ? 0.5
+            : 1
+        : Math.max(0, Math.min(1, vAlign));
+
     // Calculate vertical positioning
     const verticalPadding = Math.max(0, height - contentHeight);
     const topPadding = Math.floor(verticalPadding * vAlignValue);
     const bottomPadding = verticalPadding - topPadding;
-    
+
     // Create the result lines
     const result: string[] = [];
-    
+
     // Add top padding
     for (let i = 0; i < topPadding; i++) {
       result.push(' '.repeat(width));
     }
-    
+
     // Add content lines with horizontal alignment
     for (const line of lines) {
       const lineWidth = getDisplayWidth(line);
       const horizontalPadding = Math.max(0, width - lineWidth);
       const leftPadding = Math.floor(horizontalPadding * hAlignValue);
       const rightPadding = horizontalPadding - leftPadding;
-      
+
       const paddedLine = ' '.repeat(leftPadding) + line + ' '.repeat(rightPadding);
       result.push(paddedLine.slice(0, width)); // Ensure exact width
     }
-    
+
     // Add bottom padding
     for (let i = 0; i < bottomPadding; i++) {
       result.push(' '.repeat(width));
     }
-    
+
     return result.slice(0, height).join('\n'); // Ensure exact height
   };
 }
@@ -184,7 +197,6 @@ export namespace Layout {
  * Text measurement utilities
  */
 export namespace Measurement {
-  
   /**
    * Calculates the display width of text (excluding ANSI escape sequences)
    * @param text - Text to measure
@@ -193,7 +205,7 @@ export namespace Measurement {
   export const width = (text: string): number => {
     if (!text) return 0;
     const lines = text.split('\n');
-    return Math.max(...lines.map(line => getDisplayWidth(line)));
+    return Math.max(...lines.map((line) => getDisplayWidth(line)));
   };
 
   /**
@@ -213,7 +225,7 @@ export namespace Measurement {
   export const size = (text: string): readonly [number, number] => {
     if (!text) return [0, 1] as const;
     const lines = text.split('\n');
-    const textWidth = Math.max(...lines.map(line => getDisplayWidth(line)));
+    const textWidth = Math.max(...lines.map((line) => getDisplayWidth(line)));
     const textHeight = lines.length;
     return [textWidth, textHeight] as const;
   };

@@ -1,13 +1,13 @@
 /**
  * Table Component Builder
- * 
+ *
  * Fluent API builder pattern for table construction following functional principles.
  * Provides method chaining while maintaining immutable core operations.
  */
 
-import type { TableConfig, TableStyleFunction } from './types';
 import type { BorderConfig } from '../../border/types';
 import { Table } from './operations';
+import type { TableConfig, TableStyleFunction } from './types';
 
 /**
  * Table builder namespace providing fluent API creation

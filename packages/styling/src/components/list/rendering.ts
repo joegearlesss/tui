@@ -10,7 +10,7 @@ export namespace ListRenderer {
    */
   const DEFAULT_OPTIONS: Required<ListRenderOptions> = {
     includeAnsi: true,
-    baseIndent: 0
+    baseIndent: 0,
   };
 
   /**
@@ -19,10 +19,10 @@ export namespace ListRenderer {
   export function render(config: ListConfig, options: ListRenderOptions = {}): string {
     const validConfig = validateListConfig(config);
     const validOptions = { ...DEFAULT_OPTIONS, ...validateListRenderOptions(options) };
-    
+
     const lines: string[] = [];
     renderItems(validConfig.items, validConfig, 0, validOptions, lines);
-    
+
     return lines.join('\n');
   }
 
@@ -38,32 +38,28 @@ export namespace ListRenderer {
   ): void {
     const baseIndent = ' '.repeat(options.baseIndent);
     // For root level (depth 0), use config.indent. For nested levels, use 4 spaces per depth
-    const itemIndent = depth === 0 
-      ? ' '.repeat(config.indent || 0)
-      : ' '.repeat(4 * depth);
+    const itemIndent = depth === 0 ? ' '.repeat(config.indent || 0) : ' '.repeat(4 * depth);
     const fullIndent = baseIndent + itemIndent;
 
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
-      
+
       if (typeof item === 'string') {
         // Render string item
         const enumerator = config.enumerator ? config.enumerator(i, depth) : '';
-        const styledEnumerator = config.enumeratorStyle && enumerator
-          ? config.enumeratorStyle(enumerator)
-          : enumerator;
-        
+        const styledEnumerator =
+          config.enumeratorStyle && enumerator ? config.enumeratorStyle(enumerator) : enumerator;
+
         const itemText = config.itemStyle ? config.itemStyle(item) : item;
-        
+
         // Handle text wrapping if maxWidth is specified
         if (config.maxWidth && item.length > config.maxWidth) {
           const wrappedLines = wrapText(itemText, config.maxWidth);
           const enumeratorPadding = ' '.repeat(styledEnumerator.length + 1);
-          
+
           for (let j = 0; j < wrappedLines.length; j++) {
-            const prefix = j === 0 
-              ? (styledEnumerator ? `${styledEnumerator} ` : '')
-              : enumeratorPadding;
+            const prefix =
+              j === 0 ? (styledEnumerator ? `${styledEnumerator} ` : '') : enumeratorPadding;
             lines.push(`${fullIndent}${prefix}${wrappedLines[j]}`);
           }
         } else {
@@ -73,23 +69,23 @@ export namespace ListRenderer {
       } else {
         // Render nested list
         const nestedConfig = validateListConfig(item);
-        
+
         // Add enumerator for the nested list container if parent has one
         if (config.enumerator) {
           const enumerator = config.enumerator(i, depth);
-          const styledEnumerator = config.enumeratorStyle 
+          const styledEnumerator = config.enumeratorStyle
             ? config.enumeratorStyle(enumerator)
             : enumerator;
-          
+
           if (styledEnumerator) {
             lines.push(`${fullIndent}${styledEnumerator}`);
           }
         }
-        
+
         // Render nested items with increased depth
         renderItems(nestedConfig.items, nestedConfig, depth + 1, options, lines);
       }
-      
+
       // Add spacing between items (except after the last item)
       if (config.spacing && config.spacing > 0 && i < items.length - 1) {
         for (let s = 0; s < config.spacing; s++) {
@@ -118,7 +114,7 @@ export namespace ListRenderer {
           lines.push(currentLine.trim());
           currentLine = '';
         }
-        
+
         // Break long word into chunks
         for (let i = 0; i < word.length; i += maxWidth) {
           lines.push(word.slice(i, i + maxWidth));
@@ -152,8 +148,8 @@ export namespace ListRenderer {
    * Renders a list with custom line separator
    */
   export function renderWithSeparator(
-    config: ListConfig, 
-    separator: string = '\n', 
+    config: ListConfig,
+    separator = '\n',
     options: ListRenderOptions = {}
   ): string {
     const lines = renderToLines(config, options);
@@ -166,10 +162,10 @@ export namespace ListRenderer {
   export function renderToHtml(config: ListConfig): string {
     const validConfig = validateListConfig(config);
     const lines: string[] = ['<ul>'];
-    
+
     renderItemsToHtml(validConfig.items, validConfig, lines);
     lines.push('</ul>');
-    
+
     return lines.join('\n');
   }
 
@@ -209,10 +205,10 @@ export namespace ListRenderer {
   export function renderToMarkdown(config: ListConfig, options: ListRenderOptions = {}): string {
     const validConfig = validateListConfig(config);
     const validOptions = { ...DEFAULT_OPTIONS, ...validateListRenderOptions(options) };
-    
+
     const lines: string[] = [];
     renderItemsToMarkdown(validConfig.items, validConfig, 0, validOptions, lines);
-    
+
     return lines.join('\n');
   }
 
@@ -227,27 +223,31 @@ export namespace ListRenderer {
     lines: string[]
   ): void {
     const indent = '  '.repeat(depth);
-    
+
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
-      
+
       if (typeof item === 'string') {
         // Use markdown list syntax - check the actual enumerator output
         let bullet = '-'; // Default to bullet list
         if (config.enumerator) {
           const enumOutput = config.enumerator(0);
           // If enumerator produces numbers or letters, use numbered list
-          if (/^\d+\./.test(enumOutput) || /^[a-zA-Z]\./.test(enumOutput) || /^[ivxlcdm]+\./.test(enumOutput.toLowerCase())) {
+          if (
+            /^\d+\./.test(enumOutput) ||
+            /^[a-zA-Z]\./.test(enumOutput) ||
+            /^[ivxlcdm]+\./.test(enumOutput.toLowerCase())
+          ) {
             bullet = '1.';
           }
         }
-        
+
         lines.push(`${indent}${bullet} ${item}`);
       } else {
         // Render nested list
         renderItemsToMarkdown(item.items, item, depth + 1, options, lines);
       }
-      
+
       // Add spacing
       if (config.spacing && config.spacing > 0 && i < items.length - 1) {
         for (let s = 0; s < config.spacing; s++) {
@@ -260,19 +260,22 @@ export namespace ListRenderer {
   /**
    * Gets the rendered dimensions of a list
    */
-  export function getDimensions(config: ListConfig, options: ListRenderOptions = {}): {
+  export function getDimensions(
+    config: ListConfig,
+    options: ListRenderOptions = {}
+  ): {
     width: number;
     height: number;
     lines: number;
   } {
     const lines = renderToLines(config, options);
-    const width = Math.max(...lines.map(line => stripAnsi(line).length));
+    const width = Math.max(...lines.map((line) => stripAnsi(line).length));
     const height = lines.length;
-    
+
     return {
       width,
       height,
-      lines: lines.length
+      lines: lines.length,
     };
   }
 
@@ -288,13 +291,13 @@ export namespace ListRenderer {
    * Renders a list with line numbers
    */
   export function renderWithLineNumbers(
-    config: ListConfig, 
+    config: ListConfig,
     options: ListRenderOptions = {}
   ): string {
     const lines = renderToLines(config, options);
     const maxLineNumber = lines.length;
     const padding = maxLineNumber.toString().length;
-    
+
     return lines
       .map((line, index) => {
         const lineNumber = (index + 1).toString().padStart(padding, ' ');
@@ -306,22 +309,19 @@ export namespace ListRenderer {
   /**
    * Renders a list with a border around it
    */
-  export function renderWithBorder(
-    config: ListConfig, 
-    options: ListRenderOptions = {}
-  ): string {
+  export function renderWithBorder(config: ListConfig, options: ListRenderOptions = {}): string {
     const lines = renderToLines(config, options);
-    const maxWidth = Math.max(...lines.map(line => stripAnsi(line).length));
-    
-    const topBorder = '┌' + '─'.repeat(maxWidth + 2) + '┐';
-    const bottomBorder = '└' + '─'.repeat(maxWidth + 2) + '┘';
-    
+    const maxWidth = Math.max(...lines.map((line) => stripAnsi(line).length));
+
+    const topBorder = `┌${'─'.repeat(maxWidth + 2)}┐`;
+    const bottomBorder = `└${'─'.repeat(maxWidth + 2)}┘`;
+
     const borderedLines = [
       topBorder,
-      ...lines.map(line => `│ ${line.padEnd(maxWidth)} │`),
-      bottomBorder
+      ...lines.map((line) => `│ ${line.padEnd(maxWidth)} │`),
+      bottomBorder,
     ];
-    
+
     return borderedLines.join('\n');
   }
 }

@@ -1,17 +1,17 @@
 /**
  * Table Component Rendering
- * 
+ *
  * Core rendering engine for table components with ANSI styling support.
  * Handles border rendering, cell formatting, and layout calculations.
  */
 
-import type { TableConfig, TableMetrics, TableRenderOptions } from './types';
-import type { StyleProperties } from '../../style/style';
-import type { BorderConfig } from '../../border/types';
-import { Table } from './operations';
-import { Style } from '../../style/style';
 import { Border } from '../../border/presets';
+import type { BorderConfig } from '../../border/types';
 import { Layout } from '../../layout/joining';
+import type { StyleProperties } from '../../style/style';
+import { Style } from '../../style/style';
+import { Table } from './operations';
+import type { TableConfig, TableMetrics, TableRenderOptions } from './types';
 
 /**
  * Table rendering namespace containing all rendering functions
@@ -34,7 +34,7 @@ export namespace TableRender {
    */
   export const render = (table: TableConfig, options: Partial<TableRenderOptions> = {}): string => {
     const renderOptions = { ...DEFAULT_RENDER_OPTIONS, ...options };
-    
+
     // Handle empty table
     if (Table.isEmpty(table)) {
       return '';
@@ -77,13 +77,7 @@ export namespace TableRender {
 
     // Data rows
     table.rows.forEach((row, rowIndex) => {
-      const renderedRow = renderRow(
-        row,
-        columnWidths,
-        rowIndex,
-        table,
-        renderOptions
-      );
+      const renderedRow = renderRow(row, columnWidths, rowIndex, table, renderOptions);
       parts.push(renderedRow);
 
       // Row separator (except for last row)
@@ -127,8 +121,10 @@ export namespace TableRender {
     // Render each cell
     rowData.forEach((cellValue, colIndex) => {
       const width = columnWidths[colIndex] ?? 10;
-      const cellStyle = options.applyStyling ? Table.getCellStyle(table, rowIndex, colIndex) : undefined;
-      
+      const cellStyle = options.applyStyling
+        ? Table.getCellStyle(table, rowIndex, colIndex)
+        : undefined;
+
       const formattedCell = renderCell(cellValue, width, cellStyle);
       cells.push(formattedCell);
 
@@ -156,11 +152,10 @@ export namespace TableRender {
   const renderCell = (value: string, width: number, style?: StyleProperties): string => {
     // Truncate or pad the value to fit the width
     const padding = 1; // Space on each side
-    const contentWidth = width - (padding * 2);
-    
-    let content = value.length > contentWidth 
-      ? value.substring(0, contentWidth - 3) + '...'
-      : value;
+    const contentWidth = width - padding * 2;
+
+    let content =
+      value.length > contentWidth ? `${value.substring(0, contentWidth - 3)}...` : value;
 
     // Pad to content width
     content = content.padEnd(contentWidth);
@@ -266,7 +261,7 @@ export namespace TableRender {
     // Extract border characters from border config
     // This assumes the border config has a chars property
     const chars = (border as any).chars || {};
-    
+
     return {
       top: chars.top || '─',
       right: chars.right || '│',
@@ -327,9 +322,9 @@ export namespace TableRender {
    * @returns Simple rendered table string
    */
   export const renderSimple = (table: TableConfig): string => {
-    return render(table, { 
-      includeBorders: false, 
-      applyStyling: false 
+    return render(table, {
+      includeBorders: false,
+      applyStyling: false,
     });
   };
 

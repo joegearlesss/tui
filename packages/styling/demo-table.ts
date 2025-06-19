@@ -1,19 +1,15 @@
 /**
  * Table Component Demo
- * 
+ *
  * Demonstrates the table component functionality matching OVERVIEW-v2 examples.
  */
 
-import { TableBuilder, Table, TableRender, Border, Style } from './src';
+import { Border, Style, Table, TableBuilder, TableRender } from './src';
 
 // Create a simple table
 const simpleTable = TableBuilder.create()
   .headers('Name', 'Age', 'City')
-  .rows(
-    ['John', '25', 'NYC'],
-    ['Jane', '30', 'LA'],
-    ['Bob', '35', 'Chicago']
-  )
+  .rows(['John', '25', 'NYC'], ['Jane', '30', 'LA'], ['Bob', '35', 'Chicago'])
   .build();
 
 console.log('Simple Table:');
@@ -40,11 +36,7 @@ console.log();
 // Create a table with styling
 const styledTable = TableBuilder.create()
   .headers('Language', 'Formal', 'Informal')
-  .rows(
-    ['English', 'Hello', 'Hi'],
-    ['Spanish', 'Hola', 'Hey'],
-    ['French', 'Bonjour', 'Salut']
-  )
+  .rows(['English', 'Hello', 'Hi'], ['Spanish', 'Hola', 'Hey'], ['French', 'Bonjour', 'Salut'])
   .styleFunc((row, col) => {
     if (row === Table.HEADER_ROW) {
       return Style.bold(Style.create(), true);
@@ -62,16 +54,16 @@ console.log(TableRender.render(styledTable));
 console.log();
 
 // Demonstrate functional composition
-const dataTable = Table.headers('Product', 'Price', 'Stock')(
+const dataTable = Table.headers(
+  'Product',
+  'Price',
+  'Stock'
+)(
   Table.rows(
     ['Laptop', '$999', '5'],
     ['Mouse', '$25', '50'],
     ['Keyboard', '$75', '20']
-  )(
-    Table.border(Border.thick())(
-      Table.create()
-    )
-  )
+  )(Table.border(Border.thick())(Table.create()))
 );
 
 console.log('Functional Composition Table:');

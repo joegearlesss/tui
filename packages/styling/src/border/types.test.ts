@@ -1,19 +1,19 @@
 /**
  * Border Types Tests
- * 
+ *
  * Tests for border type definitions and Zod schemas
  */
 
-import { describe, test, expect } from 'bun:test';
+import { describe, expect, test } from 'bun:test';
 import { z } from 'zod';
 import {
-  BorderCharsSchema,
-  BorderSidesSchema,
-  BorderConfigSchema,
-  CustomBorderConfigSchema,
-  type BorderConfig,
   type BorderChars,
+  BorderCharsSchema,
+  type BorderConfig,
+  BorderConfigSchema,
+  BorderSidesSchema,
   type CustomBorderConfig,
+  CustomBorderConfigSchema,
 } from './types';
 
 describe('Border Types', () => {
@@ -119,7 +119,7 @@ describe('Border Types', () => {
     test('should validate valid border sides array', () => {
       const validSides = [true, true, true, true] as const;
       expect(() => BorderSidesSchema.parse(validSides)).not.toThrow();
-      
+
       const result = BorderSidesSchema.parse(validSides);
       expect(result).toEqual(validSides);
     });
@@ -169,7 +169,7 @@ describe('Border Types', () => {
 
     test('should validate all border types', () => {
       const types = ['normal', 'rounded', 'thick', 'double', 'custom'] as const;
-      
+
       for (const type of types) {
         const config = {
           type,
@@ -283,8 +283,17 @@ describe('Border Types', () => {
 
     test('should have descriptions on all char fields', () => {
       const shape = BorderCharsSchema.shape;
-      const charFields = ['top', 'right', 'bottom', 'left', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
-      
+      const charFields = [
+        'top',
+        'right',
+        'bottom',
+        'left',
+        'topLeft',
+        'topRight',
+        'bottomLeft',
+        'bottomRight',
+      ];
+
       for (const field of charFields) {
         expect(shape[field].description).toBeDefined();
         expect(shape[field].description).toContain('Unicode character');

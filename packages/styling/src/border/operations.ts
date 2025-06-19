@@ -1,19 +1,18 @@
 /**
  * Border Operations
- * 
+ *
  * Functional operations for manipulating border configurations.
  * All operations are pure functions that return new border configurations.
  */
 
-import type { BorderConfig, BorderChars, CustomBorderConfig } from './types';
 import { Border } from './presets';
+import type { BorderChars, BorderConfig, CustomBorderConfig } from './types';
 
 /**
  * Border manipulation operations following functional programming principles
  * All functions are pure and return new BorderConfig objects
  */
 export namespace BorderOperations {
-
   /**
    * Merges two border configurations, with the second taking precedence
    * @param base - Base border configuration
@@ -26,7 +25,12 @@ export namespace BorderOperations {
       ...base.chars,
       ...override.chars,
     }),
-    sides: Object.freeze(override.sides ?? base.sides) as readonly [boolean, boolean, boolean, boolean],
+    sides: Object.freeze(override.sides ?? base.sides) as readonly [
+      boolean,
+      boolean,
+      boolean,
+      boolean,
+    ],
   });
 
   /**
@@ -50,7 +54,7 @@ export namespace BorderOperations {
    * @returns New BorderConfig with updated side visibility
    */
   export const updateSides = (
-    border: BorderConfig, 
+    border: BorderConfig,
     sides: readonly [boolean, boolean, boolean, boolean]
   ): BorderConfig => ({
     ...border,
@@ -64,14 +68,14 @@ export namespace BorderOperations {
    * @returns New BorderConfig with toggled side visibility
    */
   export const toggleSide = (
-    border: BorderConfig, 
+    border: BorderConfig,
     side: 'top' | 'right' | 'bottom' | 'left'
   ): BorderConfig => {
     const [top, right, bottom, left] = border.sides;
     const sideIndex = { top: 0, right: 1, bottom: 2, left: 3 }[side];
     const newSides = [...border.sides] as [boolean, boolean, boolean, boolean];
     newSides[sideIndex] = !newSides[sideIndex];
-    
+
     return updateSides(border, newSides);
   };
 
@@ -86,12 +90,12 @@ export namespace BorderOperations {
     enabledSides: readonly ('top' | 'right' | 'bottom' | 'left')[]
   ): BorderConfig => {
     const sides: [boolean, boolean, boolean, boolean] = [false, false, false, false];
-    
+
     for (const side of enabledSides) {
       const index = { top: 0, right: 1, bottom: 2, left: 3 }[side];
       sides[index] = true;
     }
-    
+
     return updateSides(border, sides);
   };
 
@@ -107,12 +111,12 @@ export namespace BorderOperations {
   ): BorderConfig => {
     const [top, right, bottom, left] = border.sides;
     const sides: [boolean, boolean, boolean, boolean] = [top, right, bottom, left];
-    
+
     for (const side of disabledSides) {
       const index = { top: 0, right: 1, bottom: 2, left: 3 }[side];
       sides[index] = false;
     }
-    
+
     return updateSides(border, sides);
   };
 
@@ -132,7 +136,7 @@ export namespace BorderOperations {
       thick: Border.thick,
       double: Border.double,
     };
-    
+
     const newBorder = styleMap[newStyle]();
     return updateSides(newBorder, border.sides);
   };
@@ -149,7 +153,12 @@ export namespace BorderOperations {
       ...base.chars,
       ...customConfig.chars,
     }),
-    sides: Object.freeze(customConfig.sides ?? base.sides) as readonly [boolean, boolean, boolean, boolean],
+    sides: Object.freeze(customConfig.sides ?? base.sides) as readonly [
+      boolean,
+      boolean,
+      boolean,
+      boolean,
+    ],
   });
 
   /**
@@ -160,23 +169,29 @@ export namespace BorderOperations {
    */
   export const isEqual = (border1: BorderConfig, border2: BorderConfig): boolean => {
     if (border1.type !== border2.type) return false;
-    
+
     // Check sides equality
     if (border1.sides.length !== border2.sides.length) return false;
     for (let i = 0; i < border1.sides.length; i++) {
       if (border1.sides[i] !== border2.sides[i]) return false;
     }
-    
+
     // Check chars equality
     const charKeys: (keyof BorderChars)[] = [
-      'top', 'right', 'bottom', 'left',
-      'topLeft', 'topRight', 'bottomLeft', 'bottomRight'
+      'top',
+      'right',
+      'bottom',
+      'left',
+      'topLeft',
+      'topRight',
+      'bottomLeft',
+      'bottomRight',
     ];
-    
+
     for (const key of charKeys) {
       if (border1.chars[key] !== border2.chars[key]) return false;
     }
-    
+
     return true;
   };
 
@@ -186,7 +201,7 @@ export namespace BorderOperations {
    * @returns True if at least one side is visible, false if all sides are hidden
    */
   export const hasVisibleSides = (border: BorderConfig): boolean => {
-    return border.sides.some(side => side);
+    return border.sides.some((side) => side);
   };
 
   /**
@@ -194,7 +209,9 @@ export namespace BorderOperations {
    * @param border - Border configuration to analyze
    * @returns Array of visible side names
    */
-  export const getVisibleSides = (border: BorderConfig): readonly ('top' | 'right' | 'bottom' | 'left')[] => {
+  export const getVisibleSides = (
+    border: BorderConfig
+  ): readonly ('top' | 'right' | 'bottom' | 'left')[] => {
     const sideNames = ['top', 'right', 'bottom', 'left'] as const;
     return sideNames.filter((_, index) => border.sides[index]);
   };
@@ -209,7 +226,7 @@ export namespace BorderOperations {
     if (!hasVisibleSides(border)) {
       return Border.none(Border.normal());
     }
-    
+
     return border;
   };
 }

@@ -1,6 +1,6 @@
 /**
  * List Component Types
- * 
+ *
  * Defines the core types and interfaces for the list component system.
  * Based on OVERVIEW-v2.internal.md Section 5 (List Component) specification.
  */
@@ -23,31 +23,31 @@ export type EnumeratorFunction = (items: readonly ListItem[], index: number) => 
 export interface ListConfig {
   /** Array of list items (strings or nested lists) */
   readonly items: readonly ListItem[];
-  
+
   /** Function that generates enumeration for each item */
   readonly enumerator: EnumeratorFunction;
-  
+
   /** Optional style configuration for list items */
   readonly itemStyle: StyleProperties | undefined;
-  
+
   /** Optional style configuration for enumerators */
   readonly enumeratorStyle: StyleProperties | undefined;
-  
+
   /** Whether the list should be hidden from rendering */
   readonly hidden: boolean;
-  
+
   /** Optional offset for positioning [x, y] */
   readonly offset: readonly [number, number] | undefined;
-  
+
   /** Indentation level for nested lists */
   readonly indentLevel: number;
-  
+
   /** Custom indentation string (overrides default spacing) */
   readonly indentString: string | undefined;
-  
+
   /** Whether to show enumerators for this list */
   readonly showEnumerators: boolean;
-  
+
   /** Spacing between enumerator and item content */
   readonly enumeratorSpacing: number;
 }
@@ -58,16 +58,16 @@ export interface ListConfig {
 export interface ListRenderOptions {
   /** Whether to apply item styling */
   readonly applyItemStyling: boolean;
-  
+
   /** Whether to apply enumerator styling */
   readonly applyEnumeratorStyling: boolean;
-  
+
   /** Maximum depth for nested list rendering */
   readonly maxDepth: number;
-  
+
   /** Custom indentation per level */
   readonly indentPerLevel: number;
-  
+
   /** Whether to render hidden lists */
   readonly renderHidden: boolean;
 }
@@ -78,10 +78,10 @@ export interface ListRenderOptions {
 export interface ListValidationResult {
   /** Whether the list configuration is valid */
   readonly isValid: boolean;
-  
+
   /** Array of validation error messages */
   readonly errors: readonly string[];
-  
+
   /** Array of validation warnings */
   readonly warnings: readonly string[];
 }
@@ -92,19 +92,19 @@ export interface ListValidationResult {
 export interface ListMetrics {
   /** Total number of items (including nested) */
   readonly totalItems: number;
-  
+
   /** Maximum nesting depth */
   readonly maxDepth: number;
-  
+
   /** Total rendered width */
   readonly totalWidth: number;
-  
+
   /** Total rendered height in lines */
   readonly totalHeight: number;
-  
+
   /** Number of top-level items */
   readonly topLevelItems: number;
-  
+
   /** Array of item widths */
   readonly itemWidths: readonly number[];
 }
@@ -115,16 +115,16 @@ export interface ListMetrics {
 export interface ListItemPosition {
   /** Index in the current level */
   readonly index: number;
-  
+
   /** Nesting depth (0 for top level) */
   readonly depth: number;
-  
+
   /** Path to this item (array of indices) */
   readonly path: readonly number[];
-  
+
   /** Whether this is the last item at its level */
   readonly isLast: boolean;
-  
+
   /** Whether this item has children */
   readonly hasChildren: boolean;
 }

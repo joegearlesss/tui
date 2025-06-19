@@ -1,10 +1,10 @@
 /**
  * Border Presets Tests
- * 
+ *
  * Tests for predefined border configurations and preset functions
  */
 
-import { describe, test, expect } from 'bun:test';
+import { describe, expect, test } from 'bun:test';
 import { Border, BorderPresets } from './presets';
 import type { BorderConfig } from './types';
 
@@ -13,7 +13,7 @@ describe('Border Presets', () => {
     describe('normal()', () => {
       test('should create normal border configuration', () => {
         const border = Border.normal();
-        
+
         expect(border.type).toBe('normal');
         expect(border.chars.top).toBe('─');
         expect(border.chars.right).toBe('│');
@@ -34,7 +34,7 @@ describe('Border Presets', () => {
       test('should create new instance each time', () => {
         const border1 = Border.normal();
         const border2 = Border.normal();
-        
+
         expect(border1).not.toBe(border2);
         expect(border1).toEqual(border2);
       });
@@ -43,7 +43,7 @@ describe('Border Presets', () => {
     describe('rounded()', () => {
       test('should create rounded border configuration', () => {
         const border = Border.rounded();
-        
+
         expect(border.type).toBe('rounded');
         expect(border.chars.topLeft).toBe('╭');
         expect(border.chars.topRight).toBe('╮');
@@ -60,7 +60,7 @@ describe('Border Presets', () => {
     describe('thick()', () => {
       test('should create thick border configuration', () => {
         const border = Border.thick();
-        
+
         expect(border.type).toBe('thick');
         expect(border.chars.top).toBe('━');
         expect(border.chars.right).toBe('┃');
@@ -77,7 +77,7 @@ describe('Border Presets', () => {
     describe('double()', () => {
       test('should create double border configuration', () => {
         const border = Border.double();
-        
+
         expect(border.type).toBe('double');
         expect(border.chars.top).toBe('═');
         expect(border.chars.right).toBe('║');
@@ -99,9 +99,9 @@ describe('Border Presets', () => {
             bottom: '═',
           },
         };
-        
+
         const border = Border.custom(customConfig);
-        
+
         expect(border.type).toBe('custom');
         expect(border.chars.top).toBe('═');
         expect(border.chars.bottom).toBe('═');
@@ -120,9 +120,9 @@ describe('Border Presets', () => {
           },
           sides: [true, false, true, false] as const,
         };
-        
+
         const border = Border.custom(customConfig);
-        
+
         expect(border.type).toBe('custom');
         expect(border.chars.topLeft).toBe('╔');
         expect(border.chars.topRight).toBe('╗');
@@ -131,7 +131,7 @@ describe('Border Presets', () => {
 
       test('should handle empty custom config', () => {
         const border = Border.custom({ chars: {} });
-        
+
         expect(border.type).toBe('custom');
         // Should be identical to normal border
         const normalBorder = Border.normal();
@@ -144,7 +144,7 @@ describe('Border Presets', () => {
       test('should modify border sides', () => {
         const baseBorder = Border.normal();
         const modifiedBorder = Border.withSides(baseBorder, true, false, true, false);
-        
+
         expect(modifiedBorder.sides).toEqual([true, false, true, false]);
         expect(modifiedBorder.chars).toEqual(baseBorder.chars);
         expect(modifiedBorder.type).toBe(baseBorder.type);
@@ -153,9 +153,9 @@ describe('Border Presets', () => {
       test('should not modify original border', () => {
         const baseBorder = Border.normal();
         const originalSides = [...baseBorder.sides];
-        
+
         Border.withSides(baseBorder, false, false, false, false);
-        
+
         expect(baseBorder.sides).toEqual(originalSides);
       });
     });
@@ -200,15 +200,15 @@ describe('Border Presets', () => {
     describe('immutability', () => {
       test('all border functions should return new objects', () => {
         const baseBorder = Border.normal();
-        
+
         const topOnly = Border.topOnly(baseBorder);
         const bottomOnly = Border.bottomOnly(baseBorder);
         const withSides = Border.withSides(baseBorder, true, false, true, false);
-        
+
         expect(topOnly).not.toBe(baseBorder);
         expect(bottomOnly).not.toBe(baseBorder);
         expect(withSides).not.toBe(baseBorder);
-        
+
         expect(topOnly).not.toBe(bottomOnly);
         expect(bottomOnly).not.toBe(withSides);
       });
@@ -256,7 +256,7 @@ describe('Border Presets', () => {
 
     test('all presets should use normal border characters', () => {
       const normalChars = Border.normal().chars;
-      
+
       expect(BorderPresets.horizontalLine.chars).toEqual(normalChars);
       expect(BorderPresets.verticalLine.chars).toEqual(normalChars);
       expect(BorderPresets.topLine.chars).toEqual(normalChars);
@@ -268,16 +268,11 @@ describe('Border Presets', () => {
 
   describe('Unicode character validation', () => {
     test('all preset borders should use valid Unicode box-drawing characters', () => {
-      const borders = [
-        Border.normal(),
-        Border.rounded(),
-        Border.thick(),
-        Border.double(),
-      ];
+      const borders = [Border.normal(), Border.rounded(), Border.thick(), Border.double()];
 
       for (const border of borders) {
         // Check that all characters are single Unicode characters
-        Object.values(border.chars).forEach(char => {
+        Object.values(border.chars).forEach((char) => {
           expect(char.length).toBeGreaterThan(0);
           expect(char.length).toBeLessThanOrEqual(2);
         });
@@ -286,11 +281,11 @@ describe('Border Presets', () => {
 
     test('border characters should be visually distinct', () => {
       const border = Border.normal();
-      
+
       // Horizontal and vertical characters should be different
       expect(border.chars.top).not.toBe(border.chars.left);
       expect(border.chars.bottom).not.toBe(border.chars.right);
-      
+
       // Corner characters should be different from line characters
       expect(border.chars.topLeft).not.toBe(border.chars.top);
       expect(border.chars.topLeft).not.toBe(border.chars.left);
@@ -302,19 +297,19 @@ describe('Border Presets', () => {
       // Test that functions don't modify global state
       const border1 = Border.normal();
       const border2 = Border.normal();
-      
+
       expect(border1).toEqual(border2);
-      
+
       // Modify one border
       Border.topOnly(border1);
-      
+
       // Original should be unchanged
       expect(border1).toEqual(border2);
     });
 
     test('all returned objects should be immutable', () => {
       const border = Border.normal();
-      
+
       // Attempt to modify the border (should not work with readonly types)
       expect(() => {
         // @ts-expect-error - Testing immutability

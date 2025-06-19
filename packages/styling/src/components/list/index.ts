@@ -1,18 +1,18 @@
 /**
  * List Component - Functional list creation and rendering system
- * 
+ *
  * This module provides a comprehensive system for creating, manipulating, and rendering
  * lists with support for nested structures, custom enumerators, styling, and various
  * output formats.
- * 
+ *
  * @example Basic Usage
  * ```typescript
  * import { List, ListBuilder } from './list';
- * 
+ *
  * // Functional approach
  * const list = List.create(['Item 1', 'Item 2', 'Item 3']);
  * const styled = List.withEnumerator(list, List.Enumerator.ARABIC);
- * 
+ *
  * // Builder approach
  * const built = ListBuilder
  *   .fromStrings(['Item 1', 'Item 2', 'Item 3'])
@@ -20,7 +20,7 @@
  *   .indent(4)
  *   .build();
  * ```
- * 
+ *
  * @example Nested Lists
  * ```typescript
  * const nested = List.create([
@@ -29,7 +29,7 @@
  *   'Another top level item'
  * ]);
  * ```
- * 
+ *
  * @example Custom Styling
  * ```typescript
  * const styled = List.create(['Item 1', 'Item 2'])
@@ -44,7 +44,7 @@ export type {
   ListConfig,
   EnumeratorFunction,
   ListMetrics,
-  ListRenderOptions
+  ListRenderOptions,
 } from './types';
 
 // Validation functions and schemas
@@ -58,7 +58,7 @@ export {
   validateEnumeratorFunction,
   validateListConfig,
   validateListMetrics,
-  validateListRenderOptions
+  validateListRenderOptions,
 } from './validation';
 
 // Functional operations (primary API)
@@ -82,7 +82,7 @@ export const {
   nested: nestedList,
   calculateMetrics: getListMetrics,
   flatten: flattenList,
-  validate: validateList
+  validate: validateList,
 } = ListImport;
 
 // Convenience re-exports for rendering
@@ -91,5 +91,5 @@ export const {
   renderToLines: renderListToLines,
   renderToHtml: renderListToHtml,
   renderToMarkdown: renderListToMarkdown,
-  getDimensions: getListDimensions
+  getDimensions: getListDimensions,
 } = ListRendererImport;

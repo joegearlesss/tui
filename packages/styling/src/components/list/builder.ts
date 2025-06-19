@@ -1,5 +1,5 @@
-import type { ListItem, ListConfig, EnumeratorFunction } from './types';
 import { List } from './operations';
+import type { EnumeratorFunction, ListConfig, ListItem } from './types';
 
 /**
  * Fluent API builder for creating lists with method chaining

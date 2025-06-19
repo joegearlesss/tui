@@ -1,6 +1,6 @@
 /**
  * Components Index
- * 
+ *
  * Main exports for all components in the styling package.
  * Provides unified access to table, list, and tree components.
  */

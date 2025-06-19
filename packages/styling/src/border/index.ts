@@ -1,6 +1,6 @@
 /**
  * Border System Index
- * 
+ *
  * Main exports for the border system following functional programming principles.
  * Provides a complete API for creating, manipulating, and rendering borders.
  */

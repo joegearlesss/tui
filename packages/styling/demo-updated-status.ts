@@ -3,16 +3,16 @@
  * Shows the current state of OVERVIEW-v2 compliance
  */
 
-import { 
-  Style, 
-  StyleBuilder, 
-  Color, 
-  Border, 
-  BorderBuilder, 
+import {
+  ANSI,
+  Border,
+  BorderBuilder,
   BorderRender,
-  Layout, 
+  Color,
+  Layout,
   Measurement,
-  ANSI 
+  Style,
+  StyleBuilder,
 } from '@tui/styling';
 
 console.log('🎨 TUI Styling Package - Updated Implementation Status\n');
@@ -34,9 +34,7 @@ console.log('✅ WORKING: Color System');
 const adaptiveColor = Color.adaptive({ light: '#0066CC', dark: '#4A9EFF' });
 const rgbColor = Color.rgb(255, 107, 107);
 
-const colorDemo = StyleBuilder.create()
-  .foreground(adaptiveColor)
-  .build();
+const colorDemo = StyleBuilder.create().foreground(adaptiveColor).build();
 
 console.log(Style.render(colorDemo, 'Adaptive colors work!'));
 console.log('');
@@ -48,9 +46,7 @@ const boxedText = BorderRender.box(roundedBorder, 'Borders work perfectly!');
 console.log(boxedText);
 
 // Border builder example
-const customBorder = BorderBuilder.rounded()
-  .horizontalOnly()
-  .build();
+const customBorder = BorderBuilder.rounded().horizontalOnly().build();
 const horizontalBox = BorderRender.box(customBorder, 'Horizontal border only');
 console.log(horizontalBox);
 console.log('');
@@ -62,12 +58,7 @@ const content = 'Content line 1\nContent line 2';
 const footer = 'Footer';
 
 // This now works exactly as specified in OVERVIEW-v2!
-const layout = Layout.joinVertical(
-  'center',
-  header,
-  content,
-  footer
-);
+const layout = Layout.joinVertical('center', header, content, footer);
 
 console.log('Layout composition:');
 console.log(layout);
@@ -105,10 +96,7 @@ const headerStyle = StyleBuilder.create()
   .padding(1, 2)
   .build();
 
-const contentStyle = StyleBuilder.create()
-  .foreground('#666666')
-  .padding(1)
-  .build();
+const contentStyle = StyleBuilder.create().foreground('#666666').padding(1).build();
 
 // This is exactly the pattern from OVERVIEW-v2!
 const dashboard = Layout.joinVertical(
@@ -117,9 +105,15 @@ const dashboard = Layout.joinVertical(
   '',
   Layout.joinHorizontal(
     'top',
-    BorderRender.box(Border.rounded(), 'Feature Status:\n✅ Style System\n✅ Color System\n✅ Border System\n✅ Layout System'),
+    BorderRender.box(
+      Border.rounded(),
+      'Feature Status:\n✅ Style System\n✅ Color System\n✅ Border System\n✅ Layout System'
+    ),
     '  ',
-    BorderRender.box(Border.normal(), 'Next Steps:\n❌ Table Component\n❌ List Component\n❌ Tree Component')
+    BorderRender.box(
+      Border.normal(),
+      'Next Steps:\n❌ Table Component\n❌ List Component\n❌ Tree Component'
+    )
   )
 );
 

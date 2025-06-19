@@ -2,7 +2,7 @@
  * Layout Joining and Measurement Tests
  */
 
-import { describe, test, expect } from 'bun:test';
+import { describe, expect, test } from 'bun:test';
 import { Layout, Measurement } from './joining';
 
 describe('Layout', () => {
@@ -10,7 +10,7 @@ describe('Layout', () => {
     test('should join blocks horizontally with top alignment', () => {
       const block1 = 'A\nB\nC';
       const block2 = 'X\nY';
-      
+
       const result = Layout.joinHorizontal('top', block1, block2);
       expect(result).toBe('AX\nBY\nC');
     });
@@ -18,7 +18,7 @@ describe('Layout', () => {
     test('should join blocks horizontally with bottom alignment', () => {
       const block1 = 'A\nB\nC';
       const block2 = 'X\nY';
-      
+
       const result = Layout.joinHorizontal('bottom', block1, block2);
       expect(result).toBe('A\nBX\nCY');
     });
@@ -26,7 +26,7 @@ describe('Layout', () => {
     test('should join blocks horizontally with middle alignment', () => {
       const block1 = 'A\nB\nC\nD\nE';
       const block2 = 'X\nY\nZ';
-      
+
       const result = Layout.joinHorizontal('middle', block1, block2);
       expect(result).toBe('A\nBX\nCY\nDZ\nE');
     });
@@ -34,7 +34,7 @@ describe('Layout', () => {
     test('should handle numeric alignment values', () => {
       const block1 = 'A\nB\nC';
       const block2 = 'X';
-      
+
       const result = Layout.joinHorizontal(0.5, block1, block2);
       expect(result).toBe('A\nBX\nC');
     });
@@ -54,7 +54,7 @@ describe('Layout', () => {
     test('should join blocks vertically with left alignment', () => {
       const block1 = 'ABC';
       const block2 = 'XY';
-      
+
       const result = Layout.joinVertical('left', block1, block2);
       expect(result).toBe('ABC\nXY ');
     });
@@ -62,7 +62,7 @@ describe('Layout', () => {
     test('should join blocks vertically with right alignment', () => {
       const block1 = 'ABC';
       const block2 = 'XY';
-      
+
       const result = Layout.joinVertical('right', block1, block2);
       expect(result).toBe('ABC\n XY');
     });
@@ -70,7 +70,7 @@ describe('Layout', () => {
     test('should join blocks vertically with center alignment', () => {
       const block1 = 'ABCDE';
       const block2 = 'XY';
-      
+
       const result = Layout.joinVertical('center', block1, block2);
       expect(result).toBe('ABCDE\n XY  ');
     });
@@ -78,7 +78,7 @@ describe('Layout', () => {
     test('should handle numeric alignment values', () => {
       const block1 = 'ABCD';
       const block2 = 'XY';
-      
+
       const result = Layout.joinVertical(0.5, block1, block2);
       expect(result).toBe('ABCD\n XY ');
     });
@@ -86,7 +86,7 @@ describe('Layout', () => {
     test('should handle multiline blocks', () => {
       const block1 = 'A\nBC';
       const block2 = 'XYZ';
-      
+
       const result = Layout.joinVertical('left', block1, block2);
       expect(result).toBe('A  \nBC \nXYZ');
     });
@@ -182,31 +182,26 @@ describe('Layout integration', () => {
     const header = 'HEADER';
     const content = 'Content\nLine 2';
     const footer = 'Footer';
-    
-    const layout = Layout.joinVertical(
-      'center',
-      header,
-      content,
-      footer
-    );
-    
+
+    const layout = Layout.joinVertical('center', header, content, footer);
+
     expect(layout).toBe('HEADER \nContent\nLine 2 \nFooter ');
   });
 
   test('should work with nested layouts', () => {
     const left = 'L1\nL2';
     const right = 'R1\nR2';
-    
+
     const horizontal = Layout.joinHorizontal('top', left, right);
     const final = Layout.joinVertical('center', 'Title', horizontal);
-    
+
     expect(final).toBe('Title\nL1R1 \nL2R2 ');
   });
 
   test('should work with placement and joining', () => {
     const content = Layout.place(6, 3, 'center', 'middle', 'Hi');
     const bordered = Layout.joinVertical('left', '------', content, '------');
-    
+
     expect(bordered).toBe('------\n      \n  Hi  \n      \n------');
   });
 });

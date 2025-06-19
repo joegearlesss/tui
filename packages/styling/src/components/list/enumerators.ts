@@ -130,7 +130,7 @@ export namespace Enumerator {
   /**
    * Custom enumerator with a prefix and suffix
    */
-  export function custom(prefix: string = '', suffix: string = ''): EnumeratorFunction {
+  export function custom(prefix = '', suffix = ''): EnumeratorFunction {
     return (index: number) => `${prefix}${index + 1}${suffix}`;
   }
 
@@ -141,7 +141,7 @@ export namespace Enumerator {
     if (enumerators.length === 0) {
       throw new Error('Depth-aware enumerator requires at least one enumerator function');
     }
-    return (index: number, depth: number = 0) => {
+    return (index: number, depth = 0) => {
       const enumerator = enumerators[depth % enumerators.length];
       return enumerator(index, depth);
     };
@@ -158,7 +158,7 @@ function toRoman(num: number): string {
 
   const values = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
   const symbols = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
-  
+
   let result = '';
   for (let i = 0; i < values.length; i++) {
     while (num >= values[i]) {
@@ -166,6 +166,6 @@ function toRoman(num: number): string {
       num -= values[i];
     }
   }
-  
+
   return result;
 }

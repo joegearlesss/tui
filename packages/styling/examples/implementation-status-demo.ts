@@ -1,11 +1,11 @@
 /**
  * Implementation Status Demo
- * 
+ *
  * This demo shows what's currently working vs what's missing
  * compared to the OVERVIEW-v2.internal.md specification
  */
 
-import { Style, StyleBuilder, Color, ANSI } from '@tui/styling';
+import { ANSI, Color, Style, StyleBuilder } from '@tui/styling';
 
 console.log('🎨 TUI Styling Package - Implementation Status Demo\n');
 
@@ -27,9 +27,7 @@ const adaptiveColor = Color.adaptive({ light: '#0066CC', dark: '#4A9EFF' });
 const rgbColor = Color.rgb(255, 107, 107);
 const hexColor = Color.parse('#FF6B6B');
 
-const colorDemo = StyleBuilder.create()
-  .foreground(adaptiveColor)
-  .build();
+const colorDemo = StyleBuilder.create().foreground(adaptiveColor).build();
 
 console.log(Style.render(colorDemo, 'Adaptive colors work!'));
 

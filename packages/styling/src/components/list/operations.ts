@@ -1,4 +1,4 @@
-import type { ListItem, ListConfig, ListMetrics, EnumeratorFunction } from './types';
+import type { EnumeratorFunction, ListConfig, ListItem, ListMetrics } from './types';
 import { validateListConfig, validateListItem } from './validation';
 
 /**
@@ -11,7 +11,7 @@ function toRoman(num: number): string {
 
   const values = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
   const symbols = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
-  
+
   let result = '';
   for (let i = 0; i < values.length; i++) {
     while (num >= values[i]) {
@@ -19,7 +19,7 @@ function toRoman(num: number): string {
       num -= values[i];
     }
   }
-  
+
   return result;
 }
 
@@ -57,18 +57,18 @@ export namespace List {
       }
       return (index: number) => symbols[index % symbols.length];
     },
-    custom: (prefix: string = '', suffix: string = '') => {
+    custom: (prefix = '', suffix = '') => {
       return (index: number) => `${prefix}${index + 1}${suffix}`;
     },
     depthAware: (enumerators: EnumeratorFunction[]) => {
       if (enumerators.length === 0) {
         throw new Error('Depth-aware enumerator requires at least one enumerator function');
       }
-      return (index: number, depth: number = 0) => {
+      return (index: number, depth = 0) => {
         const enumerator = enumerators[depth % enumerators.length];
         return enumerator(index, depth);
       };
-    }
+    },
   } as const;
 
   /**
@@ -79,7 +79,7 @@ export namespace List {
       items: items.map(validateListItem),
       enumerator: Enumerator.BULLET,
       indent: 0,
-      spacing: 0
+      spacing: 0,
     };
     return validateListConfig(config);
   }
@@ -104,7 +104,7 @@ export namespace List {
   export function withEnumerator(config: ListConfig, enumerator: EnumeratorFunction): ListConfig {
     return validateListConfig({
       ...config,
-      enumerator
+      enumerator,
     });
   }
 
@@ -114,7 +114,7 @@ export namespace List {
   export function withIndent(config: ListConfig, indent: number): ListConfig {
     return validateListConfig({
       ...config,
-      indent
+      indent,
     });
   }
 
@@ -124,27 +124,33 @@ export namespace List {
   export function withSpacing(config: ListConfig, spacing: number): ListConfig {
     return validateListConfig({
       ...config,
-      spacing
+      spacing,
     });
   }
 
   /**
    * Sets the item style function
    */
-  export function withItemStyle(config: ListConfig, itemStyle: (text: string) => string): ListConfig {
+  export function withItemStyle(
+    config: ListConfig,
+    itemStyle: (text: string) => string
+  ): ListConfig {
     return validateListConfig({
       ...config,
-      itemStyle
+      itemStyle,
     });
   }
 
   /**
    * Sets the enumerator style function
    */
-  export function withEnumeratorStyle(config: ListConfig, enumeratorStyle: (text: string) => string): ListConfig {
+  export function withEnumeratorStyle(
+    config: ListConfig,
+    enumeratorStyle: (text: string) => string
+  ): ListConfig {
     return validateListConfig({
       ...config,
-      enumeratorStyle
+      enumeratorStyle,
     });
   }
 
@@ -154,7 +160,7 @@ export namespace List {
   export function withMaxWidth(config: ListConfig, maxWidth: number): ListConfig {
     return validateListConfig({
       ...config,
-      maxWidth
+      maxWidth,
     });
   }
 
@@ -164,7 +170,7 @@ export namespace List {
   export function append(config: ListConfig, item: ListItem): ListConfig {
     return validateListConfig({
       ...config,
-      items: [...config.items, validateListItem(item)]
+      items: [...config.items, validateListItem(item)],
     });
   }
 
@@ -174,7 +180,7 @@ export namespace List {
   export function prepend(config: ListConfig, item: ListItem): ListConfig {
     return validateListConfig({
       ...config,
-      items: [validateListItem(item), ...config.items]
+      items: [validateListItem(item), ...config.items],
     });
   }
 
@@ -185,13 +191,13 @@ export namespace List {
     if (index < 0 || index > config.items.length) {
       throw new Error(`Index ${index} is out of bounds for list with ${config.items.length} items`);
     }
-    
+
     const newItems = [...config.items];
     newItems.splice(index, 0, validateListItem(item));
-    
+
     return validateListConfig({
       ...config,
-      items: newItems
+      items: newItems,
     });
   }
 
@@ -202,13 +208,13 @@ export namespace List {
     if (index < 0 || index >= config.items.length) {
       throw new Error(`Index ${index} is out of bounds for list with ${config.items.length} items`);
     }
-    
+
     const newItems = [...config.items];
     newItems.splice(index, 1);
-    
+
     return validateListConfig({
       ...config,
-      items: newItems
+      items: newItems,
     });
   }
 
@@ -219,33 +225,39 @@ export namespace List {
     if (index < 0 || index >= config.items.length) {
       throw new Error(`Index ${index} is out of bounds for list with ${config.items.length} items`);
     }
-    
+
     const newItems = [...config.items];
     newItems[index] = validateListItem(item);
-    
+
     return validateListConfig({
       ...config,
-      items: newItems
+      items: newItems,
     });
   }
 
   /**
    * Filters list items based on a predicate function
    */
-  export function filter(config: ListConfig, predicate: (item: ListItem, index: number) => boolean): ListConfig {
+  export function filter(
+    config: ListConfig,
+    predicate: (item: ListItem, index: number) => boolean
+  ): ListConfig {
     return validateListConfig({
       ...config,
-      items: config.items.filter(predicate)
+      items: config.items.filter(predicate),
     });
   }
 
   /**
    * Maps over list items with a transformation function
    */
-  export function map(config: ListConfig, transform: (item: ListItem, index: number) => ListItem): ListConfig {
+  export function map(
+    config: ListConfig,
+    transform: (item: ListItem, index: number) => ListItem
+  ): ListConfig {
     return validateListConfig({
       ...config,
-      items: config.items.map((item, index) => validateListItem(transform(item, index)))
+      items: config.items.map((item, index) => validateListItem(transform(item, index))),
     });
   }
 
@@ -255,7 +267,7 @@ export namespace List {
   export function concat(config1: ListConfig, config2: ListConfig): ListConfig {
     return validateListConfig({
       ...config1,
-      items: [...config1.items, ...config2.items]
+      items: [...config1.items, ...config2.items],
     });
   }
 
@@ -265,7 +277,7 @@ export namespace List {
   export function reverse(config: ListConfig): ListConfig {
     return validateListConfig({
       ...config,
-      items: [...config.items].reverse()
+      items: [...config.items].reverse(),
     });
   }
 
@@ -297,7 +309,7 @@ export namespace List {
    * Finds the index of an item in the list
    */
   export function indexOf(config: ListConfig, item: ListItem): number {
-    return config.items.findIndex(listItem => {
+    return config.items.findIndex((listItem) => {
       if (typeof listItem === 'string' && typeof item === 'string') {
         return listItem === item;
       }
@@ -324,25 +336,23 @@ export namespace List {
     let totalLines = 0;
     let maxItemWidth = 0;
 
-    function processItems(items: ListItem[], depth: number = 0): void {
+    function processItems(items: ListItem[], depth = 0): void {
       maxDepth = Math.max(maxDepth, depth);
-      
+
       for (let i = 0; i < items.length; i++) {
         const item = items[i];
         totalItems++;
-        
+
         if (typeof item === 'string') {
           // Calculate lines for text wrapping if maxWidth is set
-          const lines = config.maxWidth 
-            ? Math.ceil(item.length / config.maxWidth) 
-            : 1;
+          const lines = config.maxWidth ? Math.ceil(item.length / config.maxWidth) : 1;
           totalLines += lines;
           maxItemWidth = Math.max(maxItemWidth, item.length);
         } else {
           // Nested list
           processItems(item.items, depth + 1);
         }
-        
+
         // Add spacing lines (only between items, not after the last one)
         if (config.spacing && config.spacing > 0 && i < items.length - 1) {
           totalLines += config.spacing;
@@ -356,7 +366,7 @@ export namespace List {
       totalItems,
       maxDepth,
       totalLines,
-      maxItemWidth
+      maxItemWidth,
     };
   }
 
@@ -365,7 +375,7 @@ export namespace List {
    */
   export function flatten(config: ListConfig): string[] {
     const result: string[] = [];
-    
+
     function processItems(items: ListItem[]): void {
       for (const item of items) {
         if (typeof item === 'string') {
@@ -375,7 +385,7 @@ export namespace List {
         }
       }
     }
-    
+
     processItems(config.items);
     return result;
   }
@@ -392,15 +402,13 @@ export namespace List {
    */
   export function clone(config: ListConfig): ListConfig {
     return validateListConfig({
-      items: [...config.items.map(item => 
-        typeof item === 'string' ? item : clone(item)
-      )],
+      items: [...config.items.map((item) => (typeof item === 'string' ? item : clone(item)))],
       enumerator: config.enumerator,
       indent: config.indent,
       spacing: config.spacing,
       itemStyle: config.itemStyle,
       enumeratorStyle: config.enumeratorStyle,
-      maxWidth: config.maxWidth
+      maxWidth: config.maxWidth,
     });
   }
 

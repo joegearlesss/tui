@@ -1,18 +1,18 @@
 /**
  * Border System Demo
- * 
+ *
  * Demonstrates the border system functionality and integration with the styling package
  */
 
-import { 
-  BorderBuilder, 
-  Border, 
-  BorderRender, 
+import {
+  Border,
+  BorderBuilder,
+  BorderRender,
   StyleBuilder,
+  doubleBorder,
   normalBorder,
   roundedBorder,
   thickBorder,
-  doubleBorder,
 } from '../src';
 
 console.log('🎨 Border System Demo\n');
@@ -49,17 +49,13 @@ console.log(BorderRender.box(customBorder, 'Custom mixed style!'));
 console.log();
 
 console.log('Partial Border (horizontal only):');
-const horizontalBorder = BorderBuilder.rounded()
-  .horizontalOnly()
-  .build();
+const horizontalBorder = BorderBuilder.rounded().horizontalOnly().build();
 
 console.log(BorderRender.box(horizontalBorder, 'Only top and bottom borders'));
 console.log();
 
 console.log('Partial Border (left only):');
-const leftBorder = BorderBuilder.thick()
-  .leftOnly()
-  .build();
+const leftBorder = BorderBuilder.thick().leftOnly().build();
 
 console.log(BorderRender.box(leftBorder, 'Only left border'));
 console.log();
@@ -76,20 +72,15 @@ console.log();
 
 // Border with minimum size
 console.log('📐 Border with Minimum Size:');
-const sizedContent = BorderRender.boxWithMinSize(
-  doubleBorder,
-  'Small',
-  20,
-  5
-);
+const sizedContent = BorderRender.boxWithMinSize(doubleBorder, 'Small', 20, 5);
 console.log(sizedContent);
 console.log();
 
 // Function chaining with pipe
 console.log('🔗 Function Chaining with Pipe:');
 const pipedBorder = BorderBuilder.create()
-  .pipe(chain => chain.style('thick').topChar('━'))
-  .pipe(chain => chain.bottomChar('━').verticalOnly())
+  .pipe((chain) => chain.style('thick').topChar('━'))
+  .pipe((chain) => chain.bottomChar('━').verticalOnly())
   .build();
 
 console.log(BorderRender.box(pipedBorder, 'Piped transformations!'));

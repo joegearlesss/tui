@@ -1,19 +1,19 @@
 /**
  * Table Component Operations
- * 
+ *
  * Core functional operations for table manipulation following functional programming principles.
  * All operations are pure functions that return new table configurations.
  */
 
-import type { 
-  TableConfig, 
-  TableValidationResult, 
+import type { BorderConfig } from '../../border/types';
+import type { StyleProperties } from '../../style/style';
+import type {
+  TableCellPosition,
+  TableConfig,
   TableMetrics,
   TableStyleFunction,
-  TableCellPosition 
+  TableValidationResult,
 } from './types';
-import type { StyleProperties } from '../../style/style';
-import type { BorderConfig } from '../../border/types';
 import { TableConfigSchema, TableValidationResultSchema } from './validation';
 
 /**
@@ -41,7 +41,8 @@ export namespace Table {
    * @param headerList - Array of header strings
    * @returns Function that takes a table config and returns new config with headers
    */
-  export const headers = (...headerList: readonly string[]) => 
+  export const headers =
+    (...headerList: readonly string[]) =>
     (table: TableConfig): TableConfig => ({
       ...table,
       headers: headerList,
@@ -52,7 +53,8 @@ export namespace Table {
    * @param rowList - Array of row data where each row is an array of strings
    * @returns Function that takes a table config and returns new config with rows
    */
-  export const rows = (...rowList: readonly (readonly string[])[]) => 
+  export const rows =
+    (...rowList: readonly (readonly string[])[]) =>
     (table: TableConfig): TableConfig => ({
       ...table,
       rows: rowList,
@@ -63,7 +65,8 @@ export namespace Table {
    * @param row - Array of cell values for the new row
    * @returns Function that takes a table config and returns new config with added row
    */
-  export const addRow = (row: readonly string[]) => 
+  export const addRow =
+    (row: readonly string[]) =>
     (table: TableConfig): TableConfig => ({
       ...table,
       rows: [...table.rows, row],
@@ -74,7 +77,8 @@ export namespace Table {
    * @param newRows - Array of rows to add
    * @returns Function that takes a table config and returns new config with added rows
    */
-  export const addRows = (newRows: readonly (readonly string[])[]) => 
+  export const addRows =
+    (newRows: readonly (readonly string[])[]) =>
     (table: TableConfig): TableConfig => ({
       ...table,
       rows: [...table.rows, ...newRows],
@@ -85,7 +89,8 @@ export namespace Table {
    * @param borderConfig - Border configuration to apply
    * @returns Function that takes a table config and returns new config with border
    */
-  export const border = (borderConfig: BorderConfig) => 
+  export const border =
+    (borderConfig: BorderConfig) =>
     (table: TableConfig): TableConfig => ({
       ...table,
       border: borderConfig,
@@ -95,7 +100,8 @@ export namespace Table {
    * Removes the border from a table configuration
    * @returns Function that takes a table config and returns new config without border
    */
-  export const noBorder = () => 
+  export const noBorder =
+    () =>
     (table: TableConfig): TableConfig => ({
       ...table,
       border: undefined,
@@ -106,7 +112,8 @@ export namespace Table {
    * @param fn - Function that returns style config for specific cells
    * @returns Function that takes a table config and returns new config with style function
    */
-  export const styleFunc = (fn: TableStyleFunction) => 
+  export const styleFunc =
+    (fn: TableStyleFunction) =>
     (table: TableConfig): TableConfig => ({
       ...table,
       styleFunc: fn,
@@ -116,7 +123,8 @@ export namespace Table {
    * Removes the style function from a table configuration
    * @returns Function that takes a table config and returns new config without style function
    */
-  export const noStyleFunc = () => 
+  export const noStyleFunc =
+    () =>
     (table: TableConfig): TableConfig => ({
       ...table,
       styleFunc: undefined,
@@ -127,7 +135,8 @@ export namespace Table {
    * @param tableWidth - Fixed width for the table
    * @returns Function that takes a table config and returns new config with width
    */
-  export const width = (tableWidth: number) => 
+  export const width =
+    (tableWidth: number) =>
     (table: TableConfig): TableConfig => ({
       ...table,
       width: tableWidth,
@@ -138,7 +147,8 @@ export namespace Table {
    * @param tableHeight - Fixed height for the table
    * @returns Function that takes a table config and returns new config with height
    */
-  export const height = (tableHeight: number) => 
+  export const height =
+    (tableHeight: number) =>
     (table: TableConfig): TableConfig => ({
       ...table,
       height: tableHeight,
@@ -150,7 +160,8 @@ export namespace Table {
    * @param tableHeight - Fixed height for the table
    * @returns Function that takes a table config and returns new config with dimensions
    */
-  export const dimensions = (tableWidth: number, tableHeight: number) => 
+  export const dimensions =
+    (tableWidth: number, tableHeight: number) =>
     (table: TableConfig): TableConfig => ({
       ...table,
       width: tableWidth,
@@ -185,7 +196,9 @@ export namespace Table {
       const headerCount = table.headers.length;
       table.rows.forEach((row, index) => {
         if (row.length !== headerCount) {
-          warnings.push(`Row ${index} has ${row.length} cells but table has ${headerCount} headers`);
+          warnings.push(
+            `Row ${index} has ${row.length} cells but table has ${headerCount} headers`
+          );
         }
       });
     }
@@ -223,13 +236,13 @@ export namespace Table {
     // Calculate column widths based on content
     const columnWidths = table.headers.map((header, colIndex) => {
       let maxWidth = header.length;
-      
-      table.rows.forEach(row => {
+
+      table.rows.forEach((row) => {
         if (row[colIndex]) {
           maxWidth = Math.max(maxWidth, row[colIndex].length);
         }
       });
-      
+
       return maxWidth + 2; // Add padding
     });
 
@@ -237,8 +250,8 @@ export namespace Table {
     const rowHeights = new Array(rowCount).fill(1);
 
     // Calculate total dimensions
-    const totalWidth = columnWidths.reduce((sum, width) => sum + width, 0) + 
-                      (table.border ? columnCount + 1 : 0); // Add border space
+    const totalWidth =
+      columnWidths.reduce((sum, width) => sum + width, 0) + (table.border ? columnCount + 1 : 0); // Add border space
     const totalHeight = rowCount + (table.border ? 3 : 0); // Add border space
 
     return {
@@ -258,7 +271,11 @@ export namespace Table {
    * @param col - Column index
    * @returns Style configuration for the cell, or undefined if no style function
    */
-  export const getCellStyle = (table: TableConfig, row: number, col: number): StyleProperties | undefined => {
+  export const getCellStyle = (
+    table: TableConfig,
+    row: number,
+    col: number
+  ): StyleProperties | undefined => {
     if (table.styleFunc) {
       return table.styleFunc(row, col);
     }
@@ -276,11 +293,11 @@ export namespace Table {
     if (row === HEADER_ROW) {
       return table.headers[col] ?? '';
     }
-    
+
     if (row >= 0 && row < table.rows.length) {
       return table.rows[row][col] ?? '';
     }
-    
+
     return '';
   };
 

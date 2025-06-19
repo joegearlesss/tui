@@ -1,6 +1,6 @@
 /**
  * Border Rendering
- * 
+ *
  * Provides functions for rendering borders around content using ANSI characters.
  * Handles border drawing, content placement, and proper spacing.
  */
@@ -47,7 +47,6 @@ export interface BorderDimensions {
  * Border rendering functions following functional programming principles
  */
 export namespace BorderRender {
-
   /**
    * Renders a border around the given content
    * @param border - Border configuration to use
@@ -56,43 +55,38 @@ export namespace BorderRender {
    * @returns String with content surrounded by border
    */
   export const render = (
-    border: BorderConfig, 
-    content: string, 
+    border: BorderConfig,
+    content: string,
     options: BorderRenderOptions = {}
   ): string => {
-    const {
-      minWidth = 0,
-      minHeight = 0,
-      padding = 0,
-      trimContent = false,
-    } = options;
+    const { minWidth = 0, minHeight = 0, padding = 0, trimContent = false } = options;
 
     // Process content
     const processedContent = trimContent ? content.trim() : content;
     const contentLines = processedContent.split('\n');
-    
+
     // Calculate dimensions
     const dimensions = calculateDimensions(border, contentLines, minWidth, minHeight, padding);
-    
+
     // Build the bordered content
     const lines: string[] = [];
-    
+
     // Top border
     if (dimensions.hasTop) {
       lines.push(renderTopBorder(border, dimensions));
     }
-    
+
     // Content with side borders
     const paddedContentLines = padContentLines(contentLines, dimensions, padding);
     for (const line of paddedContentLines) {
       lines.push(renderContentLine(border, line, dimensions));
     }
-    
+
     // Bottom border
     if (dimensions.hasBottom) {
       lines.push(renderBottomBorder(border, dimensions));
     }
-    
+
     return lines.join('\n');
   };
 
@@ -108,27 +102,27 @@ export namespace BorderRender {
   export const calculateDimensions = (
     border: BorderConfig,
     contentLines: readonly string[],
-    minWidth: number = 0,
-    minHeight: number = 0,
-    padding: number = 0
+    minWidth = 0,
+    minHeight = 0,
+    padding = 0
   ): BorderDimensions => {
     const [hasTop, hasRight, hasBottom, hasLeft] = border.sides;
-    
+
     // Calculate content dimensions
     const maxContentLineWidth = Math.max(
       minWidth,
-      ...contentLines.map(line => getDisplayWidth(line))
+      ...contentLines.map((line) => getDisplayWidth(line))
     );
     const contentHeight = Math.max(minHeight, contentLines.length);
-    
+
     // Add padding to content dimensions
-    const paddedContentWidth = maxContentLineWidth + (padding * 2);
-    const paddedContentHeight = contentHeight + (padding * 2);
-    
+    const paddedContentWidth = maxContentLineWidth + padding * 2;
+    const paddedContentHeight = contentHeight + padding * 2;
+
     // Calculate total dimensions including borders
     const totalWidth = paddedContentWidth + (hasLeft ? 1 : 0) + (hasRight ? 1 : 0);
     const totalHeight = paddedContentHeight + (hasTop ? 1 : 0) + (hasBottom ? 1 : 0);
-    
+
     return {
       totalWidth,
       totalHeight,
@@ -150,22 +144,22 @@ export namespace BorderRender {
   const renderTopBorder = (border: BorderConfig, dimensions: BorderDimensions): string => {
     const { chars } = border;
     const { contentWidth, hasLeft, hasRight } = dimensions;
-    
+
     let line = '';
-    
+
     // Left corner
     if (hasLeft) {
       line += chars.topLeft;
     }
-    
+
     // Top line
     line += chars.top.repeat(contentWidth);
-    
+
     // Right corner
     if (hasRight) {
       line += chars.topRight;
     }
-    
+
     return line;
   };
 
@@ -178,22 +172,22 @@ export namespace BorderRender {
   const renderBottomBorder = (border: BorderConfig, dimensions: BorderDimensions): string => {
     const { chars } = border;
     const { contentWidth, hasLeft, hasRight } = dimensions;
-    
+
     let line = '';
-    
+
     // Left corner
     if (hasLeft) {
       line += chars.bottomLeft;
     }
-    
+
     // Bottom line
     line += chars.bottom.repeat(contentWidth);
-    
+
     // Right corner
     if (hasRight) {
       line += chars.bottomRight;
     }
-    
+
     return line;
   };
 
@@ -205,29 +199,29 @@ export namespace BorderRender {
    * @returns Content line with side borders
    */
   const renderContentLine = (
-    border: BorderConfig, 
-    contentLine: string, 
+    border: BorderConfig,
+    contentLine: string,
     dimensions: BorderDimensions
   ): string => {
     const { chars } = border;
     const { contentWidth, hasLeft, hasRight } = dimensions;
-    
+
     let line = '';
-    
+
     // Left border
     if (hasLeft) {
       line += chars.left;
     }
-    
+
     // Content with padding to fill width
     const paddedContent = padLine(contentLine, contentWidth);
     line += paddedContent;
-    
+
     // Right border
     if (hasRight) {
       line += chars.right;
     }
-    
+
     return line;
   };
 
@@ -244,28 +238,28 @@ export namespace BorderRender {
     padding: number
   ): readonly string[] => {
     const lines: string[] = [];
-    
+
     // Top padding
     for (let i = 0; i < padding; i++) {
       lines.push('');
     }
-    
+
     // Content lines
     for (const line of contentLines) {
       lines.push(' '.repeat(padding) + line);
     }
-    
+
     // Fill remaining height
     const remainingHeight = dimensions.contentHeight - lines.length - padding;
     for (let i = 0; i < remainingHeight; i++) {
       lines.push('');
     }
-    
+
     // Bottom padding
     for (let i = 0; i < padding; i++) {
       lines.push('');
     }
-    
+
     return lines;
   };
 
@@ -310,8 +304,8 @@ export namespace BorderRender {
    * @returns Boxed content with padding
    */
   export const boxWithPadding = (
-    border: BorderConfig, 
-    content: string, 
+    border: BorderConfig,
+    content: string,
     padding: number
   ): string => {
     return render(border, content, { padding });

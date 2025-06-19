@@ -1,6 +1,6 @@
 /**
  * Table Component Index
- * 
+ *
  * Main exports for the table component following the OVERVIEW-v2 specification.
  * Provides both functional API and builder pattern for table creation and manipulation.
  */
