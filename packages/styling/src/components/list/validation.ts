@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { ListItem, ListConfig, EnumeratorFunction, ListMetrics, ListRenderOptions } from './types.js';
+import type { ListItem, ListConfig, EnumeratorFunction, ListMetrics, ListRenderOptions } from './types';
 
 /**
  * Validates a list item which can be either a string or nested list configuration

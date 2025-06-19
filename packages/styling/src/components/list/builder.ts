@@ -1,5 +1,5 @@
-import type { ListItem, ListConfig, EnumeratorFunction } from './types.js';
-import { List } from './operations.js';
+import type { ListItem, ListConfig, EnumeratorFunction } from './types';
+import { List } from './operations';
 
 /**
  * Fluent API builder for creating lists with method chaining

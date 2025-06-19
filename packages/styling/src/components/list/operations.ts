@@ -1,5 +1,5 @@
-import type { ListItem, ListConfig, ListMetrics, EnumeratorFunction } from './types.js';
-import { validateListConfig, validateListItem } from './validation.js';
+import type { ListItem, ListConfig, ListMetrics, EnumeratorFunction } from './types';
+import { validateListConfig, validateListItem } from './validation';
 
 /**
  * Converts a number to Roman numerals

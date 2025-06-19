@@ -45,7 +45,7 @@ export type {
   EnumeratorFunction,
   ListMetrics,
   ListRenderOptions
-} from './types.js';
+} from './types';
 
 // Validation functions and schemas
 export {
@@ -59,21 +59,21 @@ export {
   validateListConfig,
   validateListMetrics,
   validateListRenderOptions
-} from './validation.js';
+} from './validation';
 
 // Functional operations (primary API)
-export { List } from './operations.js';
+export { List } from './operations';
 
 // Import and re-export Enumerator
-import { List as ListImport } from './operations.js';
+import { List as ListImport } from './operations';
 export const Enumerator = ListImport.Enumerator;
 
 // Builder pattern for fluent API
-export { ListBuilder, ListChain } from './builder.js';
+export { ListBuilder, ListChain } from './builder';
 
 // Rendering system
-export { ListRenderer } from './rendering.js';
-import { ListRenderer as ListRendererImport } from './rendering.js';
+export { ListRenderer } from './rendering';
+import { ListRenderer as ListRendererImport } from './rendering';
 
 // Convenience re-exports for common operations
 export const {

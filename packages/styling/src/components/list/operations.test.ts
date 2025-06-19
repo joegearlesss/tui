@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'bun:test';
-import { List, ListBuilder, ListRenderer, Enumerator } from './index.js';
-import type { ListConfig, ListItem } from './types.js';
+import { List, ListBuilder, ListRenderer, Enumerator } from './index';
+import type { ListConfig, ListItem } from './types';
 
 describe('List Component', () => {
   describe('List.create', () => {

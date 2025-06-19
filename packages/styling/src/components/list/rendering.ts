@@ -1,5 +1,5 @@
-import type { ListConfig, ListItem, ListRenderOptions } from './types.js';
-import { validateListConfig, validateListRenderOptions } from './validation.js';
+import type { ListConfig, ListItem, ListRenderOptions } from './types';
+import { validateListConfig, validateListRenderOptions } from './validation';
 
 /**
  * Renders lists to strings with ANSI support and proper formatting
