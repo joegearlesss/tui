@@ -7,10 +7,10 @@
 import {
   BorderBuilder,
   BorderRender,
+  StyleBuilder,
   doubleBorder,
   normalBorder,
   roundedBorder,
-  StyleBuilder,
   thickBorder,
 } from '../src';
 

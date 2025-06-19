@@ -1,11 +1,11 @@
 import type {
-  AdaptiveColor,
   ANSI256Color,
+  AdaptiveColor,
   ColorProfile,
   ColorValue,
   CompleteColor,
-  HexColor,
   HSLColor,
+  HexColor,
   RGBColor,
 } from '@tui/styling/types';
 
@@ -912,6 +912,35 @@ export namespace Color {
       return [baseHex, first, second];
     };
   }
+
+  /**
+   * Detects if the terminal has a dark background
+   * Note: This is a best-effort detection and may not be 100% accurate
+   * @returns Promise resolving to true if terminal has dark background, undefined if unknown
+   */
+  export const hasDarkBackground = async (): Promise<boolean | undefined> => {
+    // Import Terminal here to avoid circular dependencies
+    const { Terminal } = await import('../terminal/detection');
+    const detection = await Terminal.detectBackground();
+    return detection.isDark;
+  };
+
+  /**
+   * Synchronous version of dark background detection (less accurate)
+   * @returns True if terminal has dark background, undefined if unknown
+   */
+  export const hasDarkBackgroundSync = (): boolean | undefined => {
+    // Import Terminal here to avoid circular dependencies
+    try {
+      // Use require to avoid top-level import
+      const { Terminal } = require('../terminal/detection');
+      const detection = Terminal.detectBackgroundSync();
+      return detection.isDark;
+    } catch {
+      // Fallback if terminal detection is not available
+      return undefined;
+    }
+  };
 
   /**
    * Helper function to convert any color value to hex

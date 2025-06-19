@@ -9,7 +9,13 @@
 export * from './list';
 // Re-export list namespace for convenience
 export { Enumerator, List, ListBuilder, ListRenderer } from './list';
+
 // Table component exports
 export * from './table';
 // Re-export table namespace for convenience
 export { Table, TableBuilder, TableRender } from './table';
+
+// Tree component exports
+export * from './tree';
+// Re-export tree namespace for convenience
+export { Tree, TreeBuilder, TreeEnumerator, TreeNode, TreeRenderer } from './tree';

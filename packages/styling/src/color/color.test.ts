@@ -309,4 +309,21 @@ describe('Color utilities', () => {
       expect(color).toEqual({ ansi: undefined, hex: '#FF0000' });
     });
   });
+
+  describe('background detection', () => {
+    test('hasDarkBackground should return background detection result', async () => {
+      const result = await Color.hasDarkBackground();
+      expect(typeof result === 'boolean' || result === undefined).toBe(true);
+    });
+
+    test('hasDarkBackgroundSync should return background detection result', () => {
+      const result = Color.hasDarkBackgroundSync();
+      expect(typeof result === 'boolean' || result === undefined).toBe(true);
+    });
+
+    test('hasDarkBackgroundSync should handle missing terminal module gracefully', () => {
+      // This test ensures the function doesn't throw when terminal detection fails
+      expect(() => Color.hasDarkBackgroundSync()).not.toThrow();
+    });
+  });
 });

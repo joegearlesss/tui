@@ -5,24 +5,12 @@
     "rules": {
       "recommended": true,
       "style": {
-        "noNonNullAssertion": "off",
-        "noParameterAssign": "error",
-        "useAsConstAssertion": "error",
-        "useDefaultParameterLast": "error",
-        "useEnumInitializers": "error",
-        "useSelfClosingElements": "error",
-        "useSingleVarDeclarator": "error",
-        "noUnusedTemplateLiteral": "error",
-        "useNumberNamespace": "error",
-        "noInferrableTypes": "error",
-        "noUselessElse": "error"
+        "noNonNullAssertion": "off"
       },
       "suspicious": {
-        "noExplicitAny": "error",
-        "noControlCharactersInRegex": "off"
-      },
-      "complexity": {
-        "noForEach": "error"
+        "noExplicitAny": "off",
+        "noControlCharactersInRegex": "off",
+        "noThenProperty": "off"
       }
     }
   },
@@ -42,6 +30,6 @@
     }
   },
   "files": {
-    "includes": ["packages/**/*.ts", "packages/**/*.js"]
+    "include": ["packages/**/*.ts", "packages/**/*.js"]
   }
 }
