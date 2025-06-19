@@ -3,8 +3,8 @@
  */
 
 import { describe, expect, test } from 'bun:test';
-import { Layout, Measurement } from './joining';
 import { Position } from '@tui/styling/types';
+import { Layout, Measurement } from './joining';
 
 describe('Layout', () => {
   describe('joinHorizontal', () => {

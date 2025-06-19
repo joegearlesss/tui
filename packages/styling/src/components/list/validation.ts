@@ -40,39 +40,22 @@ export const ListConfigSchema: z.ZodType<ListConfig> = z
       'Function to generate bullet points or numbering'
     ),
 
-    itemStyle: z
-      .any()
-      .optional()
-      .describe('Optional style configuration for list items'),
+    itemStyle: z.any().optional().describe('Optional style configuration for list items'),
 
-    enumeratorStyle: z
-      .any()
-      .optional()
-      .describe('Optional style configuration for enumerators'),
+    enumeratorStyle: z.any().optional().describe('Optional style configuration for enumerators'),
 
-    hidden: z
-      .boolean()
-      .describe('Whether the list should be hidden from rendering'),
+    hidden: z.boolean().describe('Whether the list should be hidden from rendering'),
 
     offset: z
       .tuple([z.number(), z.number()])
       .optional()
       .describe('Optional offset for positioning [x, y]'),
 
-    indentLevel: z
-      .number()
-      .int()
-      .min(0)
-      .max(20)
-      .describe('Indentation level for nested lists'),
+    indentLevel: z.number().int().min(0).max(20).describe('Indentation level for nested lists'),
 
-    indentString: z
-      .string()
-      .describe('Custom indentation string (overrides default spacing)'),
+    indentString: z.string().describe('Custom indentation string (overrides default spacing)'),
 
-    showEnumerators: z
-      .boolean()
-      .describe('Whether to show enumerators for this list'),
+    showEnumerators: z.boolean().describe('Whether to show enumerators for this list'),
 
     enumeratorSpacing: z
       .number()
@@ -81,26 +64,11 @@ export const ListConfigSchema: z.ZodType<ListConfig> = z
       .max(10)
       .describe('Spacing between enumerator and item content'),
 
-    maxWidth: z
-      .number()
-      .int()
-      .min(1)
-      .optional()
-      .describe('Maximum width for text wrapping'),
+    maxWidth: z.number().int().min(1).optional().describe('Maximum width for text wrapping'),
 
-    spacing: z
-      .number()
-      .int()
-      .min(0)
-      .optional()
-      .describe('Spacing between list items'),
+    spacing: z.number().int().min(0).optional().describe('Spacing between list items'),
 
-    indent: z
-      .number()
-      .int()
-      .min(0)
-      .optional()
-      .describe('Base indentation for the list'),
+    indent: z.number().int().min(0).optional().describe('Base indentation for the list'),
   })
   .describe('Complete list configuration with items, styling, and layout options');
 
@@ -113,27 +81,13 @@ export const ListMetricsSchema: z.ZodType<ListMetrics> = z
 
     maxDepth: z.number().int().min(0).describe('Maximum nesting depth of the list'),
 
-    totalWidth: z
-      .number()
-      .int()
-      .min(0)
-      .describe('Total rendered width'),
+    totalWidth: z.number().int().min(0).describe('Total rendered width'),
 
-    totalHeight: z
-      .number()
-      .int()
-      .min(0)
-      .describe('Total rendered height in lines'),
+    totalHeight: z.number().int().min(0).describe('Total rendered height in lines'),
 
-    topLevelItems: z
-      .number()
-      .int()
-      .min(0)
-      .describe('Number of top-level items'),
+    topLevelItems: z.number().int().min(0).describe('Number of top-level items'),
 
-    itemWidths: z
-      .array(z.number().int().min(0))
-      .describe('Array of item widths'),
+    itemWidths: z.array(z.number().int().min(0)).describe('Array of item widths'),
   })
   .describe('Calculated metrics and dimensions of a list');
 
@@ -142,29 +96,15 @@ export const ListMetricsSchema: z.ZodType<ListMetrics> = z
  */
 export const ListRenderOptionsSchema: z.ZodType<ListRenderOptions> = z
   .object({
-    applyItemStyling: z
-      .boolean()
-      .describe('Whether to apply item styling'),
+    applyItemStyling: z.boolean().describe('Whether to apply item styling'),
 
-    applyEnumeratorStyling: z
-      .boolean()
-      .describe('Whether to apply enumerator styling'),
+    applyEnumeratorStyling: z.boolean().describe('Whether to apply enumerator styling'),
 
-    maxDepth: z
-      .number()
-      .int()
-      .min(0)
-      .describe('Maximum depth for nested list rendering'),
+    maxDepth: z.number().int().min(0).describe('Maximum depth for nested list rendering'),
 
-    indentPerLevel: z
-      .number()
-      .int()
-      .min(0)
-      .describe('Custom indentation per level'),
+    indentPerLevel: z.number().int().min(0).describe('Custom indentation per level'),
 
-    renderHidden: z
-      .boolean()
-      .describe('Whether to render hidden lists'),
+    renderHidden: z.boolean().describe('Whether to render hidden lists'),
   })
   .describe('Options for controlling list rendering output');
 

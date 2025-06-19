@@ -189,9 +189,9 @@ export namespace BorderValidation {
       if (codePoint === undefined) return false;
 
       return boxDrawingRanges.some(([start, end]) => {
-      if (start === undefined || end === undefined) return false;
-      return codePoint >= start && codePoint <= end;
-    });
+        if (start === undefined || end === undefined) return false;
+        return codePoint >= start && codePoint <= end;
+      });
     };
 
     return Object.values(chars).every(

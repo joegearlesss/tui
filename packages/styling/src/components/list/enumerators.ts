@@ -27,14 +27,12 @@ export namespace Enumerator {
   /**
    * Arabic numerals with period (1. 2. 3.)
    */
-  export const ARABIC: EnumeratorFunction = (index: number) =>
-    `${index + 1}.`;
+  export const ARABIC: EnumeratorFunction = (index: number) => `${index + 1}.`;
 
   /**
    * Arabic numerals with parenthesis (1) 2) 3))
    */
-  export const ARABIC_PAREN: EnumeratorFunction = (index: number) =>
-    `${index + 1})`;
+  export const ARABIC_PAREN: EnumeratorFunction = (index: number) => `${index + 1})`;
 
   /**
    * Arabic numerals with both parentheses ((1) (2) (3))

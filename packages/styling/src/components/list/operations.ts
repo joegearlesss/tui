@@ -18,7 +18,7 @@ function toRoman(num: number): string {
     const value = values[i];
     const symbol = symbols[i];
     if (value === undefined || symbol === undefined) continue;
-    
+
     while (remaining >= value) {
       result += symbol;
       remaining -= value;
@@ -369,7 +369,7 @@ export namespace List {
       for (let i = 0; i < items.length; i++) {
         const item = items[i];
         if (!item) continue;
-        
+
         totalItems++;
 
         if (typeof item === 'string') {

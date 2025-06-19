@@ -211,11 +211,7 @@ describe('StyleBuilder', () => {
         foreground: '#FF0000',
       };
 
-      const style = StyleBuilder.create()
-        .inherit(parent)
-        .bold(false)
-        .foreground('#00FF00')
-        .build();
+      const style = StyleBuilder.create().inherit(parent).bold(false).foreground('#00FF00').build();
 
       expect(style.bold).toBe(false);
       expect(style.foreground).toEqual('#00FF00');
@@ -224,10 +220,7 @@ describe('StyleBuilder', () => {
 
   describe('rendering', () => {
     test('should render with chained styles', () => {
-      const result = StyleBuilder.create()
-        .bold(true)
-        .foreground('#FF0000')
-        .render('Hello World');
+      const result = StyleBuilder.create().bold(true).foreground('#FF0000').render('Hello World');
 
       expect(result).toContain('Hello World');
       expect(result).toContain('\x1b[1m'); // Bold
@@ -244,9 +237,7 @@ describe('StyleBuilder', () => {
 
   describe('copy', () => {
     test('should create independent copy', () => {
-      const original = StyleBuilder.create()
-        .bold(true)
-        .foreground('#FF0000');
+      const original = StyleBuilder.create().bold(true).foreground('#FF0000');
 
       const copy = original.copy().italic(true);
 

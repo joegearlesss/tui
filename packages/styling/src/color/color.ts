@@ -597,7 +597,7 @@ export namespace Color {
    * @returns Adaptive color object
    */
   export const adaptive = (
-    light: string | number | CompleteColor, 
+    light: string | number | CompleteColor,
     dark: string | number | CompleteColor
   ): AdaptiveColor => {
     return { light, dark };

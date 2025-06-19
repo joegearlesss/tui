@@ -47,9 +47,7 @@ namespace Examples {
     // Simple text formatting
     const boldText = StyleBuilder.create().bold(true).render('This is bold text');
 
-    const coloredText = StyleBuilder.create()
-      .foreground('#FF0000')
-      .render('This is red text');
+    const coloredText = StyleBuilder.create().foreground('#FF0000').render('This is red text');
 
     const complexStyle = StyleBuilder.create()
       .bold(true)
@@ -82,10 +80,7 @@ namespace Examples {
       .build();
 
     // Another inheritance
-    const emphasisStyle = StyleBuilder.from(baseStyle)
-      .italic(true)
-      .foreground('#FF6B6B')
-      .build();
+    const emphasisStyle = StyleBuilder.from(baseStyle).italic(true).foreground('#FF6B6B').build();
 
     console.log(Style.render(baseStyle, 'Base text'));
     console.log(Style.render(headerStyle, 'Header text'));
@@ -276,11 +271,7 @@ namespace Examples {
     console.log('Variant 3:', variant3.render('Underlined variant'));
 
     // Combining variants
-    const combined = variant1
-      .copy()
-      .italic(true)
-      .underline(true)
-      .foreground('#E67E22');
+    const combined = variant1.copy().italic(true).underline(true).foreground('#E67E22');
 
     console.log('Combined:', combined.render('All variants combined'));
     console.log();

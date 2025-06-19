@@ -643,12 +643,12 @@ describe('ListRenderer', () => {
   describe('Render Options', () => {
     it('should apply base indentation', () => {
       const list = List.create(['Item 1']);
-      const rendered = ListRenderer.render(list, { 
+      const rendered = ListRenderer.render(list, {
         applyItemStyling: true,
         applyEnumeratorStyling: true,
         maxDepth: 10,
         indentPerLevel: 4,
-        renderHidden: false
+        renderHidden: false,
       });
 
       expect(rendered).toMatch(/^• Item 1$/);
@@ -656,19 +656,19 @@ describe('ListRenderer', () => {
 
     it('should handle ANSI option', () => {
       const list = List.create(['Item 1']);
-      const withStyling = ListRenderer.render(list, { 
+      const withStyling = ListRenderer.render(list, {
         applyItemStyling: true,
         applyEnumeratorStyling: true,
         maxDepth: 10,
         indentPerLevel: 4,
-        renderHidden: false
+        renderHidden: false,
       });
-      const withoutStyling = ListRenderer.render(list, { 
+      const withoutStyling = ListRenderer.render(list, {
         applyItemStyling: false,
         applyEnumeratorStyling: false,
         maxDepth: 10,
         indentPerLevel: 4,
-        renderHidden: false
+        renderHidden: false,
       });
 
       // Both should contain the basic text (ANSI handling is more complex)

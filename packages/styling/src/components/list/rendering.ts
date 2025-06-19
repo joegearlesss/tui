@@ -40,7 +40,10 @@ export namespace ListRenderer {
     lines: string[]
   ): void {
     // For root level (depth 0), use config.indentLevel. For nested levels, use indentPerLevel per depth
-    const itemIndent = depth === 0 ? ' '.repeat(config.indentLevel || 0) : ' '.repeat(options.indentPerLevel * depth);
+    const itemIndent =
+      depth === 0
+        ? ' '.repeat(config.indentLevel || 0)
+        : ' '.repeat(options.indentPerLevel * depth);
 
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
@@ -49,9 +52,12 @@ export namespace ListRenderer {
         // Render string item
         const enumerator = config.enumerator ? config.enumerator(i) : '';
         const styledEnumerator =
-          config.enumeratorStyle && enumerator && options.applyEnumeratorStyling ? config.enumeratorStyle(enumerator) : enumerator;
+          config.enumeratorStyle && enumerator && options.applyEnumeratorStyling
+            ? config.enumeratorStyle(enumerator)
+            : enumerator;
 
-        const itemText = config.itemStyle && options.applyItemStyling ? config.itemStyle(item) : item;
+        const itemText =
+          config.itemStyle && options.applyItemStyling ? config.itemStyle(item) : item;
 
         // Handle text wrapping if maxWidth is specified
         if (config.maxWidth && item.length > config.maxWidth) {
@@ -74,9 +80,10 @@ export namespace ListRenderer {
         // Add enumerator for the nested list container if parent has one
         if (config.enumerator) {
           const enumerator = config.enumerator(i);
-          const styledEnumerator = config.enumeratorStyle && options.applyEnumeratorStyling
-            ? config.enumeratorStyle(enumerator)
-            : enumerator;
+          const styledEnumerator =
+            config.enumeratorStyle && options.applyEnumeratorStyling
+              ? config.enumeratorStyle(enumerator)
+              : enumerator;
 
           if (styledEnumerator) {
             lines.push(`${itemIndent}${styledEnumerator}`);
@@ -140,7 +147,10 @@ export namespace ListRenderer {
   /**
    * Renders a list to an array of lines (without joining)
    */
-  export function renderToLines(config: ListConfig, options: ListRenderOptions = DEFAULT_OPTIONS): string[] {
+  export function renderToLines(
+    config: ListConfig,
+    options: ListRenderOptions = DEFAULT_OPTIONS
+  ): string[] {
     const rendered = render(config, options);
     return rendered.split('\n');
   }
@@ -160,7 +170,10 @@ export namespace ListRenderer {
   /**
    * Renders a list to Markdown format
    */
-  export function renderToMarkdown(config: ListConfig, options: ListRenderOptions = DEFAULT_OPTIONS): string {
+  export function renderToMarkdown(
+    config: ListConfig,
+    options: ListRenderOptions = DEFAULT_OPTIONS
+  ): string {
     const validConfig = validateListConfig(config);
     const validOptions = { ...DEFAULT_OPTIONS, ...options };
 
@@ -268,7 +281,10 @@ export namespace ListRenderer {
   /**
    * Renders a list with a border around it
    */
-  export function renderWithBorder(config: ListConfig, options: ListRenderOptions = DEFAULT_OPTIONS): string {
+  export function renderWithBorder(
+    config: ListConfig,
+    options: ListRenderOptions = DEFAULT_OPTIONS
+  ): string {
     const lines = renderToLines(config, options);
     const maxWidth = Math.max(...lines.map((line) => stripAnsi(line).length));
 

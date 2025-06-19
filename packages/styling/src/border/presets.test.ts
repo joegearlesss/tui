@@ -152,7 +152,12 @@ describe('Border Presets', () => {
 
       test('should not modify original border', () => {
         const baseBorder = Border.normal();
-        const originalSides = [...baseBorder.sides] as readonly [boolean, boolean, boolean, boolean];
+        const originalSides = [...baseBorder.sides] as readonly [
+          boolean,
+          boolean,
+          boolean,
+          boolean,
+        ];
 
         Border.withSides(baseBorder, false, false, false, false);
 
