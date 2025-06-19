@@ -37,6 +37,13 @@ export {
   rightLineBorder,
 } from './border';
 
+// Component system exports
+export {
+  Table,
+  TableBuilder,
+  TableRender,
+} from './components';
+
 // Type exports
 export type {
   // Color types
@@ -65,4 +72,15 @@ export type {
   CustomBorderConfig,
   BorderRenderOptions,
   BorderDimensions,
+  // Table types
+  TableConfig,
+  TableCellPosition,
+  TableRenderOptions,
+  TableColumnConfig,
+  TableRowConfig,
+  TableValidationResult,
+  TableMetrics,
+  TableStyleFunction,
+  TableCellRenderer,
+  TableBorderRenderer,
 } from './types';

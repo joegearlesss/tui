@@ -30,3 +30,17 @@ export type {
   BorderRenderOptions,
   BorderDimensions,
 } from '../border/rendering';
+
+// Component types
+export type {
+  TableConfig,
+  TableCellPosition,
+  TableRenderOptions,
+  TableColumnConfig,
+  TableRowConfig,
+  TableValidationResult,
+  TableMetrics,
+  TableStyleFunction,
+  TableCellRenderer,
+  TableBorderRenderer,
+} from '../components/table/types';
