@@ -3,5 +3,6 @@ IMPLEMENTATION*.md
 
 # OpenCode
 .opencode/
+.claude
 
 node_modules
