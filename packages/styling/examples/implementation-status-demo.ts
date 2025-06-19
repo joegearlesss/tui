@@ -23,9 +23,9 @@ console.log('');
 
 // ✅ WORKING: Color System (100% OVERVIEW-v2 compliant)
 console.log('✅ WORKING: Color System');
-const adaptiveColor = Color.adaptive({ light: '#0066CC', dark: '#4A9EFF' });
-const rgbColor = Color.rgb(255, 107, 107);
-const hexColor = Color.parse('#FF6B6B');
+const adaptiveColor = Color.adaptive('#0066CC', '#4A9EFF');
+const rgbColor = '#FF6B6B';
+const hexColor = '#FF6B6B';
 
 const colorDemo = StyleBuilder.create().foreground(adaptiveColor).build();
 
@@ -45,7 +45,7 @@ const baseStyle = Style.create();
 const headerStyle = Style.inherit(baseStyle, {
   bold: true,
   foreground: adaptiveColor,
-  padding: [1, 2, 1, 2] as const,
+  padding: { top: 1, right: 2, bottom: 1, left: 2 },
 });
 
 console.log(Style.render(headerStyle, 'Functional composition works!'));
@@ -53,8 +53,8 @@ console.log('');
 
 // ✅ WORKING: ANSI Rendering
 console.log('✅ WORKING: ANSI Rendering');
-const redColor = Color.complete({ rgb: { r: 255, g: 100, b: 100 } });
-console.log(ANSI.wrap('Direct ANSI formatting works!', [ANSI.BOLD, ANSI.foreground(redColor)]));
+const redColor = Color.complete({ trueColor: '#FF6464' });
+console.log(ANSI.wrap('Direct ANSI formatting works!', ANSI.BOLD, ANSI.foreground(redColor)));
 console.log('');
 
 // ❌ MISSING: Border System (Required for OVERVIEW-v2 examples)

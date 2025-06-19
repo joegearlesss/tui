@@ -8,12 +8,12 @@ import { Color, Style, StyleBuilder, type StyleProperties } from '@tui/styling';
 // Theme configuration using functional approach
 namespace Theme {
   export const colors = {
-    primary: Color.adaptive(Color.parse('#0066CC'), Color.parse('#4A9EFF')),
-    secondary: Color.adaptive(Color.parse('#666666'), Color.parse('#CCCCCC')),
-    accent: Color.rgb(255, 107, 107),
-    success: Color.parse('#00AA00'),
-    warning: Color.parse('#FFAA00'),
-    error: Color.parse('#FF0000'),
+    primary: Color.adaptive('#0066CC', '#4A9EFF'),
+    secondary: Color.adaptive('#666666', '#CCCCCC'),
+    accent: '#FF6B6B',
+    success: '#00AA00',
+    warning: '#FFAA00',
+    error: '#FF0000',
   } as const;
 
   export const styles = {
@@ -48,14 +48,14 @@ namespace Examples {
     const boldText = StyleBuilder.create().bold(true).render('This is bold text');
 
     const coloredText = StyleBuilder.create()
-      .foreground(Color.rgb(255, 0, 0))
+      .foreground('#FF0000')
       .render('This is red text');
 
     const complexStyle = StyleBuilder.create()
       .bold(true)
       .italic(true)
-      .foreground(Color.parse('#FF6B6B'))
-      .background(Color.parse('#4ECDC4'))
+      .foreground('#FF6B6B')
+      .background('#4ECDC4')
       .padding(1, 2)
       .render('Complex styled text');
 
@@ -72,19 +72,19 @@ namespace Examples {
     console.log('=== Style Inheritance Examples ===\n');
 
     // Base style
-    const baseStyle = StyleBuilder.create().foreground(Color.parse('#333333')).padding(1).build();
+    const baseStyle = StyleBuilder.create().foreground('#333333').padding(1).build();
 
     // Inherit and extend
     const headerStyle = StyleBuilder.from(baseStyle)
       .bold(true)
-      .foreground(Color.parse('#000000'))
+      .foreground('#000000')
       .alignHorizontal('center')
       .build();
 
     // Another inheritance
     const emphasisStyle = StyleBuilder.from(baseStyle)
       .italic(true)
-      .foreground(Color.parse('#FF6B6B'))
+      .foreground('#FF6B6B')
       .build();
 
     console.log(Style.render(baseStyle, 'Base text'));
@@ -101,20 +101,19 @@ namespace Examples {
 
     // Using Style namespace functions directly
     const style1 = Style.bold(Style.create(), true);
-    const style2 = Style.foreground(style1, Color.rgb(0, 255, 0));
+    const style2 = Style.foreground(style1, '#00FF00');
     const style3 = Style.padding(style2, 1, 2);
 
     console.log(Style.render(style3, 'Functionally composed style'));
 
     // Function composition with pipe-like pattern
     const pipeStyle = [
-      Style.create(),
       (s: StyleProperties) => Style.bold(s, true),
       (s: StyleProperties) => Style.italic(s, true),
-      (s: StyleProperties) => Style.foreground(s, Color.parse('#9B59B6')),
-      (s: StyleProperties) => Style.background(s, Color.parse('#F8F8F8')),
+      (s: StyleProperties) => Style.foreground(s, '#9B59B6'),
+      (s: StyleProperties) => Style.background(s, '#F8F8F8'),
       (s: StyleProperties) => Style.padding(s, 1, 3),
-    ].reduce((style, fn) => fn(style));
+    ].reduce((style, fn) => fn(style), Style.create());
 
     console.log(Style.render(pipeStyle, 'Pipe-style composition'));
     console.log();
@@ -146,12 +145,12 @@ namespace Examples {
       .bold(true)
       .italic(true)
       .underline(true)
-      .foreground(Color.rgb(255, 0, 0))
-      .background(Color.rgb(255, 255, 0))
+      .foreground('#FF0000')
+      .background('#FFFF00')
       .padding(2, 4)
       .unsetItalic() // Remove italic
       .unsetBackground() // Remove background
-      .foreground(Color.rgb(0, 0, 255)) // Change foreground
+      .foreground('#0000FF') // Change foreground
       .paddingTop(1) // Adjust padding
       .render('Evolved style');
 
@@ -161,7 +160,7 @@ namespace Examples {
     const isError = true;
     const conditionalStyle = StyleBuilder.create()
       .bold(true)
-      .foreground(isError ? Color.parse('#FF0000') : Color.parse('#00AA00'))
+      .foreground(isError ? '#FF0000' : '#00AA00')
       .render(isError ? 'Error message' : 'Success message');
 
     console.log(conditionalStyle);
@@ -177,22 +176,22 @@ namespace Examples {
     // Card-like component
     const cardHeader = StyleBuilder.create()
       .bold(true)
-      .foreground(Color.parse('#FFFFFF'))
-      .background(Color.parse('#3498DB'))
+      .foreground('#FFFFFF')
+      .background('#3498DB')
       .padding(1, 2)
       .alignHorizontal('center')
       .render('📊 Dashboard Card');
 
     const cardContent = StyleBuilder.create()
-      .foreground(Color.parse('#2C3E50'))
-      .background(Color.parse('#ECF0F1'))
+      .foreground('#2C3E50')
+      .background('#ECF0F1')
       .padding(2, 3)
       .render('This is the card content with some important information.');
 
     const cardFooter = StyleBuilder.create()
       .faint(true)
-      .foreground(Color.parse('#7F8C8D'))
-      .background(Color.parse('#BDC3C7'))
+      .foreground('#7F8C8D')
+      .background('#BDC3C7')
       .padding(1, 2)
       .alignHorizontal('right')
       .render('Last updated: 2024');
@@ -213,14 +212,14 @@ namespace Examples {
       .bold(true)
       .foreground(
         Color.adaptive(
-          Color.parse('#2C3E50'), // Dark text for light theme
-          Color.parse('#ECF0F1') // Light text for dark theme
+          '#2C3E50', // Dark text for light theme
+          '#ECF0F1' // Light text for dark theme
         )
       )
       .background(
         Color.adaptive(
-          Color.parse('#FFFFFF'), // Light background for light theme
-          Color.parse('#2C3E50') // Dark background for dark theme
+          '#FFFFFF', // Light background for light theme
+          '#2C3E50' // Dark background for dark theme
         )
       )
       .padding(1, 2)
@@ -242,12 +241,12 @@ namespace Examples {
       .render('this will be uppercase');
 
     const prefixStyle = StyleBuilder.create()
-      .foreground(Color.parse('#E74C3C'))
+      .foreground('#E74C3C')
       .transform((text: string) => `🔥 ${text}`)
       .render('Hot content');
 
     const boxedStyle = StyleBuilder.create()
-      .foreground(Color.parse('#9B59B6'))
+      .foreground('#9B59B6')
       .transform((text: string) => `[ ${text} ]`)
       .render('Boxed text');
 
@@ -263,7 +262,7 @@ namespace Examples {
   export const immutabilityDemo = (): void => {
     console.log('=== Immutability Demonstration ===\n');
 
-    const baseBuilder = StyleBuilder.create().foreground(Color.parse('#34495E'));
+    const baseBuilder = StyleBuilder.create().foreground('#34495E');
 
     // Each operation creates a new builder instance
     const variant1 = baseBuilder.bold(true);
@@ -281,7 +280,7 @@ namespace Examples {
       .copy()
       .italic(true)
       .underline(true)
-      .foreground(Color.parse('#E67E22'));
+      .foreground('#E67E22');
 
     console.log('Combined:', combined.render('All variants combined'));
     console.log();

@@ -7,9 +7,10 @@
       "@tui/styling": ["./src/index.ts"]
     }
   },
-  "include": [
+  "include": [    
     "src/**/*",
-    "tests/**/*"
+    "tests/**/*",
+    "examples/**/*",
   ],
   "exclude": [
     "node_modules",
