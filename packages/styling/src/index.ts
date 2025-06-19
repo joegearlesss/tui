@@ -7,7 +7,35 @@
 export { Style, StyleBuilder, StyleChain } from './style/style';
 export { Color } from './color/color';
 export { Position, BoxModel } from './layout/positioning';
+export { Layout, Measurement } from './layout/joining';
 export { ANSI } from './ansi/ansi';
+
+// Border system exports
+export {
+  Border,
+  BorderPresets,
+  BorderOperations,
+  BorderBuilder,
+  BorderChain,
+  BorderRender,
+  BorderValidation,
+  // Convenience exports
+  normalBorder,
+  roundedBorder,
+  thickBorder,
+  doubleBorder,
+  customBorder,
+  boxBorder,
+  roundedBoxBorder,
+  thickBoxBorder,
+  doubleBoxBorder,
+  horizontalLineBorder,
+  verticalLineBorder,
+  topLineBorder,
+  bottomLineBorder,
+  leftLineBorder,
+  rightLineBorder,
+} from './border';
 
 // Type exports
 export type {
@@ -30,4 +58,11 @@ export type {
   // Style types
   StyleProperties,
   TextTransform,
+  // Border types
+  BorderType,
+  BorderChars,
+  BorderConfig,
+  CustomBorderConfig,
+  BorderRenderOptions,
+  BorderDimensions,
 } from './types';
