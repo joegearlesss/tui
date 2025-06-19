@@ -1,4 +1,6 @@
 import { ANSI } from '@tui/styling/ansi/ansi';
+import type { BorderConfig } from '@tui/styling/border';
+import { BorderRender } from '@tui/styling/border';
 import { Color } from '@tui/styling/color';
 import { BoxModel, Position } from '@tui/styling/layout';
 import type {
@@ -43,6 +45,19 @@ export interface StyleProperties {
   readonly padding?: BoxDimensions;
   readonly margin?: BoxDimensions;
   readonly marginBackground?: ColorValue;
+
+  // Border properties
+  readonly border?: BorderConfig;
+  readonly borderForeground?: ColorValue;
+  readonly borderBackground?: ColorValue;
+  readonly borderTopForeground?: ColorValue;
+  readonly borderRightForeground?: ColorValue;
+  readonly borderBottomForeground?: ColorValue;
+  readonly borderLeftForeground?: ColorValue;
+  readonly borderTopBackground?: ColorValue;
+  readonly borderRightBackground?: ColorValue;
+  readonly borderBottomBackground?: ColorValue;
+  readonly borderLeftBackground?: ColorValue;
 
   // Alignment
   readonly horizontalAlignment?: TextAlignment;
@@ -585,6 +600,192 @@ export namespace Style {
     return rest;
   };
 
+  // Border functions
+
+  /**
+   * Sets border configuration
+   * @param style - Current style properties
+   * @param border - Border configuration
+   * @returns New style properties with border
+   */
+  export const border = (style: StyleProperties, border: BorderConfig): StyleProperties => ({
+    ...style,
+    border,
+  });
+
+  /**
+   * Sets general border foreground color
+   * @param style - Current style properties
+   * @param color - Color for border foreground
+   * @returns New style properties with border foreground color
+   */
+  export const borderForeground = (
+    style: StyleProperties,
+    color: ColorValue | string | number
+  ): StyleProperties => {
+    const parsedColor =
+      typeof color === 'string' || typeof color === 'number' ? Color.parse(color) : color;
+    return { ...style, borderForeground: parsedColor };
+  };
+
+  /**
+   * Sets general border background color
+   * @param style - Current style properties
+   * @param color - Color for border background
+   * @returns New style properties with border background color
+   */
+  export const borderBackground = (
+    style: StyleProperties,
+    color: ColorValue | string | number
+  ): StyleProperties => {
+    const parsedColor =
+      typeof color === 'string' || typeof color === 'number' ? Color.parse(color) : color;
+    return { ...style, borderBackground: parsedColor };
+  };
+
+  /**
+   * Sets top border foreground color
+   * @param style - Current style properties
+   * @param color - Color for top border foreground
+   * @returns New style properties with top border foreground color
+   */
+  export const borderTopForeground = (
+    style: StyleProperties,
+    color: ColorValue | string | number
+  ): StyleProperties => {
+    const parsedColor =
+      typeof color === 'string' || typeof color === 'number' ? Color.parse(color) : color;
+    return { ...style, borderTopForeground: parsedColor };
+  };
+
+  /**
+   * Sets right border foreground color
+   * @param style - Current style properties
+   * @param color - Color for right border foreground
+   * @returns New style properties with right border foreground color
+   */
+  export const borderRightForeground = (
+    style: StyleProperties,
+    color: ColorValue | string | number
+  ): StyleProperties => {
+    const parsedColor =
+      typeof color === 'string' || typeof color === 'number' ? Color.parse(color) : color;
+    return { ...style, borderRightForeground: parsedColor };
+  };
+
+  /**
+   * Sets bottom border foreground color
+   * @param style - Current style properties
+   * @param color - Color for bottom border foreground
+   * @returns New style properties with bottom border foreground color
+   */
+  export const borderBottomForeground = (
+    style: StyleProperties,
+    color: ColorValue | string | number
+  ): StyleProperties => {
+    const parsedColor =
+      typeof color === 'string' || typeof color === 'number' ? Color.parse(color) : color;
+    return { ...style, borderBottomForeground: parsedColor };
+  };
+
+  /**
+   * Sets left border foreground color
+   * @param style - Current style properties
+   * @param color - Color for left border foreground
+   * @returns New style properties with left border foreground color
+   */
+  export const borderLeftForeground = (
+    style: StyleProperties,
+    color: ColorValue | string | number
+  ): StyleProperties => {
+    const parsedColor =
+      typeof color === 'string' || typeof color === 'number' ? Color.parse(color) : color;
+    return { ...style, borderLeftForeground: parsedColor };
+  };
+
+  /**
+   * Sets top border background color
+   * @param style - Current style properties
+   * @param color - Color for top border background
+   * @returns New style properties with top border background color
+   */
+  export const borderTopBackground = (
+    style: StyleProperties,
+    color: ColorValue | string | number
+  ): StyleProperties => {
+    const parsedColor =
+      typeof color === 'string' || typeof color === 'number' ? Color.parse(color) : color;
+    return { ...style, borderTopBackground: parsedColor };
+  };
+
+  /**
+   * Sets right border background color
+   * @param style - Current style properties
+   * @param color - Color for right border background
+   * @returns New style properties with right border background color
+   */
+  export const borderRightBackground = (
+    style: StyleProperties,
+    color: ColorValue | string | number
+  ): StyleProperties => {
+    const parsedColor =
+      typeof color === 'string' || typeof color === 'number' ? Color.parse(color) : color;
+    return { ...style, borderRightBackground: parsedColor };
+  };
+
+  /**
+   * Sets bottom border background color
+   * @param style - Current style properties
+   * @param color - Color for bottom border background
+   * @returns New style properties with bottom border background color
+   */
+  export const borderBottomBackground = (
+    style: StyleProperties,
+    color: ColorValue | string | number
+  ): StyleProperties => {
+    const parsedColor =
+      typeof color === 'string' || typeof color === 'number' ? Color.parse(color) : color;
+    return { ...style, borderBottomBackground: parsedColor };
+  };
+
+  /**
+   * Sets left border background color
+   * @param style - Current style properties
+   * @param color - Color for left border background
+   * @returns New style properties with left border background color
+   */
+  export const borderLeftBackground = (
+    style: StyleProperties,
+    color: ColorValue | string | number
+  ): StyleProperties => {
+    const parsedColor =
+      typeof color === 'string' || typeof color === 'number' ? Color.parse(color) : color;
+    return { ...style, borderLeftBackground: parsedColor };
+  };
+
+  /**
+   * Removes all border properties
+   * @param style - Current style properties
+   * @returns New style properties without border
+   */
+  export const unsetBorder = (style: StyleProperties): StyleProperties => {
+    const {
+      border: _,
+      borderForeground: __,
+      borderBackground: ___,
+      borderTopForeground: ____,
+      borderRightForeground: _____,
+      borderBottomForeground: ______,
+      borderLeftForeground: _______,
+      borderTopBackground: ________,
+      borderRightBackground: _________,
+      borderBottomBackground: __________,
+      borderLeftBackground: ___________,
+      ...rest
+    } = style;
+    return rest;
+  };
+
   // Alignment functions
 
   /**
@@ -685,6 +886,58 @@ export namespace Style {
   // Rendering functions
 
   /**
+   * Renders border with styling around content
+   * @param style - Style properties containing border configuration
+   * @param content - Pre-styled content to wrap with border
+   * @returns Content with styled border
+   */
+  const renderStyledBorder = (style: StyleProperties, content: string): string => {
+    if (!style.border) {
+      return content;
+    }
+
+    // Render basic border without additional padding since padding should be handled by the style system
+    let borderedContent = BorderRender.render(style.border, content);
+
+    // Apply border colors if specified
+    if (
+      style.borderForeground ||
+      style.borderBackground ||
+      style.borderTopForeground ||
+      style.borderRightForeground ||
+      style.borderBottomForeground ||
+      style.borderLeftForeground
+    ) {
+      borderedContent = applyBorderColors(style, borderedContent);
+    }
+
+    return borderedContent;
+  };
+
+  /**
+   * Applies color formatting to border characters
+   * @param style - Style properties with border colors
+   * @param borderedContent - Content with border already applied
+   * @returns Content with colored border
+   */
+  const applyBorderColors = (style: StyleProperties, borderedContent: string): string => {
+    // For now, apply general border foreground color if specified
+    // TODO: Implement per-side border coloring in a future enhancement
+    if (style.borderForeground) {
+      const color = Color.toComplete(style.borderForeground);
+      if (color) {
+        const colorCode = ANSI.foreground(color);
+        // Apply color to border characters only
+        // This is a simplified implementation - a more sophisticated approach
+        // would parse the border structure and apply colors selectively
+        return borderedContent.replace(/(^[^\w\s]|[^\w\s]$)/gm, `${colorCode}$1${ANSI.RESET}`);
+      }
+    }
+
+    return borderedContent;
+  };
+
+  /**
    * Applies ANSI formatting to text based on style properties
    * @param style - Style properties to apply
    * @param text - Text to format
@@ -750,11 +1003,21 @@ export namespace Style {
     const text = content ?? style.content ?? '';
     const transformedText = style.transform ? style.transform(text) : text;
 
-    if (transformedText === '') {
+    // Don't return early if we have a border, even with empty content
+    if (transformedText === '' && !style.border) {
       return '';
     }
 
-    return applyAnsiFormatting(style, transformedText);
+    // Apply basic ANSI formatting first
+    let result = applyAnsiFormatting(style, transformedText);
+
+    // Apply border if specified
+    if (style.border) {
+      // Apply border with color support
+      result = renderStyledBorder(style, result);
+    }
+
+    return result;
   };
 
   /**
@@ -999,6 +1262,51 @@ export class StyleChain {
     return new StyleChain(Style.marginBackground(this.config, color));
   }
 
+  // Border methods
+  border(border: BorderConfig): StyleChain {
+    return new StyleChain(Style.border(this.config, border));
+  }
+
+  borderForeground(color: ColorValue | string | number): StyleChain {
+    return new StyleChain(Style.borderForeground(this.config, color));
+  }
+
+  borderBackground(color: ColorValue | string | number): StyleChain {
+    return new StyleChain(Style.borderBackground(this.config, color));
+  }
+
+  borderTopForeground(color: ColorValue | string | number): StyleChain {
+    return new StyleChain(Style.borderTopForeground(this.config, color));
+  }
+
+  borderRightForeground(color: ColorValue | string | number): StyleChain {
+    return new StyleChain(Style.borderRightForeground(this.config, color));
+  }
+
+  borderBottomForeground(color: ColorValue | string | number): StyleChain {
+    return new StyleChain(Style.borderBottomForeground(this.config, color));
+  }
+
+  borderLeftForeground(color: ColorValue | string | number): StyleChain {
+    return new StyleChain(Style.borderLeftForeground(this.config, color));
+  }
+
+  borderTopBackground(color: ColorValue | string | number): StyleChain {
+    return new StyleChain(Style.borderTopBackground(this.config, color));
+  }
+
+  borderRightBackground(color: ColorValue | string | number): StyleChain {
+    return new StyleChain(Style.borderRightBackground(this.config, color));
+  }
+
+  borderBottomBackground(color: ColorValue | string | number): StyleChain {
+    return new StyleChain(Style.borderBottomBackground(this.config, color));
+  }
+
+  borderLeftBackground(color: ColorValue | string | number): StyleChain {
+    return new StyleChain(Style.borderLeftBackground(this.config, color));
+  }
+
   // Alignment methods
   align(
     horizontal: HorizontalPosition | TextAlignment,
@@ -1088,6 +1396,10 @@ export class StyleChain {
 
   unsetMargin(): StyleChain {
     return new StyleChain(Style.unsetMargin(this.config));
+  }
+
+  unsetBorder(): StyleChain {
+    return new StyleChain(Style.unsetBorder(this.config));
   }
 
   // Terminal methods
