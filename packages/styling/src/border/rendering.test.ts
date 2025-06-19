@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { BorderRender, type BorderRenderOptions, type BorderDimensions } from './rendering';
+import { BorderRender } from './rendering';
 import type { BorderConfig } from './types';
 
 const createTestBorder = (): BorderConfig => ({

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
-import { TableValidation } from './validation';
 import type { TableConfig } from './types';
+import { TableValidation } from './validation';
 
 describe('TableValidation', () => {
   describe('validateTableConfig', () => {
@@ -371,7 +371,7 @@ describe('TableValidation', () => {
 
   describe('validateStyleFunction', () => {
     test('validates working style function', () => {
-      const styleFunc = (row: number, col: number) => ({ bold: row === -1 });
+      const styleFunc = (row: number, _col: number) => ({ bold: row === -1 });
       const result = TableValidation.validateStyleFunction(styleFunc);
       expect(result.isValid).toBe(true);
       expect(result.errors).toHaveLength(0);
@@ -472,7 +472,7 @@ describe('TableValidation', () => {
 
     test('warns about large tables', () => {
       const headers = Array.from({ length: 50 }, (_, i) => `Col${i}`);
-      const rows = Array.from({ length: 1000 }, (_, i) => 
+      const rows = Array.from({ length: 1000 }, (_, i) =>
         Array.from({ length: 50 }, (_, j) => `Cell${i}-${j}`)
       );
 
@@ -487,8 +487,12 @@ describe('TableValidation', () => {
 
       const result = TableValidation.validateTableStructure(config);
       expect(result.isValid).toBe(true);
-      expect(result.warnings).toContain('Table has a large number of columns (50), which may impact performance');
-      expect(result.warnings).toContain('Table has a large number of rows (1000), which may impact performance');
+      expect(result.warnings).toContain(
+        'Table has a large number of columns (50), which may impact performance'
+      );
+      expect(result.warnings).toContain(
+        'Table has a large number of rows (1000), which may impact performance'
+      );
     });
   });
 

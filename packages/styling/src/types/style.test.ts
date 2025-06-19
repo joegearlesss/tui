@@ -1,13 +1,13 @@
 import { describe, expect, test } from 'bun:test';
 import {
-  TextFormattingSchema,
-  BorderSideSchema,
+  type BorderDefinition,
   BorderDefinitionSchema,
+  type BorderSide,
+  BorderSideSchema,
+  type BorderVisibility,
   BorderVisibilitySchema,
   type TextFormatting,
-  type BorderSide,
-  type BorderDefinition,
-  type BorderVisibility,
+  TextFormattingSchema,
 } from './style';
 
 describe('TextFormattingSchema', () => {
@@ -162,11 +162,13 @@ describe('BorderVisibilitySchema', () => {
   });
 
   test('rejects non-boolean values', () => {
-    expect(() => BorderVisibilitySchema.parse({ 
-      top: 'true', 
-      right: true, 
-      bottom: true, 
-      left: true 
-    })).toThrow();
+    expect(() =>
+      BorderVisibilitySchema.parse({
+        top: 'true',
+        right: true,
+        bottom: true,
+        left: true,
+      })
+    ).toThrow();
   });
 });

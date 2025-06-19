@@ -1,17 +1,17 @@
 import { describe, expect, test } from 'bun:test';
+import type { ListConfig, ListMetrics, ListRenderOptions } from './types';
 import {
-  ListItemSchema,
   EnumeratorFunctionSchema,
   ListConfigSchema,
+  ListItemSchema,
   ListMetricsSchema,
   ListRenderOptionsSchema,
-  validateListItem,
   validateEnumeratorFunction,
   validateListConfig,
+  validateListItem,
   validateListMetrics,
   validateListRenderOptions,
 } from './validation';
-import type { ListConfig, ListItem, EnumeratorFunction, ListMetrics, ListRenderOptions } from './types';
 
 describe('ListItemSchema', () => {
   test('validates string items', () => {
@@ -260,10 +260,18 @@ describe('ListRenderOptionsSchema', () => {
       renderHidden: false,
     };
 
-    expect(() => ListRenderOptionsSchema.parse({ ...baseOptions, maxDepth: 0, indentPerLevel: 0 })).not.toThrow();
-    expect(() => ListRenderOptionsSchema.parse({ ...baseOptions, maxDepth: 100, indentPerLevel: 10 })).not.toThrow();
-    expect(() => ListRenderOptionsSchema.parse({ ...baseOptions, maxDepth: -1, indentPerLevel: 0 })).toThrow();
-    expect(() => ListRenderOptionsSchema.parse({ ...baseOptions, maxDepth: 0, indentPerLevel: -1 })).toThrow();
+    expect(() =>
+      ListRenderOptionsSchema.parse({ ...baseOptions, maxDepth: 0, indentPerLevel: 0 })
+    ).not.toThrow();
+    expect(() =>
+      ListRenderOptionsSchema.parse({ ...baseOptions, maxDepth: 100, indentPerLevel: 10 })
+    ).not.toThrow();
+    expect(() =>
+      ListRenderOptionsSchema.parse({ ...baseOptions, maxDepth: -1, indentPerLevel: 0 })
+    ).toThrow();
+    expect(() =>
+      ListRenderOptionsSchema.parse({ ...baseOptions, maxDepth: 0, indentPerLevel: -1 })
+    ).toThrow();
   });
 
   test('rejects non-boolean values for boolean fields', () => {
@@ -272,12 +280,14 @@ describe('ListRenderOptionsSchema', () => {
       indentPerLevel: 4,
     };
 
-    expect(() => ListRenderOptionsSchema.parse({ 
-      ...baseOptions, 
-      applyItemStyling: 'true', 
-      applyEnumeratorStyling: true, 
-      renderHidden: false 
-    })).toThrow();
+    expect(() =>
+      ListRenderOptionsSchema.parse({
+        ...baseOptions,
+        applyItemStyling: 'true',
+        applyEnumeratorStyling: true,
+        renderHidden: false,
+      })
+    ).toThrow();
   });
 });
 
@@ -339,7 +349,7 @@ describe('validation functions', () => {
         enumerator: () => '•',
       };
       const result = validateListConfig(partialConfig);
-      
+
       expect(result.hidden).toBe(false);
       expect(result.indentLevel).toBe(0);
       expect(result.indentString).toBe('  ');
@@ -358,7 +368,7 @@ describe('validation functions', () => {
         enumeratorSpacing: 2,
       };
       const result = validateListConfig(config);
-      
+
       expect(result.hidden).toBe(true);
       expect(result.indentLevel).toBe(2);
       expect(result.indentString).toBe('    ');

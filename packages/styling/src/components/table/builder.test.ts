@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { TableBuilder, TableChain } from './builder';
+import { TableBuilder } from './builder';
 import type { TableConfig } from './types';
 
 describe('TableBuilder', () => {
@@ -14,7 +14,10 @@ describe('TableBuilder', () => {
     test('creates table builder from existing config', () => {
       const config: TableConfig = {
         headers: ['Name', 'Age'],
-        rows: [['John', '25'], ['Jane', '30']],
+        rows: [
+          ['John', '25'],
+          ['Jane', '30'],
+        ],
         border: undefined,
         styleFunc: undefined,
         width: undefined,
@@ -38,17 +41,18 @@ describe('TableBuilder', () => {
       const builder = TableBuilder.create()
         .headers('Name', 'Age')
         .rows(['John', '25'], ['Jane', '30']);
-      
+
       const config = builder.getConfig();
-      expect(config.rows).toEqual([['John', '25'], ['Jane', '30']]);
+      expect(config.rows).toEqual([
+        ['John', '25'],
+        ['Jane', '30'],
+      ]);
       expect(builder.getRowCount()).toBe(2);
     });
 
     test('adds single row', () => {
-      const builder = TableBuilder.create()
-        .headers('Name', 'Age')
-        .addRow(['John', '25']);
-      
+      const builder = TableBuilder.create().headers('Name', 'Age').addRow(['John', '25']);
+
       const config = builder.getConfig();
       expect(config.rows).toEqual([['John', '25']]);
       expect(builder.getRowCount()).toBe(1);
@@ -57,10 +61,16 @@ describe('TableBuilder', () => {
     test('adds multiple rows', () => {
       const builder = TableBuilder.create()
         .headers('Name', 'Age')
-        .addRows([['John', '25'], ['Jane', '30']]);
-      
+        .addRows([
+          ['John', '25'],
+          ['Jane', '30'],
+        ]);
+
       const config = builder.getConfig();
-      expect(config.rows).toEqual([['John', '25'], ['Jane', '30']]);
+      expect(config.rows).toEqual([
+        ['John', '25'],
+        ['Jane', '30'],
+      ]);
       expect(builder.getRowCount()).toBe(2);
     });
 
@@ -69,8 +79,11 @@ describe('TableBuilder', () => {
         .headers('Name', 'Age')
         .addRow(['John', '25'])
         .addRow(['Jane', '30'])
-        .addRows([['Bob', '35'], ['Alice', '28']]);
-      
+        .addRows([
+          ['Bob', '35'],
+          ['Alice', '28'],
+        ]);
+
       expect(builder.getRowCount()).toBe(4);
       const config = builder.getConfig();
       expect(config.rows[2]).toEqual(['Bob', '35']);
@@ -115,10 +128,8 @@ describe('TableBuilder', () => {
         sides: [true, true, true, true] as const,
       };
 
-      const builder = TableBuilder.create()
-        .border(borderConfig)
-        .noBorder();
-      
+      const builder = TableBuilder.create().border(borderConfig).noBorder();
+
       const config = builder.getConfig();
       expect(config.border).toBeUndefined();
     });
@@ -126,19 +137,17 @@ describe('TableBuilder', () => {
 
   describe('style function configuration', () => {
     test('sets style function', () => {
-      const styleFunc = (row: number, col: number) => ({ bold: row === -1 });
+      const styleFunc = (row: number, _col: number) => ({ bold: row === -1 });
       const builder = TableBuilder.create().styleFunc(styleFunc);
-      
+
       const config = builder.getConfig();
       expect(config.styleFunc).toBe(styleFunc);
     });
 
     test('removes style function', () => {
-      const styleFunc = (row: number, col: number) => ({ bold: true });
-      const builder = TableBuilder.create()
-        .styleFunc(styleFunc)
-        .noStyleFunc();
-      
+      const styleFunc = (_row: number, _col: number) => ({ bold: true });
+      const builder = TableBuilder.create().styleFunc(styleFunc).noStyleFunc();
+
       const config = builder.getConfig();
       expect(config.styleFunc).toBeUndefined();
     });
@@ -176,14 +185,17 @@ describe('TableBuilder', () => {
       const builder = TableBuilder.create().fromArray(data);
       const config = builder.getConfig();
       expect(config.headers).toEqual(['Name', 'Age', 'City']);
-      expect(config.rows).toEqual([['John', '25', 'NYC'], ['Jane', '30', 'LA']]);
+      expect(config.rows).toEqual([
+        ['John', '25', 'NYC'],
+        ['Jane', '30', 'LA'],
+      ]);
     });
 
     test('converts table to 2D array', () => {
       const builder = TableBuilder.create()
         .headers('Name', 'Age')
         .rows(['John', '25'], ['Jane', '30']);
-      
+
       const array = builder.toArray();
       expect(array).toEqual([
         ['Name', 'Age'],
@@ -197,7 +209,7 @@ describe('TableBuilder', () => {
     test('checks if table is empty', () => {
       const emptyBuilder = TableBuilder.create();
       const nonEmptyBuilder = TableBuilder.create().headers('Name');
-      
+
       expect(emptyBuilder.isEmpty()).toBe(true);
       expect(nonEmptyBuilder.isEmpty()).toBe(false);
     });
@@ -211,7 +223,7 @@ describe('TableBuilder', () => {
       const builder = TableBuilder.create()
         .headers('Name', 'Age')
         .rows(['John', '25'], ['Jane', '30']);
-      
+
       expect(builder.getRowCount()).toBe(2);
     });
 
@@ -219,7 +231,7 @@ describe('TableBuilder', () => {
       const builder = TableBuilder.create()
         .headers('Name', 'Age')
         .rows(['John', '25'], ['Jane', '30']);
-      
+
       expect(builder.getTotalRowCount()).toBe(3);
     });
 
@@ -227,7 +239,7 @@ describe('TableBuilder', () => {
       const builder = TableBuilder.create()
         .headers('Name', 'Age')
         .rows(['John', '25'], ['Jane', '30']);
-      
+
       const metrics = builder.calculateMetrics();
       expect(metrics.columnCount).toBe(2);
       expect(metrics.rowCount).toBe(3);
@@ -237,7 +249,7 @@ describe('TableBuilder', () => {
       const builder = TableBuilder.create()
         .headers('Name', 'Age')
         .rows(['John', '25'], ['Jane', '30']);
-      
+
       const validation = builder.validate();
       expect(validation.isValid).toBe(true);
       expect(validation.errors).toHaveLength(0);
@@ -246,10 +258,8 @@ describe('TableBuilder', () => {
 
   describe('functional methods', () => {
     test('clones table', () => {
-      const original = TableBuilder.create()
-        .headers('Name', 'Age')
-        .rows(['John', '25']);
-      
+      const original = TableBuilder.create().headers('Name', 'Age').rows(['John', '25']);
+
       const cloned = original.clone();
       expect(cloned.getConfig()).toEqual(original.getConfig());
       expect(cloned).not.toBe(original);
@@ -262,7 +272,7 @@ describe('TableBuilder', () => {
           ...config,
           width: 100,
         }));
-      
+
       expect(builder.getConfig().width).toBe(100);
     });
 
@@ -271,7 +281,7 @@ describe('TableBuilder', () => {
         .headers('Name', 'Age')
         .when(true, (chain) => chain.width(80))
         .when(false, (chain) => chain.height(20));
-      
+
       const config = builder.getConfig();
       expect(config.width).toBe(80);
       expect(config.height).toBeUndefined();
@@ -281,17 +291,15 @@ describe('TableBuilder', () => {
       const builder = TableBuilder.create()
         .headers('Name', 'Age')
         .pipe((chain) => chain.width(100));
-      
+
       expect(builder.getConfig().width).toBe(100);
     });
   });
 
   describe('build methods', () => {
     test('builds final configuration', () => {
-      const builder = TableBuilder.create()
-        .headers('Name', 'Age')
-        .rows(['John', '25']);
-      
+      const builder = TableBuilder.create().headers('Name', 'Age').rows(['John', '25']);
+
       const config = builder.build();
       expect(config.headers).toEqual(['Name', 'Age']);
       expect(config.rows).toEqual([['John', '25']]);
@@ -310,7 +318,7 @@ describe('TableChain', () => {
     test('each operation returns new chain', () => {
       const original = TableBuilder.create();
       const modified = original.headers('Name', 'Age');
-      
+
       expect(original.getConfig().headers).toHaveLength(0);
       expect(modified.getConfig().headers).toEqual(['Name', 'Age']);
       expect(original).not.toBe(modified);
@@ -320,7 +328,7 @@ describe('TableChain', () => {
       const chain1 = TableBuilder.create();
       const chain2 = chain1.headers('Name', 'Age');
       const chain3 = chain2.addRow(['John', '25']);
-      
+
       expect(chain1.getConfig().headers).toHaveLength(0);
       expect(chain2.getConfig().headers).toEqual(['Name', 'Age']);
       expect(chain2.getConfig().rows).toHaveLength(0);
@@ -350,8 +358,8 @@ describe('TableChain', () => {
         .rows(['John', '25', 'NYC'], ['Jane', '30', 'LA'])
         .border(borderConfig)
         .width(80)
-        .styleFunc((row, col) => ({ bold: row === -1 }));
-      
+        .styleFunc((row, _col) => ({ bold: row === -1 }));
+
       const config = chain.getConfig();
       expect(config.headers).toEqual(['Name', 'Age', 'City']);
       expect(config.rows).toHaveLength(2);
@@ -365,8 +373,11 @@ describe('TableChain', () => {
         .headers('Name', 'Age')
         .addRow(['John', '25'])
         .addRow(['Jane', '30'])
-        .addRows([['Bob', '35'], ['Alice', '28']]);
-      
+        .addRows([
+          ['Bob', '35'],
+          ['Alice', '28'],
+        ]);
+
       expect(chain.getRowCount()).toBe(4);
       expect(chain.getColumnCount()).toBe(2);
     });
@@ -430,9 +441,7 @@ describe('TableChain', () => {
     });
 
     test('validates complex table configurations', () => {
-      const table = TableBuilder.create()
-        .headers('Name', 'Age')
-        .rows(['John', '25'], ['Jane']); // Mismatched column count
+      const table = TableBuilder.create().headers('Name', 'Age').rows(['John', '25'], ['Jane']); // Mismatched column count
 
       const validation = table.validate();
       expect(validation.isValid).toBe(true); // Column mismatch is a warning, not error

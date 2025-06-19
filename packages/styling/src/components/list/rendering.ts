@@ -286,7 +286,8 @@ export namespace ListRenderer {
     options: ListRenderOptions = DEFAULT_OPTIONS
   ): string {
     const lines = renderToLines(config, options);
-    const maxWidth = lines.length > 0 ? Math.max(...lines.map((line) => stripAnsi(line).length)) : 0;
+    const maxWidth =
+      lines.length > 0 ? Math.max(...lines.map((line) => stripAnsi(line).length)) : 0;
 
     const topBorder = `┌${'─'.repeat(maxWidth + 2)}┐`;
     const bottomBorder = `└${'─'.repeat(maxWidth + 2)}┘`;

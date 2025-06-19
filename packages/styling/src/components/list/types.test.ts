@@ -1,14 +1,14 @@
 import { describe, expect, test } from 'bun:test';
 import type {
+  EnumeratorFunction,
   ListConfig,
   ListItem,
-  ListRenderOptions,
-  ListValidationResult,
-  ListMetrics,
   ListItemPosition,
-  EnumeratorFunction,
-  ListStyleFunction,
   ListItemRenderer,
+  ListMetrics,
+  ListRenderOptions,
+  ListStyleFunction,
+  ListValidationResult,
 } from './types';
 
 describe('ListItem type', () => {
@@ -243,7 +243,7 @@ describe('ListItemPosition interface', () => {
 
 describe('ListStyleFunction type', () => {
   test('accepts function that styles based on item and position', () => {
-    const styleFunction: ListStyleFunction = (item, position) => ({
+    const styleFunction: ListStyleFunction = (_item, position) => ({
       foreground: position.depth === 0 ? '#ff0000' : '#0000ff',
       bold: position.isLast,
     });

@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'bun:test';
 import {
-  TerminalCapabilitiesSchema,
-  UnicodeCharacterSchema,
   ANSISequence,
   type TerminalCapabilities,
+  TerminalCapabilitiesSchema,
   type UnicodeCharacter,
+  UnicodeCharacterSchema,
 } from './terminal';
 
 describe('TerminalCapabilitiesSchema', () => {
@@ -23,7 +23,7 @@ describe('TerminalCapabilitiesSchema', () => {
 
   test('validates all color profile options', () => {
     const profiles = ['ascii', 'ansi', 'ansi256', 'truecolor'] as const;
-    
+
     for (const profile of profiles) {
       const capabilities: TerminalCapabilities = {
         colorProfile: profile,
@@ -52,41 +52,49 @@ describe('TerminalCapabilitiesSchema', () => {
   });
 
   test('rejects zero or negative dimensions', () => {
-    expect(() => TerminalCapabilitiesSchema.parse({
-      colorProfile: 'ansi',
-      width: 0,
-      height: 24,
-      hasDarkBackground: true,
-      supportsUnicode: true,
-      supportsEmoji: true,
-    })).toThrow();
+    expect(() =>
+      TerminalCapabilitiesSchema.parse({
+        colorProfile: 'ansi',
+        width: 0,
+        height: 24,
+        hasDarkBackground: true,
+        supportsUnicode: true,
+        supportsEmoji: true,
+      })
+    ).toThrow();
 
-    expect(() => TerminalCapabilitiesSchema.parse({
-      colorProfile: 'ansi',
-      width: 80,
-      height: -1,
-      hasDarkBackground: true,
-      supportsUnicode: true,
-      supportsEmoji: true,
-    })).toThrow();
+    expect(() =>
+      TerminalCapabilitiesSchema.parse({
+        colorProfile: 'ansi',
+        width: 80,
+        height: -1,
+        hasDarkBackground: true,
+        supportsUnicode: true,
+        supportsEmoji: true,
+      })
+    ).toThrow();
   });
 
   test('rejects non-boolean capability flags', () => {
-    expect(() => TerminalCapabilitiesSchema.parse({
-      colorProfile: 'ansi',
-      width: 80,
-      height: 24,
-      hasDarkBackground: 'true',
-      supportsUnicode: true,
-      supportsEmoji: true,
-    })).toThrow();
+    expect(() =>
+      TerminalCapabilitiesSchema.parse({
+        colorProfile: 'ansi',
+        width: 80,
+        height: 24,
+        hasDarkBackground: 'true',
+        supportsUnicode: true,
+        supportsEmoji: true,
+      })
+    ).toThrow();
   });
 
   test('rejects missing required fields', () => {
-    expect(() => TerminalCapabilitiesSchema.parse({
-      colorProfile: 'ansi',
-      width: 80,
-    })).toThrow();
+    expect(() =>
+      TerminalCapabilitiesSchema.parse({
+        colorProfile: 'ansi',
+        width: 80,
+      })
+    ).toThrow();
   });
 });
 
@@ -123,7 +131,7 @@ describe('UnicodeCharacterSchema', () => {
 
   test('validates all character categories', () => {
     const categories = ['control', 'combining', 'normal', 'wide', 'emoji'] as const;
-    
+
     for (const category of categories) {
       const char: UnicodeCharacter = {
         codePoint: 65,
@@ -136,33 +144,41 @@ describe('UnicodeCharacterSchema', () => {
   });
 
   test('rejects negative code point', () => {
-    expect(() => UnicodeCharacterSchema.parse({
-      codePoint: -1,
-      width: 1,
-      category: 'normal',
-    })).toThrow();
+    expect(() =>
+      UnicodeCharacterSchema.parse({
+        codePoint: -1,
+        width: 1,
+        category: 'normal',
+      })
+    ).toThrow();
   });
 
   test('rejects invalid width', () => {
-    expect(() => UnicodeCharacterSchema.parse({
-      codePoint: 65,
-      width: -1,
-      category: 'normal',
-    })).toThrow();
+    expect(() =>
+      UnicodeCharacterSchema.parse({
+        codePoint: 65,
+        width: -1,
+        category: 'normal',
+      })
+    ).toThrow();
 
-    expect(() => UnicodeCharacterSchema.parse({
-      codePoint: 65,
-      width: 3,
-      category: 'normal',
-    })).toThrow();
+    expect(() =>
+      UnicodeCharacterSchema.parse({
+        codePoint: 65,
+        width: 3,
+        category: 'normal',
+      })
+    ).toThrow();
   });
 
   test('rejects invalid category', () => {
-    expect(() => UnicodeCharacterSchema.parse({
-      codePoint: 65,
-      width: 1,
-      category: 'invalid',
-    })).toThrow();
+    expect(() =>
+      UnicodeCharacterSchema.parse({
+        codePoint: 65,
+        width: 1,
+        category: 'invalid',
+      })
+    ).toThrow();
   });
 });
 

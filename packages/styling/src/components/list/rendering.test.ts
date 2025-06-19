@@ -38,7 +38,7 @@ describe('ListRenderer.render', () => {
   test('renders simple list with enumerators', () => {
     const list = createSimpleList();
     const result = ListRenderer.render(list);
-    
+
     const lines = result.split('\n');
     expect(lines).toHaveLength(3);
     expect(lines[0]).toBe('1. Item 1');
@@ -52,7 +52,7 @@ describe('ListRenderer.render', () => {
       enumerator: () => '', // Empty enumerator
     };
     const result = ListRenderer.render(list);
-    
+
     const lines = result.split('\n');
     expect(lines[0]).toBe('Item 1');
     expect(lines[1]).toBe('Item 2');
@@ -62,13 +62,13 @@ describe('ListRenderer.render', () => {
   test('renders nested lists', () => {
     const list = createNestedList();
     const result = ListRenderer.render(list);
-    
+
     const lines = result.split('\n');
     expect(lines).toContain('1. Top 1');
     expect(lines).toContain('2.');
     expect(lines).toContain('3. Top 2');
-    expect(lines.some(line => line.includes('Nested A'))).toBe(true);
-    expect(lines.some(line => line.includes('Nested B'))).toBe(true);
+    expect(lines.some((line) => line.includes('Nested A'))).toBe(true);
+    expect(lines.some((line) => line.includes('Nested B'))).toBe(true);
   });
 
   test('applies item styling when enabled', () => {
@@ -77,7 +77,7 @@ describe('ListRenderer.render', () => {
       itemStyle: (text) => `**${text}**`,
     };
     const result = ListRenderer.render(list);
-    
+
     expect(result).toContain('**Item 1**');
     expect(result).toContain('**Item 2**');
   });
@@ -88,7 +88,7 @@ describe('ListRenderer.render', () => {
       enumeratorStyle: (text) => `[${text}]`,
     };
     const result = ListRenderer.render(list);
-    
+
     expect(result).toContain('[1.]');
     expect(result).toContain('[2.]');
   });
@@ -105,7 +105,7 @@ describe('ListRenderer.render', () => {
       maxWidth: 20,
     };
     const result = ListRenderer.render(list);
-    
+
     const lines = result.split('\n');
     expect(lines.length).toBeGreaterThan(1);
   });
@@ -116,10 +116,10 @@ describe('ListRenderer.render', () => {
       spacing: 1,
     };
     const result = ListRenderer.render(list);
-    
+
     const lines = result.split('\n');
     expect(lines.length).toBeGreaterThan(3); // Should have empty lines
-    expect(lines.some(line => line === '')).toBe(true);
+    expect(lines.some((line) => line === '')).toBe(true);
   });
 
   test('respects render options', () => {
@@ -131,7 +131,7 @@ describe('ListRenderer.render', () => {
       indentPerLevel: 4,
       renderHidden: false,
     };
-    
+
     const result = ListRenderer.render(list, options);
     expect(typeof result).toBe('string');
     expect(result.length).toBeGreaterThan(0);
@@ -142,7 +142,7 @@ describe('ListRenderer.renderToLines', () => {
   test('returns array of lines', () => {
     const list = createSimpleList();
     const lines = ListRenderer.renderToLines(list);
-    
+
     expect(Array.isArray(lines)).toBe(true);
     expect(lines).toHaveLength(3);
     expect(lines[0]).toBe('1. Item 1');
@@ -153,7 +153,7 @@ describe('ListRenderer.renderWithSeparator', () => {
   test('uses custom separator', () => {
     const list = createSimpleList();
     const result = ListRenderer.renderWithSeparator(list, ' | ');
-    
+
     expect(result).toContain(' | ');
     expect(result.split(' | ')).toHaveLength(3);
   });
@@ -161,7 +161,7 @@ describe('ListRenderer.renderWithSeparator', () => {
   test('uses default separator when not specified', () => {
     const list = createSimpleList();
     const result = ListRenderer.renderWithSeparator(list);
-    
+
     expect(result).toContain('\n');
   });
 });
@@ -178,7 +178,7 @@ describe('ListRenderer.renderToMarkdown', () => {
       enumeratorSpacing: 1,
     };
     const result = ListRenderer.renderToMarkdown(list);
-    
+
     expect(result).toContain('- Item 1');
     expect(result).toContain('- Item 2');
   });
@@ -186,7 +186,7 @@ describe('ListRenderer.renderToMarkdown', () => {
   test('renders numbered list in markdown format', () => {
     const list = createSimpleList();
     const result = ListRenderer.renderToMarkdown(list);
-    
+
     expect(result).toContain('1. Item 1');
     expect(result).toContain('1. Item 2');
   });
@@ -222,7 +222,7 @@ describe('ListRenderer.getDimensions', () => {
   test('calculates correct dimensions', () => {
     const list = createSimpleList();
     const dimensions = ListRenderer.getDimensions(list);
-    
+
     expect(dimensions.width).toBeGreaterThan(0);
     expect(dimensions.height).toBe(3);
     expect(dimensions.lines).toBe(3);
@@ -239,7 +239,7 @@ describe('ListRenderer.getDimensions', () => {
       enumeratorSpacing: 1,
     };
     const dimensions = ListRenderer.getDimensions(list);
-    
+
     expect(dimensions.width).toBe(0);
     expect(dimensions.height).toBe(0);
     expect(dimensions.lines).toBe(0);
@@ -256,7 +256,7 @@ describe('ListRenderer.getDimensions', () => {
       enumeratorSpacing: 1,
     };
     const dimensions = ListRenderer.getDimensions(list);
-    
+
     // Width should not include ANSI escape sequences
     expect(dimensions.width).toBeLessThan(20); // Less than the full string with ANSI
   });
@@ -266,7 +266,7 @@ describe('ListRenderer.renderWithLineNumbers', () => {
   test('adds line numbers to output', () => {
     const list = createSimpleList();
     const result = ListRenderer.renderWithLineNumbers(list);
-    
+
     const lines = result.split('\n');
     expect(lines[0]).toMatch(/^1: /);
     expect(lines[1]).toMatch(/^2: /);
@@ -284,7 +284,7 @@ describe('ListRenderer.renderWithLineNumbers', () => {
       enumeratorSpacing: 1,
     };
     const result = ListRenderer.renderWithLineNumbers(list);
-    
+
     const lines = result.split('\n');
     expect(lines[0]).toMatch(/^ 1: /); // Padded with space
     expect(lines[9]).toMatch(/^10: /); // No padding needed
@@ -295,7 +295,7 @@ describe('ListRenderer.renderWithBorder', () => {
   test('adds border around list', () => {
     const list = createSimpleList();
     const result = ListRenderer.renderWithBorder(list);
-    
+
     const lines = result.split('\n');
     expect(lines[0]).toMatch(/^┌─+┐$/); // Top border
     expect(lines[lines.length - 1]).toMatch(/^└─+┘$/); // Bottom border
@@ -313,7 +313,7 @@ describe('ListRenderer.renderWithBorder', () => {
       enumeratorSpacing: 1,
     };
     const result = ListRenderer.renderWithBorder(list);
-    
+
     expect(result).toBe('┌──┐\n└──┘');
   });
 
@@ -328,11 +328,11 @@ describe('ListRenderer.renderWithBorder', () => {
       enumeratorSpacing: 1,
     };
     const result = ListRenderer.renderWithBorder(list);
-    
+
     const lines = result.split('\n');
     const topBorder = lines[0];
     const bottomBorder = lines[lines.length - 1];
-    
+
     expect(topBorder?.length).toBe(bottomBorder?.length);
     expect(topBorder?.length).toBeGreaterThan(20); // Should be wide enough for longest item
   });

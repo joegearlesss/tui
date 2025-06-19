@@ -32,16 +32,7 @@
     "@biomejs/biome": "^1.4.1",
     "@types/bun": "latest"
   },
-  "keywords": [
-    "terminal",
-    "styling",
-    "tui",
-    "ansi",
-    "colors",
-    "lipgloss",
-    "bun",
-    "typescript"
-  ],
+  "keywords": ["terminal", "styling", "tui", "ansi", "colors", "lipgloss", "bun", "typescript"],
   "author": "TUI Team",
   "license": "MIT"
 }

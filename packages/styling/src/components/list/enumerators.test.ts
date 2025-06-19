@@ -141,7 +141,7 @@ describe('Enumerator convenience functions', () => {
 describe('Enumerator custom functions', () => {
   test('cycle() creates cycling enumerator', () => {
     const cycleFn = Enumerator.cycle(['●', '○', '◆']);
-    
+
     expect(cycleFn(0)).toBe('●');
     expect(cycleFn(1)).toBe('○');
     expect(cycleFn(2)).toBe('◆');
@@ -161,7 +161,7 @@ describe('Enumerator custom functions', () => {
 
   test('custom() creates enumerator with prefix and suffix', () => {
     const customFn = Enumerator.custom('[', ']');
-    
+
     expect(customFn(0)).toBe('[1]');
     expect(customFn(1)).toBe('[2]');
     expect(customFn(9)).toBe('[10]');
@@ -169,21 +169,21 @@ describe('Enumerator custom functions', () => {
 
   test('custom() works with empty prefix and suffix', () => {
     const customFn = Enumerator.custom();
-    
+
     expect(customFn(0)).toBe('1');
     expect(customFn(1)).toBe('2');
   });
 
   test('custom() works with only prefix', () => {
     const customFn = Enumerator.custom('Step ');
-    
+
     expect(customFn(0)).toBe('Step 1');
     expect(customFn(1)).toBe('Step 2');
   });
 
   test('custom() works with only suffix', () => {
     const customFn = Enumerator.custom('', ':');
-    
+
     expect(customFn(0)).toBe('1:');
     expect(customFn(1)).toBe('2:');
   });
@@ -194,7 +194,7 @@ describe('Enumerator custom functions', () => {
       Enumerator.ALPHA_LOWER,
       Enumerator.ROMAN_LOWER,
     ]);
-    
+
     expect(depthFn(0, 0)).toBe('1.');
     expect(depthFn(0, 1)).toBe('a.');
     expect(depthFn(0, 2)).toBe('i.');
@@ -202,23 +202,22 @@ describe('Enumerator custom functions', () => {
   });
 
   test('depthAware() throws error with empty array', () => {
-    expect(() => Enumerator.depthAware([])).toThrow('Depth-aware enumerator requires at least one enumerator function');
+    expect(() => Enumerator.depthAware([])).toThrow(
+      'Depth-aware enumerator requires at least one enumerator function'
+    );
   });
 
   test('depthAware() works with single enumerator', () => {
     const depthFn = Enumerator.depthAware([Enumerator.BULLET]);
-    
+
     expect(depthFn(0, 0)).toBe('•');
     expect(depthFn(0, 1)).toBe('•');
     expect(depthFn(0, 5)).toBe('•');
   });
 
   test('depthAware() handles default depth parameter', () => {
-    const depthFn = Enumerator.depthAware([
-      Enumerator.ARABIC,
-      Enumerator.ALPHA_LOWER,
-    ]);
-    
+    const depthFn = Enumerator.depthAware([Enumerator.ARABIC, Enumerator.ALPHA_LOWER]);
+
     // When depth is not provided, should default to 0
     expect(depthFn(0)).toBe('1.');
     expect(depthFn(1)).toBe('2.');

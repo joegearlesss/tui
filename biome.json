@@ -28,8 +28,5 @@
       "trailingCommas": "es5",
       "semicolons": "always"
     }
-  },
-  "files": {
-    "includes": ["packages/**/*.ts", "packages/**/*.js"]
   }
 }

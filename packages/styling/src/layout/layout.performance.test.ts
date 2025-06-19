@@ -180,9 +180,8 @@ describe('Layout Performance Tests', () => {
       const promises = Array.from({ length: 100 }, async (_, i) => {
         if (i % 2 === 0) {
           return Layout.joinHorizontal('center', ...blocks);
-        } else {
-          return Layout.joinVertical('middle', ...blocks);
         }
+        return Layout.joinVertical('middle', ...blocks);
       });
 
       await Promise.all(promises);

@@ -7,7 +7,7 @@
 
 import { z } from 'zod';
 import type { BorderConfig } from '../../border/types';
-import type { TableConfig, TableValidationResult, TableStyleFunction } from './types';
+import type { TableConfig, TableStyleFunction, TableValidationResult } from './types';
 
 /**
  * Schema for table cell position validation
@@ -349,14 +349,14 @@ export namespace TableValidation {
 
     // Check for duplicates
     const seen = new Set<string>();
-    headers.forEach((header) => {
+    for (const header of headers) {
       if (typeof header === 'string') {
         if (seen.has(header)) {
           errors.push(`Duplicate header found: ${header}`);
         }
         seen.add(header);
       }
-    });
+    }
 
     return {
       isValid: errors.length === 0,
@@ -368,7 +368,10 @@ export namespace TableValidation {
   /**
    * Validates table rows
    */
-  export const validateRows = (rows: readonly (readonly string[])[], expectedColumnCount: number): TableValidationResult => {
+  export const validateRows = (
+    rows: readonly (readonly string[])[],
+    expectedColumnCount: number
+  ): TableValidationResult => {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -386,7 +389,9 @@ export namespace TableValidation {
         if (typeof cell !== 'string') {
           errors.push(`Cell at row ${rowIndex}, column ${cellIndex} must be a string`);
         } else if (cell.length > 100) {
-          warnings.push(`Cell at row ${rowIndex}, column ${cellIndex} is very long (${cell.length} characters)`);
+          warnings.push(
+            `Cell at row ${rowIndex}, column ${cellIndex} is very long (${cell.length} characters)`
+          );
         }
       });
     });
@@ -422,14 +427,23 @@ export namespace TableValidation {
     if (!border.chars) {
       errors.push('Border chars configuration is required');
     } else {
-      const requiredChars = ['top', 'right', 'bottom', 'left', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
-      requiredChars.forEach((charName) => {
+      const requiredChars = [
+        'top',
+        'right',
+        'bottom',
+        'left',
+        'topLeft',
+        'topRight',
+        'bottomLeft',
+        'bottomRight',
+      ];
+      for (const charName of requiredChars) {
         if (!(charName in border.chars)) {
           errors.push(`Missing border character: ${charName}`);
         } else if (typeof border.chars[charName as keyof typeof border.chars] !== 'string') {
           errors.push(`Border character ${charName} must be a string`);
         }
-      });
+      }
     }
 
     if (!Array.isArray(border.sides) || border.sides.length !== 4) {
@@ -446,7 +460,9 @@ export namespace TableValidation {
   /**
    * Validates style function
    */
-  export const validateStyleFunction = (styleFunc: TableStyleFunction | undefined): TableValidationResult => {
+  export const validateStyleFunction = (
+    styleFunc: TableStyleFunction | undefined
+  ): TableValidationResult => {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -465,7 +481,9 @@ export namespace TableValidation {
         errors.push('Style function must return an object');
       }
     } catch (error) {
-      errors.push(`Style function throws an error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      errors.push(
+        `Style function throws an error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
 
     return {
@@ -482,19 +500,36 @@ export namespace TableValidation {
     const errors: string[] = [];
     const warnings: string[] = [];
 
+    // Early return if basic structure is invalid
+    if (!config.headers || !config.rows) {
+      return { isValid: true, errors, warnings }; // Let other validators handle missing arrays
+    }
+
     // Check for large tables that might impact performance
     if (config.headers.length > 20) {
-      warnings.push(`Table has a large number of columns (${config.headers.length}), which may impact performance`);
+      warnings.push(
+        `Table has a large number of columns (${config.headers.length}), which may impact performance`
+      );
     }
 
     if (config.rows.length > 500) {
-      warnings.push(`Table has a large number of rows (${config.rows.length}), which may impact performance`);
+      warnings.push(
+        `Table has a large number of rows (${config.rows.length}), which may impact performance`
+      );
     }
+
+    // Check column count consistency
+    const expectedColumns = config.headers.length;
+    config.rows.forEach((row, rowIndex) => {
+      if (Array.isArray(row) && row.length !== expectedColumns) {
+        errors.push(`Row ${rowIndex} has ${row.length} columns, expected ${expectedColumns}`);
+      }
+    });
 
     // Check for circular references (basic check)
     try {
       JSON.stringify(config);
-    } catch (error) {
+    } catch (_error) {
       errors.push('Circular reference detected in table structure');
     }
 
@@ -524,7 +559,9 @@ export namespace TableValidation {
         errors.push('Enumerator function must return a string');
       }
     } catch (error) {
-      errors.push(`Enumerator function throws an error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      errors.push(
+        `Enumerator function throws an error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
 
     return {

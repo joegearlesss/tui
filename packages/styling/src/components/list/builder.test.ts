@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import { ListBuilder, ListChain } from './builder';
-import type { ListConfig, ListItem } from './types';
+import type { ListConfig } from './types';
 
 describe('ListBuilder', () => {
   describe('static factory methods', () => {
@@ -54,9 +54,8 @@ describe('ListBuilder', () => {
 
   describe('configuration methods', () => {
     test('sets enumerator function', () => {
-      const builder = ListBuilder.create(['A', 'B'])
-        .enumerator((i) => `${i + 1}.`);
-      
+      const builder = ListBuilder.create(['A', 'B']).enumerator((i) => `${i + 1}.`);
+
       const config = builder.get();
       expect(config.enumerator(0)).toBe('1.');
       expect(config.enumerator(1)).toBe('2.');
@@ -91,43 +90,37 @@ describe('ListBuilder', () => {
 
   describe('item manipulation methods', () => {
     test('appends items', () => {
-      const builder = ListBuilder.create(['A'])
-        .append('B')
-        .append('C');
-      
+      const builder = ListBuilder.create(['A']).append('B').append('C');
+
       expect(builder.length()).toBe(3);
       expect(builder.getItem(2)).toBe('C');
     });
 
     test('prepends items', () => {
-      const builder = ListBuilder.create(['B'])
-        .prepend('A');
-      
+      const builder = ListBuilder.create(['B']).prepend('A');
+
       expect(builder.length()).toBe(2);
       expect(builder.getItem(0)).toBe('A');
       expect(builder.getItem(1)).toBe('B');
     });
 
     test('inserts items at specific index', () => {
-      const builder = ListBuilder.create(['A', 'C'])
-        .insert(1, 'B');
-      
+      const builder = ListBuilder.create(['A', 'C']).insert(1, 'B');
+
       expect(builder.length()).toBe(3);
       expect(builder.getItem(1)).toBe('B');
     });
 
     test('removes items by index', () => {
-      const builder = ListBuilder.create(['A', 'B', 'C'])
-        .remove(1);
-      
+      const builder = ListBuilder.create(['A', 'B', 'C']).remove(1);
+
       expect(builder.length()).toBe(2);
       expect(builder.getItem(1)).toBe('C');
     });
 
     test('replaces items by index', () => {
-      const builder = ListBuilder.create(['A', 'B', 'C'])
-        .replace(1, 'X');
-      
+      const builder = ListBuilder.create(['A', 'B', 'C']).replace(1, 'X');
+
       expect(builder.length()).toBe(3);
       expect(builder.getItem(1)).toBe('X');
     });
@@ -135,18 +128,20 @@ describe('ListBuilder', () => {
 
   describe('functional methods', () => {
     test('filters items', () => {
-      const builder = ListBuilder.create(['A', 'B', 'C', 'D'])
-        .filter((item, index) => index % 2 === 0);
-      
+      const builder = ListBuilder.create(['A', 'B', 'C', 'D']).filter(
+        (_item, index) => index % 2 === 0
+      );
+
       expect(builder.length()).toBe(2);
       expect(builder.getItem(0)).toBe('A');
       expect(builder.getItem(1)).toBe('C');
     });
 
     test('maps items', () => {
-      const builder = ListBuilder.create(['a', 'b', 'c'])
-        .map((item) => typeof item === 'string' ? item.toUpperCase() : item);
-      
+      const builder = ListBuilder.create(['a', 'b', 'c']).map((item) =>
+        typeof item === 'string' ? item.toUpperCase() : item
+      );
+
       expect(builder.getItem(0)).toBe('A');
       expect(builder.getItem(1)).toBe('B');
       expect(builder.getItem(2)).toBe('C');
@@ -163,18 +158,16 @@ describe('ListBuilder', () => {
         enumeratorSpacing: 1,
       };
 
-      const builder = ListBuilder.create(['A', 'B'])
-        .concat(otherConfig);
-      
+      const builder = ListBuilder.create(['A', 'B']).concat(otherConfig);
+
       expect(builder.length()).toBe(4);
       expect(builder.getItem(2)).toBe('X');
       expect(builder.getItem(3)).toBe('Y');
     });
 
     test('reverses items', () => {
-      const builder = ListBuilder.create(['A', 'B', 'C'])
-        .reverse();
-      
+      const builder = ListBuilder.create(['A', 'B', 'C']).reverse();
+
       expect(builder.getItem(0)).toBe('C');
       expect(builder.getItem(1)).toBe('B');
       expect(builder.getItem(2)).toBe('A');
@@ -231,7 +224,7 @@ describe('ListBuilder', () => {
       const builder = ListBuilder.create(['Test']);
       const config1 = builder.build();
       const config2 = builder.build();
-      
+
       expect(config1.items).toEqual(config2.items);
       expect(config1.enumerator(0)).toEqual(config2.enumerator(0));
       expect(config1).not.toBe(config2); // Different objects
@@ -274,8 +267,8 @@ describe('ListChain', () => {
         .withIndent(2)
         .withSpacing(1)
         .append('c')
-        .map((item) => typeof item === 'string' ? item.toUpperCase() : item);
-      
+        .map((item) => (typeof item === 'string' ? item.toUpperCase() : item));
+
       const config = chain.get();
       expect(config.items).toEqual(['A', 'B', 'C']);
       expect(config.enumerator(0)).toBe('1.');
@@ -285,7 +278,7 @@ describe('ListChain', () => {
       const chain = ListChain.create(['test'])
         .withItemStyle((text) => `**${text}**`)
         .withEnumeratorStyle((text) => `[${text}]`);
-      
+
       const config = chain.get();
       expect(config.itemStyle?.('test')).toBe('**test**');
       expect(config.enumeratorStyle?.('•')).toBe('[•]');
@@ -296,7 +289,7 @@ describe('ListChain', () => {
         .filter((item) => item !== 'B')
         .prepend('X')
         .reverse();
-      
+
       const config = chain.get();
       expect(config.items).toEqual(['C', 'A', 'X']);
     });
@@ -312,9 +305,8 @@ describe('ListChain', () => {
         enumeratorSpacing: 1,
       };
 
-      const chain = ListChain.create(['A', 'B'])
-        .concat(otherConfig);
-      
+      const chain = ListChain.create(['A', 'B']).concat(otherConfig);
+
       expect(chain.get().items).toEqual(['A', 'B', 'X', 'Y']);
     });
   });
@@ -338,7 +330,7 @@ describe('ListChain', () => {
     test('each operation returns new chain', () => {
       const original = ListChain.create(['A']);
       const modified = original.append('B');
-      
+
       expect(original.get().items).toEqual(['A']);
       expect(modified.get().items).toEqual(['A', 'B']);
       expect(original).not.toBe(modified);
@@ -348,7 +340,7 @@ describe('ListChain', () => {
       const chain1 = ListChain.create(['A', 'B']);
       const chain2 = chain1.withIndent(2);
       const chain3 = chain2.append('C');
-      
+
       expect(chain1.get().items).toEqual(['A', 'B']);
       expect(chain2.get().items).toEqual(['A', 'B']);
       expect(chain3.get().items).toEqual(['A', 'B', 'C']);

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
+import type { BorderChars, BorderConfig, CustomBorderConfig } from './types';
 import { BorderValidation } from './validation';
-import type { BorderConfig, BorderChars, CustomBorderConfig } from './types';
 
 const createValidBorderConfig = (): BorderConfig => ({
   type: 'normal',
@@ -41,7 +41,7 @@ describe('BorderValidation.validateBorderConfig', () => {
 
   test('validates different border types', () => {
     const types = ['normal', 'rounded', 'thick', 'double', 'custom'] as const;
-    
+
     for (const type of types) {
       const config = { ...createValidBorderConfig(), type };
       expect(() => BorderValidation.validateBorderConfig(config)).not.toThrow();
@@ -175,7 +175,7 @@ describe('BorderValidation.isValidBoxDrawingChars', () => {
 describe('BorderValidation.formatValidationErrors', () => {
   test('formats validation errors with paths', () => {
     const invalidConfig = { type: 'invalid' };
-    
+
     try {
       BorderValidation.validateBorderConfig(invalidConfig);
     } catch (error) {
@@ -191,7 +191,7 @@ describe('BorderValidation.validateWithSuggestions', () => {
   test('returns success for valid configuration', () => {
     const config = createValidBorderConfig();
     const result = BorderValidation.validateWithSuggestions(config);
-    
+
     expect(result.isValid).toBe(true);
     expect(result.border).toEqual(config);
     expect(result.errors).toHaveLength(0);
@@ -201,7 +201,7 @@ describe('BorderValidation.validateWithSuggestions', () => {
   test('returns errors and suggestions for invalid configuration', () => {
     const invalidConfig = { type: 'invalid', chars: {}, sides: [] };
     const result = BorderValidation.validateWithSuggestions(invalidConfig);
-    
+
     expect(result.isValid).toBe(false);
     expect(result.border).toBeUndefined();
     expect(result.errors.length).toBeGreaterThan(0);
@@ -209,20 +209,26 @@ describe('BorderValidation.validateWithSuggestions', () => {
   });
 
   test('provides specific suggestions for common errors', () => {
-    const configWithInvalidType = { type: 'invalid', chars: createValidBorderChars(), sides: [true, true, true, true] };
+    const configWithInvalidType = {
+      type: 'invalid',
+      chars: createValidBorderChars(),
+      sides: [true, true, true, true],
+    };
     const result = BorderValidation.validateWithSuggestions(configWithInvalidType);
-    
-    expect(result.suggestions.some(s => s.includes('normal, rounded, thick, double, custom'))).toBe(true);
+
+    expect(
+      result.suggestions.some((s) => s.includes('normal, rounded, thick, double, custom'))
+    ).toBe(true);
   });
 
   test('removes duplicate suggestions', () => {
-    const invalidConfig = { 
-      type: 'invalid', 
-      chars: { invalid: 'chars' }, 
-      sides: [] 
+    const invalidConfig = {
+      type: 'invalid',
+      chars: { invalid: 'chars' },
+      sides: [],
     };
     const result = BorderValidation.validateWithSuggestions(invalidConfig);
-    
+
     const uniqueSuggestions = [...new Set(result.suggestions)];
     expect(result.suggestions).toEqual(uniqueSuggestions);
   });

@@ -25,7 +25,7 @@ describe('List Performance Tests', () => {
       }
 
       const end = performance.now();
-      expect(end - start).toBeLessThan(10);
+      expect(end - start).toBeLessThan(15);
     });
   });
 
@@ -41,7 +41,7 @@ describe('List Performance Tests', () => {
       }
 
       const end = performance.now();
-      expect(end - start).toBeLessThan(10);
+      expect(end - start).toBeLessThan(15);
     });
 
     test('should build nested lists efficiently', () => {

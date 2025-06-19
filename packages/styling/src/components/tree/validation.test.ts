@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
-import { TreeValidation } from './validation';
 import type { TreeConfig, TreeNodeConfig } from './types';
+import { TreeValidation } from './validation';
 
 describe('TreeValidation', () => {
   describe('validateTreeConfig', () => {
@@ -211,8 +211,13 @@ describe('TreeValidation', () => {
 
   describe('validateEnumeratorFunction', () => {
     test('validates working enumerator function', () => {
-      const enumerator = (node: TreeNodeConfig, depth: number, isLast: boolean, hasChildren: boolean) => '├─';
-      
+      const enumerator = (
+        _node: TreeNodeConfig,
+        _depth: number,
+        _isLast: boolean,
+        _hasChildren: boolean
+      ) => '├─';
+
       const result = TreeValidation.validateEnumeratorFunction(enumerator);
       expect(result.isValid).toBe(true);
       expect(result.errors).toHaveLength(0);
@@ -220,7 +225,7 @@ describe('TreeValidation', () => {
 
     test('detects non-function enumerator', () => {
       const enumerator = '├─' as any;
-      
+
       const result = TreeValidation.validateEnumeratorFunction(enumerator);
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('Enumerator must be a function');
@@ -230,7 +235,7 @@ describe('TreeValidation', () => {
       const enumerator = () => {
         throw new Error('Test error');
       };
-      
+
       const result = TreeValidation.validateEnumeratorFunction(enumerator);
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('Enumerator function throws an error: Test error');
@@ -238,18 +243,23 @@ describe('TreeValidation', () => {
 
     test('detects enumerator that returns non-string', () => {
       const enumerator = () => 123 as any;
-      
+
       const result = TreeValidation.validateEnumeratorFunction(enumerator);
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('Enumerator function must return a string');
     });
 
     test('validates enumerator with different parameters', () => {
-      const enumerator = (node: TreeNodeConfig, depth: number, isLast: boolean, hasChildren: boolean) => {
+      const enumerator = (
+        _node: TreeNodeConfig,
+        depth: number,
+        isLast: boolean,
+        _hasChildren: boolean
+      ) => {
         if (depth === 0) return '';
         return isLast ? '└─' : '├─';
       };
-      
+
       const result = TreeValidation.validateEnumeratorFunction(enumerator);
       expect(result.isValid).toBe(true);
       expect(result.errors).toHaveLength(0);
@@ -292,7 +302,7 @@ describe('TreeValidation', () => {
         style: undefined,
         expanded: true,
       };
-      
+
       // Create circular reference
       (node as any).children = [node];
 
@@ -407,7 +417,9 @@ describe('TreeValidation', () => {
 
       const result = TreeValidation.validateTreeConfig(config);
       expect(result.isValid).toBe(true);
-      expect(result.warnings).toContain('Tree has a large number of nodes (1001), which may impact performance');
+      expect(result.warnings).toContain(
+        'Tree has a large number of nodes (1001), which may impact performance'
+      );
     });
 
     test('generates warning for very large indent size', () => {

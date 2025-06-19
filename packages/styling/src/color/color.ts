@@ -1,11 +1,11 @@
 import type {
-  AdaptiveColor,
   ANSI256Color,
+  AdaptiveColor,
   ColorProfile,
   ColorValue,
   CompleteColor,
-  HexColor,
   HSLColor,
+  HexColor,
   RGBColor,
 } from '@tui/styling/types';
 

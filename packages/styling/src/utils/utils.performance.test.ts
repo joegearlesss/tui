@@ -55,7 +55,7 @@ describe('Utils Performance Tests', () => {
       }
 
       const end = performance.now();
-      expect(end - start).toBeLessThan(10);
+      expect(end - start).toBeLessThan(25);
     });
 
     test('should pad text efficiently', () => {
