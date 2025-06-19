@@ -14,6 +14,7 @@
     "test:coverage": "bun test --coverage",
     "lint": "bun run biome check",
     "format": "bun run biome format --write",
+    "typecheck": "bunx tsc --noEmit",
     "check": "bun run lint && bun run test"
   },
   "devDependencies": {
