@@ -612,14 +612,13 @@ namespace UserProfile {
   export const render = async (userId: string): Promise<string> => {
     const user = await UserService.findById(userId);
     if (user === undefined) {
-      return '<div>User not found</div>';
+      return 'User not found';
     }
     
     return `
-      <div class="${Theme.getUserProfileClass()}">
-        <h1>${user.name}</h1>
-        <p>${user.email}</p>
-      </div>
+      ${Theme.getUserProfileClass()}
+        ${user.name}
+        ${user.email}
     `;
   };
 }
@@ -1440,13 +1439,13 @@ namespace UserProfileUtils {
 #### Type Assertion as Last Resort
 ```typescript
 // ⚠️ Use sparingly - Type assertion when you know better than TypeScript
-const element = document.getElementById('user-form') as HTMLFormElement;
+const element = document.getElementById('user-form') as Element;
 
 // ✅ Better - Type guard with assertion
-const getFormElement = (id: string): HTMLFormElement => {
+const getFormElement = (id: string): Element => {
   const element = document.getElementById(id);
-  if (!(element instanceof HTMLFormElement)) {
-    throw new Error(`Element ${id} is not a form`);
+  if (!element) {
+    throw new Error(`Element ${id} not found`);
   }
   return element;
 };
