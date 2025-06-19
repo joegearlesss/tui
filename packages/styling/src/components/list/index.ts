@@ -89,7 +89,6 @@ export const {
 export const {
   render: renderList,
   renderToLines: renderListToLines,
-  renderToHtml: renderListToHtml,
   renderToMarkdown: renderListToMarkdown,
   getDimensions: getListDimensions,
 } = ListRendererImport;

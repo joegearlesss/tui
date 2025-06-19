@@ -157,49 +157,6 @@ export namespace ListRenderer {
   }
 
   /**
-   * Renders a list to HTML format (basic conversion)
-   */
-  export function renderToHtml(config: ListConfig): string {
-    const validConfig = validateListConfig(config);
-    const lines: string[] = ['<ul>'];
-
-    renderItemsToHtml(validConfig.items, validConfig, lines);
-    lines.push('</ul>');
-
-    return lines.join('\n');
-  }
-
-  /**
-   * Helper function to render items to HTML
-   */
-  function renderItemsToHtml(items: ListItem[], config: ListConfig, lines: string[]): void {
-    for (const item of items) {
-      if (typeof item === 'string') {
-        const escapedText = escapeHtml(item);
-        lines.push(`  <li>${escapedText}</li>`);
-      } else {
-        lines.push('  <li>');
-        lines.push('    <ul>');
-        renderItemsToHtml(item.items, item, lines);
-        lines.push('    </ul>');
-        lines.push('  </li>');
-      }
-    }
-  }
-
-  /**
-   * Escapes HTML special characters
-   */
-  function escapeHtml(text: string): string {
-    return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-
-  /**
    * Renders a list to Markdown format
    */
   export function renderToMarkdown(config: ListConfig, options: ListRenderOptions = {}): string {

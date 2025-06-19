@@ -674,16 +674,6 @@ describe('ListRenderer', () => {
       expect(rendered).toBe('• Item 1 | • Item 2');
     });
 
-    it('should render to HTML', () => {
-      const list = List.create(['Item 1', 'Item 2']);
-      const html = ListRenderer.renderToHtml(list);
-
-      expect(html).toContain('<ul>');
-      expect(html).toContain('<li>Item 1</li>');
-      expect(html).toContain('<li>Item 2</li>');
-      expect(html).toContain('</ul>');
-    });
-
     it('should render to Markdown', () => {
       const list = List.create(['Item 1', 'Item 2']);
       const markdown = ListRenderer.renderToMarkdown(list);
