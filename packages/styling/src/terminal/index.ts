@@ -1,13 +1,13 @@
-export {
-  type ColorProfile,
-  type TerminalCapabilities,
-  type TerminalEnvironment,
-  type BackgroundDetection,
-  ColorProfileSchema,
-  TerminalCapabilitiesSchema,
-  TerminalEnvironmentSchema,
-  BackgroundDetectionSchema,
-} from './types';
+export { AnsiEscape, Compatibility, Unicode } from './ansi';
 
 export { Terminal } from './detection';
-export { AnsiEscape, Unicode, Compatibility } from './ansi';
+export {
+  type BackgroundDetection,
+  BackgroundDetectionSchema,
+  type ColorProfile,
+  ColorProfileSchema,
+  type TerminalCapabilities,
+  TerminalCapabilitiesSchema,
+  type TerminalEnvironment,
+  TerminalEnvironmentSchema,
+} from './types';

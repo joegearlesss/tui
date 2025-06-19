@@ -5,7 +5,7 @@
  * This demonstrates the completed terminal integration features
  */
 
-import { Color, Terminal, Style, StyleBuilder } from './src';
+import { Color, Style, StyleBuilder, Terminal } from './src';
 
 async function demonstrateTerminalIntegration() {
   console.log('🎨 TUI Styling Package - Terminal Integration Demo\n');
@@ -34,15 +34,19 @@ async function demonstrateTerminalIntegration() {
 
   // 3. Background Detection (NEW FEATURE)
   console.log('🌓 Background Detection:');
-  
+
   // Async version
   const backgroundAsync = await Color.hasDarkBackground();
-  console.log(`  Async Detection: ${backgroundAsync === true ? 'Dark' : backgroundAsync === false ? 'Light' : 'Unknown'}`);
-  
+  console.log(
+    `  Async Detection: ${backgroundAsync === true ? 'Dark' : backgroundAsync === false ? 'Light' : 'Unknown'}`
+  );
+
   // Sync version
   const backgroundSync = Color.hasDarkBackgroundSync();
-  console.log(`  Sync Detection: ${backgroundSync === true ? 'Dark' : backgroundSync === false ? 'Light' : 'Unknown'}`);
-  
+  console.log(
+    `  Sync Detection: ${backgroundSync === true ? 'Dark' : backgroundSync === false ? 'Light' : 'Unknown'}`
+  );
+
   // Detailed detection
   const detection = await Terminal.detectBackground();
   console.log(`  Method: ${detection.method}`);
@@ -53,11 +57,11 @@ async function demonstrateTerminalIntegration() {
   console.log('🎭 Adaptive Color Demo:');
   const adaptiveColor = Color.adaptive({
     light: '#000000', // Black text for light backgrounds
-    dark: '#FFFFFF'   // White text for dark backgrounds
+    dark: '#FFFFFF', // White text for dark backgrounds
   });
 
   // Create styles that adapt to background
-  const adaptiveStyle = StyleBuilder.create()
+  const _adaptiveStyle = StyleBuilder.create()
     .foreground(adaptiveColor.light) // This would need to be enhanced to actually use detection
     .bold(true)
     .build();
@@ -67,7 +71,7 @@ async function demonstrateTerminalIntegration() {
 
   // 5. Unicode and ANSI Support Demo
   console.log('🔤 Unicode and ANSI Support:');
-  
+
   // Test Unicode support
   if (capabilities.hasUnicodeSupport) {
     console.log('  Unicode: ✅ 🎨 🌟 ⭐ 🚀 💫');
@@ -83,10 +87,7 @@ async function demonstrateTerminalIntegration() {
       .build();
     console.log(`  True Color: ${Style.render(trueColorStyle, 'True Color Support!')}`);
   } else if (capabilities.hasColorSupport) {
-    const basicColorStyle = StyleBuilder.create()
-      .foreground('red')
-      .background('cyan')
-      .build();
+    const basicColorStyle = StyleBuilder.create().foreground('red').background('cyan').build();
     console.log(`  Basic Color: ${Style.render(basicColorStyle, 'Basic Color Support!')}`);
   } else {
     console.log('  No color support detected');

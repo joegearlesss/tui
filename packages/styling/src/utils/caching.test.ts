@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test } from 'bun:test';
+import { describe, expect, test } from 'bun:test';
 import { CachingUtils } from './caching';
 
 describe('CachingUtils', () => {
@@ -212,9 +212,9 @@ describe('CachingUtils', () => {
     });
 
     test('should provide cache statistics', () => {
-      let callCount = 0;
+      let _callCount = 0;
       const fn = (x: number) => {
-        callCount++;
+        _callCount++;
         return x * 2;
       };
 
@@ -233,9 +233,9 @@ describe('CachingUtils', () => {
     });
 
     test('should clear cache and stats', () => {
-      let callCount = 0;
+      let _callCount = 0;
       const fn = (x: number) => {
-        callCount++;
+        _callCount++;
         return x * 2;
       };
 

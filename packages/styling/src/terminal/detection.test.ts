@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import { Terminal } from './detection';
-import type { ColorProfile, TerminalEnvironment } from './types';
 
 describe('Terminal Detection', () => {
   let originalEnv: NodeJS.ProcessEnv;

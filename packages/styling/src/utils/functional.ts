@@ -6,14 +6,14 @@ import { z } from 'zod';
  */
 
 // Validation schemas
-const PipeSchema = z
+const _PipeSchema = z
   .object({
     value: z.unknown().describe('Initial value to transform'),
     functions: z.array(z.function()).describe('Array of transformation functions'),
   })
   .describe('Pipe operation parameters');
 
-const ComposeSchema = z
+const _ComposeSchema = z
   .object({
     functions: z.array(z.function()).describe('Array of functions to compose'),
   })

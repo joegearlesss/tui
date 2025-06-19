@@ -30,6 +30,6 @@
     }
   },
   "files": {
-    "include": ["packages/**/*.ts", "packages/**/*.js"]
+    "includes": ["packages/**/*.ts", "packages/**/*.js"]
   }
 }

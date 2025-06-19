@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'bun:test';
 import {
+  AdaptiveColorSchema,
   ANSI256ColorSchema,
   ANSIColor,
-  AdaptiveColorSchema,
   ColorValueSchema,
   CompleteColorSchema,
   HexColorSchema,

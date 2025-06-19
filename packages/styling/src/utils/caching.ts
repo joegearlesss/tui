@@ -6,7 +6,7 @@ import { z } from 'zod';
  */
 
 // Validation schemas
-const CacheOptionsSchema = z
+const _CacheOptionsSchema = z
   .object({
     maxSize: z
       .number()
@@ -228,12 +228,12 @@ namespace CachingUtils {
   ) => {
     const { maxSize = 100, ttl, keyGenerator } = options;
 
-    let cache: Map<string, CacheEntry<R>>;
+    let _cache: Map<string, CacheEntry<R>>;
     let stats = { hits: 0, misses: 0 };
 
     if (ttl !== undefined) {
       const ttlCache = createTTLCache<string, R>(ttl, maxSize);
-      cache = new Map(); // We'll use TTL cache methods instead
+      _cache = new Map(); // We'll use TTL cache methods instead
 
       const cachedFn = (...args: T): R => {
         const key = keyGenerator ? keyGenerator(...args) : JSON.stringify(args);

@@ -6,7 +6,7 @@ import { z } from 'zod';
  */
 
 // Validation schemas
-const StringUtilsSchema = z
+const _StringUtilsSchema = z
   .object({
     text: z.string().describe('Input text to process'),
     width: z

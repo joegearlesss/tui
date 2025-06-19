@@ -50,36 +50,22 @@ export { Layout, Measurement } from './layout/joining';
 export { BoxModel, Position } from './layout/positioning';
 // Core exports
 export { Style, StyleBuilder, StyleChain } from './style/style';
+// Terminal type exports
+export type {
+  BackgroundDetection,
+  TerminalEnvironment,
+} from './terminal';
 // Terminal integration exports
 export {
-  Terminal,
   AnsiEscape,
-  Unicode,
   Compatibility,
+  Terminal,
+  Unicode,
 } from './terminal';
-
-// Utils exports
-export {
-  StringUtils,
-  FunctionalUtils,
-  CachingUtils,
-  ValidationUtils,
-  EmailSchema,
-  UrlSchema,
-  UuidSchema,
-  ColorHexSchema,
-  PortSchema,
-  PositiveIntegerSchema,
-  NonNegativeIntegerSchema,
-  PercentageSchema,
-  NormalizedPercentageSchema,
-} from './utils';
-
 // Type exports
 export type {
   AdaptiveColor,
   ANSI256Color,
-  BackgroundDetection,
   BorderChars,
   BorderConfig,
   BorderDimensions,
@@ -113,21 +99,38 @@ export type {
   TableValidationResult,
   // Terminal types
   TerminalCapabilities,
-  TerminalEnvironment,
   TextAlignment,
   TextTransform,
-  // Utils types
-  TruncateOptions,
-  WrapOptions,
-  Predicate,
-  Mapper,
-  Reducer,
-  Comparator,
-  CacheOptions,
-  CacheStats,
-  CacheEntry,
-  ValidationResult,
-  ValidatorFunction,
   VerticalAlignment,
   VerticalPosition,
 } from './types';
+// Utils type exports
+export type {
+  CacheEntry,
+  CacheOptions,
+  CacheStats,
+  Comparator,
+  Mapper,
+  Predicate,
+  Reducer,
+  TruncateOptions,
+  ValidationResult,
+  ValidatorFunction,
+  WrapOptions,
+} from './utils';
+// Utils exports
+export {
+  CachingUtils,
+  ColorHexSchema,
+  EmailSchema,
+  FunctionalUtils,
+  NonNegativeIntegerSchema,
+  NormalizedPercentageSchema,
+  PercentageSchema,
+  PortSchema,
+  PositiveIntegerSchema,
+  StringUtils,
+  UrlSchema,
+  UuidSchema,
+  ValidationUtils,
+} from './utils';
