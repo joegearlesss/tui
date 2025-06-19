@@ -6,7 +6,6 @@
 
 import { describe, expect, test } from 'bun:test';
 import { Border, BorderPresets } from './presets';
-import type { BorderConfig } from './types';
 
 describe('Border Presets', () => {
   describe('Border namespace', () => {

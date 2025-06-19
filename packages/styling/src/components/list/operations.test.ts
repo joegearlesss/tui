@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'bun:test';
 import { Enumerator, List, ListBuilder, ListRenderer } from './index';
-import type { ListConfig, ListItem } from './types';
 
 describe('List Component', () => {
   describe('List.create', () => {

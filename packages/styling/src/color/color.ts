@@ -1,14 +1,13 @@
 import type {
-  ANSI256Color,
   AdaptiveColor,
+  ANSI256Color,
   ColorProfile,
   ColorValue,
   CompleteColor,
-  HSLColor,
   HexColor,
+  HSLColor,
   RGBColor,
 } from '@tui/styling/types';
-import { z } from 'zod';
 
 /**
  * Color utilities and parsing functions

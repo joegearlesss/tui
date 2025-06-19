@@ -133,13 +133,13 @@ export namespace Layout {
     hAlign: HorizontalPosition | number,
     vAlign: VerticalPosition | number,
     content: string,
-    options?: PlaceOptions
+    _options?: PlaceOptions
   ): string => {
     if (width <= 0 || height <= 0) return '';
 
     const lines = content.split('\n');
     const contentHeight = lines.length;
-    const contentWidth = Math.max(...lines.map((line) => getDisplayWidth(line)));
+    const _contentWidth = Math.max(...lines.map((line) => getDisplayWidth(line)));
 
     // Normalize alignment values
     const hAlignValue =

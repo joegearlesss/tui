@@ -7,7 +7,6 @@
 import { describe, expect, test } from 'bun:test';
 import { BorderOperations } from './operations';
 import { Border } from './presets';
-import type { BorderConfig } from './types';
 
 describe('BorderOperations', () => {
   describe('merge()', () => {

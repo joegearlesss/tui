@@ -7,7 +7,6 @@
 import { describe, expect, test } from 'bun:test';
 import { BorderBuilder, BorderChain } from './builder';
 import { Border } from './presets';
-import type { BorderConfig } from './types';
 
 describe('BorderBuilder', () => {
   describe('BorderBuilder namespace', () => {

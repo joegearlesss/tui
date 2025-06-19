@@ -5,13 +5,11 @@
  * Handles border rendering, cell formatting, and layout calculations.
  */
 
-import { Border } from '../../border/presets';
 import type { BorderConfig } from '../../border/types';
-import { Layout } from '../../layout/joining';
 import type { StyleProperties } from '../../style/style';
 import { Style } from '../../style/style';
 import { Table } from './operations';
-import type { TableConfig, TableMetrics, TableRenderOptions } from './types';
+import type { TableConfig, TableRenderOptions } from './types';
 
 /**
  * Table rendering namespace containing all rendering functions

@@ -3,84 +3,82 @@
  * Declarative terminal styling library with functional programming principles
  */
 
-// Core exports
-export { Style, StyleBuilder, StyleChain } from './style/style';
-export { Color } from './color/color';
-export { Position, BoxModel } from './layout/positioning';
-export { Layout, Measurement } from './layout/joining';
 export { ANSI } from './ansi/ansi';
-
 // Border system exports
 export {
   Border,
-  BorderPresets,
-  BorderOperations,
   BorderBuilder,
   BorderChain,
+  BorderOperations,
+  BorderPresets,
   BorderRender,
   BorderValidation,
-  // Convenience exports
-  normalBorder,
-  roundedBorder,
-  thickBorder,
-  doubleBorder,
-  customBorder,
+  bottomLineBorder,
   boxBorder,
-  roundedBoxBorder,
-  thickBoxBorder,
+  customBorder,
+  doubleBorder,
   doubleBoxBorder,
   horizontalLineBorder,
-  verticalLineBorder,
-  topLineBorder,
-  bottomLineBorder,
   leftLineBorder,
+  // Convenience exports
+  normalBorder,
   rightLineBorder,
+  roundedBorder,
+  roundedBoxBorder,
+  thickBorder,
+  thickBoxBorder,
+  topLineBorder,
+  verticalLineBorder,
 } from './border';
-
+export { Color } from './color/color';
 // Component system exports
 export {
   Table,
   TableBuilder,
   TableRender,
 } from './components';
+export { Layout, Measurement } from './layout/joining';
+export { BoxModel, Position } from './layout/positioning';
+// Core exports
+export { Style, StyleBuilder, StyleChain } from './style/style';
 
 // Type exports
 export type {
-  // Color types
-  ColorValue,
-  RGBColor,
-  HSLColor,
-  HexColor,
-  ANSI256Color,
-  CompleteColor,
   AdaptiveColor,
-  ColorProfile,
-  // Layout types
-  BoxDimensions,
-  SizeConstraints,
-  HorizontalPosition,
-  VerticalPosition,
-  TextAlignment,
-  VerticalAlignment,
-  // Style types
-  StyleProperties,
-  TextTransform,
-  // Border types
-  BorderType,
+  ANSI256Color,
   BorderChars,
   BorderConfig,
-  CustomBorderConfig,
-  BorderRenderOptions,
   BorderDimensions,
+  BorderRenderOptions,
+  // Border types
+  BorderType,
+  // Layout types
+  BoxDimensions,
+  ColorProfile,
+  // Color types
+  ColorValue,
+  CompleteColor,
+  CustomBorderConfig,
+  HexColor,
+  HorizontalPosition,
+  HSLColor,
+  RGBColor,
+  SizeConstraints,
+  // Style types
+  StyleProperties,
+  TableBorderRenderer,
+  TableCellPosition,
+  TableCellRenderer,
+  TableColumnConfig,
   // Table types
   TableConfig,
-  TableCellPosition,
-  TableRenderOptions,
-  TableColumnConfig,
-  TableRowConfig,
-  TableValidationResult,
   TableMetrics,
+  TableRenderOptions,
+  TableRowConfig,
   TableStyleFunction,
-  TableCellRenderer,
-  TableBorderRenderer,
+  TableValidationResult,
+  TextAlignment,
+  TextTransform,
+  VerticalAlignment,
+  VerticalPosition,
 } from './types';

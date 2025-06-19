@@ -5,7 +5,6 @@
  * Based on OVERVIEW-v2.internal.md Section 5 (Component System) specification.
  */
 
-import type { z } from 'zod';
 import type { BorderConfig } from '../../border/types';
 import type { StyleProperties } from '../../style/style';
 

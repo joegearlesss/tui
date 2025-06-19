@@ -37,7 +37,7 @@ console.log();
 const styledTable = TableBuilder.create()
   .headers('Language', 'Formal', 'Informal')
   .rows(['English', 'Hello', 'Hi'], ['Spanish', 'Hola', 'Hey'], ['French', 'Bonjour', 'Salut'])
-  .styleFunc((row, col) => {
+  .styleFunc((row, _col) => {
     if (row === Table.HEADER_ROW) {
       return Style.bold(Style.create(), true);
     }

@@ -5,38 +5,34 @@
  * Provides a complete API for creating, manipulating, and rendering borders.
  */
 
-// Core types and interfaces
-export type {
-  BorderType,
-  BorderChars,
-  BorderConfig,
-  CustomBorderConfig,
-  BorderCharsType,
-  BorderSidesType,
-  BorderConfigType,
-  CustomBorderConfigType,
-} from './types';
-
-// Validation schemas
-export {
-  BorderCharsSchema,
-  BorderSidesSchema,
-  BorderConfigSchema,
-  CustomBorderConfigSchema,
-} from './types';
-
-// Functional border creation and presets
-export { Border, BorderPresets } from './presets';
-
+// Fluent API builder
+export { BorderBuilder, BorderChain } from './builder';
 // Border manipulation operations
 export { BorderOperations } from './operations';
 
-// Fluent API builder
-export { BorderBuilder, BorderChain } from './builder';
-
+// Functional border creation and presets
+export { Border, BorderPresets } from './presets';
 // Rendering functionality
-export type { BorderRenderOptions, BorderDimensions } from './rendering';
+export type { BorderDimensions, BorderRenderOptions } from './rendering';
 export { BorderRender } from './rendering';
+// Core types and interfaces
+export type {
+  BorderChars,
+  BorderCharsType,
+  BorderConfig,
+  BorderConfigType,
+  BorderSidesType,
+  BorderType,
+  CustomBorderConfig,
+  CustomBorderConfigType,
+} from './types';
+// Validation schemas
+export {
+  BorderCharsSchema,
+  BorderConfigSchema,
+  BorderSidesSchema,
+  CustomBorderConfigSchema,
+} from './types';
 
 // Validation utilities
 export { BorderValidation } from './validation';

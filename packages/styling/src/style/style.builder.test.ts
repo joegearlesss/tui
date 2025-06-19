@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import { Color } from '@tui/styling/color';
-import { Style, StyleBuilder, type StyleProperties } from './style';
+import { StyleBuilder, type StyleProperties } from './style';
 
 describe('StyleBuilder', () => {
   describe('create', () => {

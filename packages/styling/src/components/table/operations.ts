@@ -7,14 +7,8 @@
 
 import type { BorderConfig } from '../../border/types';
 import type { StyleProperties } from '../../style/style';
-import type {
-  TableCellPosition,
-  TableConfig,
-  TableMetrics,
-  TableStyleFunction,
-  TableValidationResult,
-} from './types';
-import { TableConfigSchema, TableValidationResultSchema } from './validation';
+import type { TableConfig, TableMetrics, TableStyleFunction, TableValidationResult } from './types';
+import { TableConfigSchema } from './validation';
 
 /**
  * Table namespace containing all table manipulation functions

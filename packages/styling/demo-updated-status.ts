@@ -4,7 +4,6 @@
  */
 
 import {
-  ANSI,
   Border,
   BorderBuilder,
   BorderRender,
@@ -32,7 +31,7 @@ console.log('');
 // ✅ WORKING: Color System (100% OVERVIEW-v2 compliant)
 console.log('✅ WORKING: Color System');
 const adaptiveColor = Color.adaptive({ light: '#0066CC', dark: '#4A9EFF' });
-const rgbColor = Color.rgb(255, 107, 107);
+const _rgbColor = Color.rgb(255, 107, 107);
 
 const colorDemo = StyleBuilder.create().foreground(adaptiveColor).build();
 
@@ -96,7 +95,7 @@ const headerStyle = StyleBuilder.create()
   .padding(1, 2)
   .build();
 
-const contentStyle = StyleBuilder.create().foreground('#666666').padding(1).build();
+const _contentStyle = StyleBuilder.create().foreground('#666666').padding(1).build();
 
 // This is exactly the pattern from OVERVIEW-v2!
 const dashboard = Layout.joinVertical(

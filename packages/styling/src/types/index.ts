@@ -2,45 +2,39 @@
  * Core type exports for the styling package
  */
 
-// Layout types
-export * from './layout';
-
-// Color types
-export * from './color';
-
-// Style types
-export * from './style';
-
-// Terminal types
-export * from './terminal';
-
+export type {
+  BorderDimensions,
+  BorderRenderOptions,
+} from '../border/rendering';
 // Border types
 export type {
-  BorderType,
   BorderChars,
-  BorderConfig,
-  CustomBorderConfig,
   BorderCharsType,
-  BorderSidesType,
+  BorderConfig,
   BorderConfigType,
+  BorderSidesType,
+  BorderType,
+  CustomBorderConfig,
   CustomBorderConfigType,
 } from '../border/types';
-
-export type {
-  BorderRenderOptions,
-  BorderDimensions,
-} from '../border/rendering';
-
 // Component types
 export type {
-  TableConfig,
-  TableCellPosition,
-  TableRenderOptions,
-  TableColumnConfig,
-  TableRowConfig,
-  TableValidationResult,
-  TableMetrics,
-  TableStyleFunction,
-  TableCellRenderer,
   TableBorderRenderer,
+  TableCellPosition,
+  TableCellRenderer,
+  TableColumnConfig,
+  TableConfig,
+  TableMetrics,
+  TableRenderOptions,
+  TableRowConfig,
+  TableStyleFunction,
+  TableValidationResult,
 } from '../components/table/types';
+// Color types
+export * from './color';
+// Layout types
+export * from './layout';
+// Style types
+export * from './style';
+// Terminal types
+export * from './terminal';

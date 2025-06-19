@@ -8,7 +8,7 @@
 import { describe, expect, test } from 'bun:test';
 import { Border } from '../../border/presets';
 import { Style } from '../../style/style';
-import { Table, TableBuilder, type TableChain, type TableConfig, TableRender } from './index';
+import { Table, TableBuilder, type TableChain, TableRender } from './index';
 
 describe('Table Component', () => {
   describe('Table.create', () => {
@@ -84,7 +84,7 @@ describe('Table Component', () => {
 
     test('should set style function', () => {
       const table = Table.create();
-      const styleFunc = (row: number, col: number) => Style.create();
+      const styleFunc = (_row: number, _col: number) => Style.create();
       const withStyle = Table.styleFunc(styleFunc)(table);
 
       expect(withStyle.styleFunc).toBe(styleFunc);
@@ -374,7 +374,7 @@ describe('Table Component', () => {
 
   describe('Table styling', () => {
     test('should apply style function to cells', () => {
-      const styleFunc = (row: number, col: number) => {
+      const styleFunc = (row: number, _col: number) => {
         if (row === Table.HEADER_ROW) {
           return Style.bold(Style.create(), true);
         }

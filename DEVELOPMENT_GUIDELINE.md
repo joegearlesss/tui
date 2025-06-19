@@ -6,7 +6,7 @@
 - **Runtime**: Bun (not Node.js)
 - **Package Manager**: Bun workspace
 - **Testing**: Bun test
-- **Linting/Formatting**: Biome
+- **Linting/Formatting**: Biome v2.0.0
 - **Schema Validation**: Zod
 - **Build Tool**: Bun
 - **API Framework**: Hono (for any API/HTTP server needs)
@@ -1599,6 +1599,66 @@ bun run build
 # Development server
 bun run dev
 ```
+
+## Biome v2.0.0 Configuration
+
+### Key Changes from v1 to v2
+- **Import Organization**: Now handled via `assist/source/organizeImports` rule instead of separate `organizeImports` config
+- **File Patterns**: `include`/`ignore` renamed to `includes` in `files` section
+- **Schema Updates**: Updated to use v2.0.0 schema with improved rule organization
+
+### Biome vs TypeScript Roles
+- **Biome v2.0.0**: Handles linting, formatting, and import organization
+- **TypeScript**: Handles type checking via `bunx tsc --noEmit`
+- **Rationale**: Biome focuses on code style and quality, while TypeScript provides comprehensive type analysis
+
+### Current Configuration
+```json
+{
+  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "style": {
+        "noNonNullAssertion": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "error",
+        "noControlCharactersInRegex": "off"
+      },
+      "complexity": {
+        "noForEach": "error"
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "lineEnding": "lf"
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingCommas": "es5",
+      "semicolons": "always"
+    }
+  },
+  "files": {
+    "includes": ["packages/**/*.ts", "packages/**/*.js"]
+  }
+}
+```
+
+### Migration Notes
+- Import organization is now automatic via the `assist/source/organizeImports` rule
+- File filtering uses `includes` instead of `include`
+- All existing formatting and linting rules remain compatible
+- Performance improvements in v2 for large codebases
+- Type checking remains with TypeScript for comprehensive type analysis
 
 ## Function Chaining Pattern
 

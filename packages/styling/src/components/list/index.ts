@@ -38,31 +38,29 @@
  * ```
  */
 
+// Functional operations (primary API)
+export { List } from './operations';
 // Core types and interfaces
 export type {
-  ListItem,
-  ListConfig,
   EnumeratorFunction,
+  ListConfig,
+  ListItem,
   ListMetrics,
   ListRenderOptions,
 } from './types';
-
 // Validation functions and schemas
 export {
-  ListItemSchema,
   EnumeratorFunctionSchema,
   ListConfigSchema,
+  ListItemSchema,
   ListMetricsSchema,
   ListRenderOptionsSchema,
-  validateListItem,
   validateEnumeratorFunction,
   validateListConfig,
+  validateListItem,
   validateListMetrics,
   validateListRenderOptions,
 } from './validation';
-
-// Functional operations (primary API)
-export { List } from './operations';
 
 // Import and re-export Enumerator
 import { List as ListImport } from './operations';
@@ -73,6 +71,7 @@ export { ListBuilder, ListChain } from './builder';
 
 // Rendering system
 export { ListRenderer } from './rendering';
+
 import { ListRenderer as ListRendererImport } from './rendering';
 
 // Convenience re-exports for common operations

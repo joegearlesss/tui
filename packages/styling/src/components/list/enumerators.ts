@@ -1,4 +1,4 @@
-import type { EnumeratorFunction, ListItem } from './types';
+import type { EnumeratorFunction } from './types';
 
 /**
  * Built-in enumerator functions for common list styles

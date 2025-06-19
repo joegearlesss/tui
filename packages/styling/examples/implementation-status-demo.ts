@@ -24,7 +24,7 @@ console.log('');
 // ✅ WORKING: Color System (100% OVERVIEW-v2 compliant)
 console.log('✅ WORKING: Color System');
 const adaptiveColor = Color.adaptive('#0066CC', '#4A9EFF');
-const rgbColor = '#FF6B6B';
+const _rgbColor = '#FF6B6B';
 const hexColor = '#FF6B6B';
 
 const colorDemo = StyleBuilder.create().foreground(adaptiveColor).build();

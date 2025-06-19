@@ -6,13 +6,14 @@
 - **Test by type**: `bun test "**/*.test.ts"` (unit), `bun test "**/*.performance.test.ts"` (perf), `bun test "**/integration/*.test.ts"` (integration), `bun test "**/e2e/*.test.ts"` (e2e)
 - **Lint**: `bun run biome check`
 - **Format**: `bun run biome format --write`
-- **Typecheck**: `bunx tsc --noEmit`
+- **Typecheck**: `bunx tsc --noEmit` (TypeScript for type checking, Biome for linting/formatting)
 - **Full check**: `bun run check` (lint + test)
 
 ## Technology Stack
 - **Runtime**: Bun (not Node.js)
 - **Testing**: Bun test framework
-- **Linting/Formatting**: Biome
+- **Linting/Formatting**: Biome v2.0.0 (linting, formatting, import organization)
+- **Type Checking**: TypeScript compiler (comprehensive type analysis)
 - **Validation**: Zod schemas with `.describe()` calls
 - **Package Manager**: Bun workspace
 

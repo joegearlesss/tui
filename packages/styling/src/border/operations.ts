@@ -71,7 +71,7 @@ export namespace BorderOperations {
     border: BorderConfig,
     side: 'top' | 'right' | 'bottom' | 'left'
   ): BorderConfig => {
-    const [top, right, bottom, left] = border.sides;
+    const [_top, _right, _bottom, _left] = border.sides;
     const sideIndex = { top: 0, right: 1, bottom: 2, left: 3 }[side];
     const newSides = [...border.sides] as [boolean, boolean, boolean, boolean];
     newSides[sideIndex] = !newSides[sideIndex];

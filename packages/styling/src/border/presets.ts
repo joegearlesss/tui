@@ -5,7 +5,7 @@
  * Based on OVERVIEW-v2 Section 3 specification with Unicode box-drawing characters.
  */
 
-import type { BorderChars, BorderConfig, CustomBorderConfig } from './types';
+import type { BorderConfig, CustomBorderConfig } from './types';
 
 /**
  * Functional Border namespace providing preset border configurations

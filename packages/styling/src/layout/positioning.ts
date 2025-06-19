@@ -1,5 +1,4 @@
 import type { BoxDimensions, HorizontalPosition, VerticalPosition } from '@tui/styling/types';
-import { z } from 'zod';
 
 /**
  * Position utilities for layout and alignment operations
