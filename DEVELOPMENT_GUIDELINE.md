@@ -1612,6 +1612,12 @@ bun run dev
 - **TypeScript**: Handles type checking via `bunx tsc --noEmit`
 - **Rationale**: Biome focuses on code style and quality, while TypeScript provides comprehensive type analysis
 
+### Rule Configuration Policy
+**IMPORTANT**: Marking existing rules as "off" in biome.json is prohibited. This ensures consistent code quality and prevents degradation of standards. However, you can:
+- ✅ Add new rules to improve code quality
+- ✅ Configure new rules with appropriate severity levels
+- ❌ Disable existing rules that are currently enabled
+
 ### Current Configuration
 ```json
 {
