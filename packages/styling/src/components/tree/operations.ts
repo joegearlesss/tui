@@ -638,10 +638,10 @@ namespace TreeEnumerator {
    */
   export const LINES: TreeEnumeratorFunction = (node, depth, isLast, hasChildren) => {
     if (depth === 0) {
-      return '';
+      return hasChildren ? '┬ ' : '';
     }
 
-    const connector = isLast ? '└──' : '├──';
+    const connector = isLast ? '└─' : '├─';
     return `${connector} `;
   };
 

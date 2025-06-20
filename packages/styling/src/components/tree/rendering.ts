@@ -47,14 +47,17 @@ namespace TreeRenderer {
       const nodeStyle = node.style || tree.itemStyle;
       const styledValue = nodeStyle ? Style.render(nodeStyle, node.value) : node.value;
 
+      // Build proper indentation for child nodes
+      const indent = depth > 0 ? ' '.repeat(tree.indentSize) : '';
+      
       // Build the full line
-      const line = `${parentPrefix}${styledEnumerator}${styledValue}`;
+      const line = `${parentPrefix}${indent}${styledEnumerator}${styledValue}`;
       lines.push(line);
 
       // Render children if expanded
       if (shouldShowChildren) {
         const childPrefix = tree.showLines
-          ? buildChildPrefix(parentPrefix, depth, isLast)
+          ? buildChildPrefix(parentPrefix, depth, isLast, tree.indentSize)
           : parentPrefix;
 
         node.children.forEach((child, index) => {
@@ -212,12 +215,13 @@ namespace TreeRenderer {
 /**
  * Helper function to build child prefix for line connections
  */
-const buildChildPrefix = (parentPrefix: string, depth: number, isLast: boolean): string => {
+const buildChildPrefix = (parentPrefix: string, depth: number, isLast: boolean, indentSize: number): string => {
   if (depth === 0) {
     return parentPrefix;
   }
 
-  const connector = isLast ? '    ' : '│   ';
+  const spaces = ' '.repeat(indentSize);
+  const connector = isLast ? spaces : '│' + ' '.repeat(indentSize - 1);
   return parentPrefix + connector;
 };
 

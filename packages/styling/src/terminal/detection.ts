@@ -41,9 +41,14 @@ namespace Terminal {
       return 'trueColor';
     }
 
-    // Check specific terminal programs
+    // Check specific terminal programs with Ghostty-first approach
     if (env.termProgram) {
       const program = env.termProgram.toLowerCase();
+
+      // Ghostty gets highest priority (Primary Development Terminal)
+      if (program.includes('ghostty')) {
+        return 'trueColor';
+      }
 
       // Known true color terminals
       if (
@@ -51,7 +56,8 @@ namespace Terminal {
         program.includes('vscode') ||
         program.includes('hyper') ||
         program.includes('wezterm') ||
-        program.includes('alacritty')
+        program.includes('alacritty') ||
+        program.includes('kitty')
       ) {
         return 'trueColor';
       }

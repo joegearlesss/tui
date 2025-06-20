@@ -16,11 +16,11 @@
     "./types": "./src/types/index.ts"
   },
   "scripts": {
-    "test": "bun test",
-    "test:unit": "bun test \"**/*.test.ts\"",
-    "test:performance": "bun test \"**/*.performance.test.ts\"",
-    "test:integration": "bun test \"**/integration/*.test.ts\"",
-    "test:coverage": "bun test --coverage",
+    "test": "FORCE_COLOR=1 bun test",
+    "test:unit": "FORCE_COLOR=1 bun test \"**/*.test.ts\"",
+    "test:performance": "FORCE_COLOR=1 bun test \"**/*.performance.test.ts\"",
+    "test:integration": "FORCE_COLOR=1 bun test \"**/integration/*.test.ts\"",
+    "test:coverage": "FORCE_COLOR=1 bun test --coverage",
     "lint": "bun run biome check",
     "format": "bun run biome format --write",
     "check": "bun run lint && bun run test"

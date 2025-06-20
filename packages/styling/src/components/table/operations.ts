@@ -209,7 +209,12 @@ export namespace Table {
 
     // Custom validation logic
     if (table.headers.length === 0 && table.rows.length === 0) {
-      errors.push('Table must have at least one header or one row');
+      errors.push('Table must have at least one header');
+    }
+
+    // Check if table has rows but no headers (invalid configuration)
+    if (table.headers.length === 0 && table.rows.length > 0) {
+      errors.push('Table must have at least one header');
     }
 
     // Check row consistency

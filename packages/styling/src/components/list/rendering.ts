@@ -93,8 +93,36 @@ export namespace ListRenderer {
           lines.push(`${fullPrefix}${itemText}`);
         }
       } else {
-        // Render nested list directly without container enumerator
+        // Render nested list with parent enumerator first
         const nestedConfig = validateListConfig(item);
+        
+        // Add enumerator for the nested list itself in the parent context
+        const enumerator = config.enumerator ? config.enumerator(i) : '';
+        const styledEnumerator =
+          config.enumeratorStyle && enumerator && options.applyEnumeratorStyling
+            ? config.enumeratorStyle(enumerator)
+            : enumerator;
+
+        // Add the parent enumeration line for the nested list
+        if (styledEnumerator) {
+          let fullPrefix = '';
+          if (styledEnumerator?.match(/^[IVX]+\./)) {
+            // For Roman numerals, right-align within the available indent space
+            const totalIndentWidth = 6;
+            if (totalIndentWidth > 0) {
+              const enumLength = styledEnumerator.length;
+              const paddingNeeded = Math.max(0, totalIndentWidth - enumLength);
+              const paddedEnum = ' '.repeat(paddingNeeded) + styledEnumerator;
+              fullPrefix = `${paddedEnum} `;
+            } else {
+              fullPrefix = `${styledEnumerator} `;
+            }
+          } else {
+            const prefix = styledEnumerator ? `${styledEnumerator} ` : '';
+            fullPrefix = `${baseIndent}${prefix}`;
+          }
+          lines.push(fullPrefix.trimEnd());
+        }
 
         // Render nested items with increased depth
         renderItems(nestedConfig.items, nestedConfig, depth + 1, options, lines);
