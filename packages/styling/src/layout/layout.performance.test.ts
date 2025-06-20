@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'bun:test';
+import { Position } from '../types/layout';
 import { Layout } from './joining';
 
 describe('Layout Performance Tests', () => {
@@ -8,7 +9,7 @@ describe('Layout Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 100; i++) {
-        Layout.joinHorizontal('top', ...blocks);
+        Layout.joinHorizontal(Position.TOP, ...blocks);
       }
 
       const end = performance.now();
@@ -20,7 +21,7 @@ describe('Layout Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 100; i++) {
-        Layout.joinVertical('left', ...blocks);
+        Layout.joinVertical(Position.LEFT, ...blocks);
       }
 
       const end = performance.now();
@@ -32,7 +33,7 @@ describe('Layout Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 20; i++) {
-        Layout.joinHorizontal('center', ...blocks);
+        Layout.joinHorizontal(Position.CENTER, ...blocks);
       }
 
       const end = performance.now();
@@ -48,8 +49,8 @@ describe('Layout Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 50; i++) {
-        Layout.joinHorizontal('middle', ...multilineBlocks);
-        Layout.joinVertical('center', ...multilineBlocks);
+        Layout.joinHorizontal(Position.MIDDLE, ...multilineBlocks);
+        Layout.joinVertical(Position.CENTER, ...multilineBlocks);
       }
 
       const end = performance.now();
@@ -63,7 +64,7 @@ describe('Layout Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 100; i++) {
-        Layout.place(80, 24, 'center', 'middle', content);
+        Layout.place(80, 24, Position.CENTER, Position.MIDDLE, content);
       }
 
       const end = performance.now();
@@ -72,17 +73,20 @@ describe('Layout Performance Tests', () => {
 
     test('should handle different alignments efficiently', () => {
       const content = 'Test content';
-      const alignments: Array<[string, string]> = [
-        ['left', 'top'],
-        ['center', 'middle'],
-        ['right', 'bottom'],
+      const alignments: Array<[number, number]> = [
+        [Position.LEFT, Position.TOP],
+        [Position.CENTER, Position.MIDDLE],
+        [Position.RIGHT, Position.BOTTOM],
       ];
 
       const start = performance.now();
 
       for (let i = 0; i < 100; i++) {
-        const [h, v] = alignments[i % alignments.length];
-        Layout.place(80, 24, h as any, v as any, content);
+        const alignment = alignments[i % alignments.length];
+        if (alignment) {
+          const [h, v] = alignment;
+          Layout.place(80, 24, h, v, content);
+        }
       }
 
       const end = performance.now();
@@ -110,9 +114,9 @@ describe('Layout Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 50; i++) {
-        const horizontal = Layout.joinHorizontal('center', ...innerBlocks);
-        const vertical = Layout.joinVertical('middle', ...innerBlocks);
-        Layout.joinVertical('left', horizontal, vertical);
+        const horizontal = Layout.joinHorizontal(Position.CENTER, ...innerBlocks);
+        const vertical = Layout.joinVertical(Position.MIDDLE, ...innerBlocks);
+        Layout.joinVertical(Position.LEFT, horizontal, vertical);
       }
 
       const end = performance.now();
@@ -124,7 +128,7 @@ describe('Layout Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 20; i++) {
-        Layout.place(120, 50, 'center', 'middle', largeContent);
+        Layout.place(120, 50, Position.CENTER, Position.MIDDLE, largeContent);
       }
 
       const end = performance.now();
@@ -138,8 +142,8 @@ describe('Layout Performance Tests', () => {
 
       for (let i = 0; i < 1000; i++) {
         const blocks = Array.from({ length: 10 }, (_, j) => `Block ${i}-${j}`);
-        Layout.joinHorizontal('center', ...blocks);
-        Layout.joinVertical('middle', ...blocks);
+        Layout.joinHorizontal(Position.CENTER, ...blocks);
+        Layout.joinVertical(Position.MIDDLE, ...blocks);
       }
 
       // Force garbage collection if available
@@ -157,9 +161,9 @@ describe('Layout Performance Tests', () => {
       const initialMemory = process.memoryUsage().heapUsed;
 
       for (let i = 0; i < 1000; i++) {
-        Layout.place(80, 24, 'center', 'middle', content);
-        Layout.place(100, 30, 'left', 'top', content);
-        Layout.place(60, 20, 'right', 'bottom', content);
+        Layout.place(80, 24, Position.CENTER, Position.MIDDLE, content);
+        Layout.place(100, 30, Position.LEFT, Position.TOP, content);
+        Layout.place(60, 20, Position.RIGHT, Position.BOTTOM, content);
       }
 
       if (global.gc) global.gc();
@@ -179,9 +183,9 @@ describe('Layout Performance Tests', () => {
 
       const promises = Array.from({ length: 100 }, async (_, i) => {
         if (i % 2 === 0) {
-          return Layout.joinHorizontal('center', ...blocks);
+          return Layout.joinHorizontal(Position.CENTER, ...blocks);
         }
-        return Layout.joinVertical('middle', ...blocks);
+        return Layout.joinVertical(Position.MIDDLE, ...blocks);
       });
 
       await Promise.all(promises);
@@ -212,8 +216,8 @@ describe('Layout Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 200; i++) {
-        Layout.joinHorizontal('center', '', '', '');
-        Layout.joinVertical('middle', '', '', '');
+        Layout.joinHorizontal(Position.CENTER, '', '', '');
+        Layout.joinVertical(Position.MIDDLE, '', '', '');
       }
 
       const end = performance.now();
@@ -225,8 +229,8 @@ describe('Layout Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 200; i++) {
-        Layout.joinHorizontal('center', ...chars);
-        Layout.joinVertical('middle', ...chars);
+        Layout.joinHorizontal(Position.CENTER, ...chars);
+        Layout.joinVertical(Position.MIDDLE, ...chars);
       }
 
       const end = performance.now();
@@ -238,7 +242,7 @@ describe('Layout Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 50; i++) {
-        Layout.place(1200, 10, 'center', 'middle', wideContent);
+        Layout.place(1200, 10, Position.CENTER, Position.MIDDLE, wideContent);
       }
 
       const end = performance.now();
@@ -250,7 +254,7 @@ describe('Layout Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 20; i++) {
-        Layout.place(80, 250, 'center', 'middle', tallContent);
+        Layout.place(80, 250, Position.CENTER, Position.MIDDLE, tallContent);
       }
 
       const end = performance.now();

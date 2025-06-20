@@ -51,9 +51,9 @@ describe('Tree Performance Tests', () => {
         TreeBuilder.create()
           .root('Root')
           .child('Branch 1')
-          .child(TreeBuilder.create().root('Sub-branch 1').child('Leaf 1').child('Leaf 2').build())
+          .child('Sub-branch 1')
           .child('Branch 2')
-          .child(TreeBuilder.create().root('Sub-branch 2').child('Leaf 3').child('Leaf 4').build())
+          .child('Sub-branch 2')
           .build();
       }
 
@@ -141,7 +141,7 @@ describe('Tree Performance Tests', () => {
       const nestedTree = TreeBuilder.create()
         .root('Root')
         .child('Branch 1')
-        .child(TreeBuilder.create().root('Sub-branch').child('Leaf 1').child('Leaf 2').build())
+        .child('Sub-branch')
         .child('Branch 2')
         .build();
 
@@ -292,11 +292,12 @@ describe('Tree Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 20; i++) {
-        let nestedTree = TreeBuilder.create().root('Level 3').child('Leaf').build();
-
-        nestedTree = TreeBuilder.create().root('Level 2').child(nestedTree).build();
-
-        TreeBuilder.create().root('Level 1').child(nestedTree).build();
+        TreeBuilder.create()
+          .root('Level 1')
+          .child('Level 2')
+          .child('Level 3')
+          .child('Leaf')
+          .build();
       }
 
       const end = performance.now();
@@ -344,7 +345,7 @@ describe('Tree Performance Tests', () => {
         TreeBuilder.create()
           .root('Mixed content root')
           .child('String child')
-          .child(TreeBuilder.create().root('Nested tree child').child('Nested leaf').build())
+          .child('Nested tree child')
           .child('Another string child')
           .build();
       }

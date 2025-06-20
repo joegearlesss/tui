@@ -5,15 +5,15 @@
  */
 
 import { describe, expect, test } from 'bun:test';
+import { newLayer } from './layer';
 import {
+  CanvasConfigSchema,
+  CanvasDimensionsSchema,
   CanvasValidation,
   LayerConfigSchema,
-  CanvasConfigSchema,
+  LayerDimensionsSchema,
   LayerPositionSchema,
-  CanvasDimensionsSchema,
-  LayerDimensionsSchema
 } from './validation';
-import { newLayer } from './layer';
 
 describe('Canvas Validation', () => {
   describe('LayerConfigSchema', () => {
@@ -21,7 +21,7 @@ describe('Canvas Validation', () => {
       const validConfig = {
         content: 'Hello World',
         x: 10,
-        y: 5
+        y: 5,
       };
 
       const result = LayerConfigSchema.safeParse(validConfig);
@@ -33,7 +33,7 @@ describe('Canvas Validation', () => {
 
     test('should provide defaults for missing position values', () => {
       const configWithoutPosition = {
-        content: 'Test content'
+        content: 'Test content',
       };
 
       const result = LayerConfigSchema.safeParse(configWithoutPosition);
@@ -49,7 +49,7 @@ describe('Canvas Validation', () => {
       const invalidConfig = {
         content: 'Test',
         x: -5,
-        y: 10
+        y: 10,
       };
 
       const result = LayerConfigSchema.safeParse(invalidConfig);
@@ -60,7 +60,7 @@ describe('Canvas Validation', () => {
       const invalidConfig = {
         content: 'Test',
         x: 5.5,
-        y: 10
+        y: 10,
       };
 
       const result = LayerConfigSchema.safeParse(invalidConfig);
@@ -70,7 +70,7 @@ describe('Canvas Validation', () => {
     test('should reject missing content', () => {
       const invalidConfig = {
         x: 5,
-        y: 10
+        y: 10,
       };
 
       const result = LayerConfigSchema.safeParse(invalidConfig);
@@ -81,7 +81,7 @@ describe('Canvas Validation', () => {
       const validConfig = {
         content: '',
         x: 0,
-        y: 0
+        y: 0,
       };
 
       const result = LayerConfigSchema.safeParse(validConfig);
@@ -92,7 +92,7 @@ describe('Canvas Validation', () => {
       const validConfig = {
         content: '\x1b[31mRed text\x1b[0m',
         x: 0,
-        y: 0
+        y: 0,
       };
 
       const result = LayerConfigSchema.safeParse(validConfig);
@@ -103,7 +103,7 @@ describe('Canvas Validation', () => {
       const validConfig = {
         content: 'Line 1\nLine 2\nLine 3',
         x: 5,
-        y: 10
+        y: 10,
       };
 
       const result = LayerConfigSchema.safeParse(validConfig);
@@ -116,7 +116,7 @@ describe('Canvas Validation', () => {
       const layer1 = newLayer('Layer 1');
       const layer2 = newLayer('Layer 2');
       const validConfig = {
-        layers: [layer1, layer2]
+        layers: [layer1, layer2],
       };
 
       const result = CanvasConfigSchema.safeParse(validConfig);
@@ -128,7 +128,7 @@ describe('Canvas Validation', () => {
 
     test('should validate empty layers array', () => {
       const validConfig = {
-        layers: []
+        layers: [],
       };
 
       const result = CanvasConfigSchema.safeParse(validConfig);
@@ -144,7 +144,7 @@ describe('Canvas Validation', () => {
 
     test('should reject non-array layers', () => {
       const invalidConfig = {
-        layers: 'not an array'
+        layers: 'not an array',
       };
 
       const result = CanvasConfigSchema.safeParse(invalidConfig);

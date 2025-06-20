@@ -22,7 +22,10 @@ describe('TableRenderer', () => {
     });
 
     test('renders simple table with data', () => {
-      const config = Table.rows(['John', '25'], ['Jane', '30'])(Table.headers('Name', 'Age')(Table.create()));
+      const config = Table.rows(
+        ['John', '25'],
+        ['Jane', '30']
+      )(Table.headers('Name', 'Age')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('Name');
@@ -220,7 +223,10 @@ describe('TableRenderer', () => {
     });
 
     test('handles both width and height constraints', () => {
-      const config = Table.dimensions(30, 3)(
+      const config = Table.dimensions(
+        30,
+        3
+      )(
         Table.rows(
           ['John Doe', '25', 'New York'],
           ['Jane Smith', '30', 'Los Angeles']
@@ -276,7 +282,9 @@ describe('TableRenderer', () => {
     test('handles very long cell content', () => {
       const longContent =
         'This is a very long piece of content that should be handled gracefully by the table renderer';
-      const config = Table.rows(['A', longContent])(Table.headers('Short', 'Long Content')(Table.create()));
+      const config = Table.rows(['A', longContent])(
+        Table.headers('Short', 'Long Content')(Table.create())
+      );
 
       const result = TableRender.render(config);
       expect(result).toContain('Short');
@@ -317,7 +325,11 @@ describe('TableRenderer', () => {
     });
 
     test('handles single column table', () => {
-      const config = Table.rows(['Row1'], ['Row2'], ['Row3'])(Table.headers('Column')(Table.create()));
+      const config = Table.rows(
+        ['Row1'],
+        ['Row2'],
+        ['Row3']
+      )(Table.headers('Column')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('Column');

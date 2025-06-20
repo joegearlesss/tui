@@ -120,9 +120,9 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
       // All results should be the same (allowing for undefined)
       expect(results[0] === results[1]).toBe(true);
       expect(results[1] === results[2]).toBe(true);
-      
+
       // Results should be boolean or undefined
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(typeof result === 'boolean' || result === undefined).toBe(true);
       });
     });

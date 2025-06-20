@@ -99,4 +99,4 @@ export function newLayer(content: string): Layer {
 }
 
 // Export both interface and namespace
-export { Layer };
+export type { Layer };

@@ -53,7 +53,7 @@ namespace Canvas {
     for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
       const line = lines[lineIndex];
       if (!line) continue; // Skip undefined lines
-      
+
       const y = startY + lineIndex;
       if (y >= canvas.length) continue; // Skip if beyond canvas height
 

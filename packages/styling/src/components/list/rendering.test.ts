@@ -333,7 +333,9 @@ describe('ListRenderer.renderWithBorder', () => {
     const topBorder = lines[0];
     const bottomBorder = lines[lines.length - 1];
 
-    expect(topBorder?.length).toBe(bottomBorder?.length);
-    expect(topBorder?.length).toBeGreaterThan(20); // Should be wide enough for longest item
+    expect(topBorder).toBeDefined();
+    expect(bottomBorder).toBeDefined();
+    expect(topBorder!.length).toBe(bottomBorder!.length);
+    expect(topBorder!.length).toBeGreaterThan(20); // Should be wide enough for longest item
   });
 });

@@ -1,4 +1,4 @@
-import type { EnumeratorFunction, DepthAwareEnumeratorFunction } from './types';
+import type { DepthAwareEnumeratorFunction, EnumeratorFunction } from './types';
 
 /**
  * Built-in enumerator functions for common list styles

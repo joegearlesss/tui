@@ -179,4 +179,4 @@ namespace ListChain {
 }
 
 // Export both interfaces and namespaces
-export { ListBuilder, ListChain };
+export { type ListBuilder, ListChain };

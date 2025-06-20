@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
-import { Table } from './operations';
 import { TableBuilder } from './builder';
+import { Table } from './operations';
 import type { TableConfig } from './types';
 
 describe('TableBuilder', () => {
@@ -13,7 +13,10 @@ describe('TableBuilder', () => {
     });
 
     test('creates table builder from existing config', () => {
-      const config = Table.rows(['John', '25'], ['Jane', '30'])(Table.headers('Name', 'Age')(Table.create()));
+      const config = Table.rows(
+        ['John', '25'],
+        ['Jane', '30']
+      )(Table.headers('Name', 'Age')(Table.create()));
       const builder = TableBuilder.from(config);
       expect(builder.getColumnCount()).toBe(2);
       expect(builder.getRowCount()).toBe(2);

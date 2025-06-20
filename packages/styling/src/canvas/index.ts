@@ -11,11 +11,11 @@ export {
   CanvasConfigSchema,
   LayerPositionSchema,
   CanvasDimensionsSchema,
-  LayerDimensionsSchema
+  LayerDimensionsSchema,
 } from './validation';
 export type {
   LayerConfigValidated,
   CanvasConfigValidated,
   CanvasDimensions,
-  LayerDimensions
+  LayerDimensions,
 } from './validation';
