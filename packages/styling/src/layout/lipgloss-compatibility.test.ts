@@ -1,6 +1,6 @@
 /**
  * Layout System - Lipgloss Compatibility Tests
- * 
+ *
  * Tests the layout system to ensure compatibility with lipgloss
  * layout functions like JoinHorizontal, JoinVertical, Place, etc.
  */
@@ -13,7 +13,7 @@ describe('Layout System - Lipgloss Compatibility', () => {
     test('JoinHorizontal equivalent', () => {
       const blocks = ['Block 1', 'Block 2\nSecond line', 'Block 3'];
       const result = Layout.joinHorizontal(0.0, ...blocks); // top alignment
-      
+
       // Should align blocks vertically at top
       const lines = result.split('\n');
       expect(lines[0]).toContain('Block 1');
@@ -44,11 +44,11 @@ describe('Layout System - Lipgloss Compatibility', () => {
       const bottomLines = bottomResult.split('\n');
       expect(bottomLines.length).toBeGreaterThan(1);
     });
-    
+
     test('JoinVertical equivalent', () => {
       const blocks = ['Block 1', 'Block 2', 'Block 3'];
       const result = Layout.joinVertical(0.5, ...blocks); // center alignment
-      
+
       const lines = result.split('\n');
       expect(lines).toHaveLength(3);
       expect(lines[0]).toContain('Block 1');
@@ -87,11 +87,11 @@ describe('Layout System - Lipgloss Compatibility', () => {
       expect(lines[0]).toContain('C');
     });
   });
-  
+
   describe('Position System', () => {
     test('fractional positioning', () => {
       const positions = [0.0, 0.25, 0.5, 0.75, 1.0];
-      positions.forEach(pos => {
+      positions.forEach((pos) => {
         const result = Layout.place(20, 5, pos, pos, 'Test');
         expect(result).toBeDefined();
         expect(result.split('\n')).toHaveLength(5);
@@ -103,10 +103,10 @@ describe('Layout System - Lipgloss Compatibility', () => {
         'A',
         'Short',
         'Medium length text',
-        'Very long text that might exceed bounds'
+        'Very long text that might exceed bounds',
       ];
 
-      contents.forEach(content => {
+      contents.forEach((content) => {
         const result = Layout.place(30, 10, 0.5, 0.5, content);
         const lines = result.split('\n');
         expect(lines).toHaveLength(10);
@@ -137,25 +137,25 @@ describe('Layout System - Lipgloss Compatibility', () => {
     test('place function with multiline content', () => {
       const multilineContent = 'Line 1\nLine 2\nLine 3';
       const result = Layout.place(20, 10, 0.5, 0.5, multilineContent);
-      
+
       expect(result).toContain('Line 1');
       expect(result).toContain('Line 2');
       expect(result).toContain('Line 3');
-      
+
       const lines = result.split('\n');
       expect(lines).toHaveLength(10);
     });
   });
-  
+
   describe('Text Measurement', () => {
     test('ANSI-aware width calculation', () => {
       const plainText = 'Hello World';
       const ansiText = '\x1b[31mHello\x1b[0m World';
-      
+
       expect(Measurement.width(plainText)).toBe(11);
       expect(Measurement.width(ansiText)).toBe(11); // Should ignore ANSI codes
     });
-    
+
     test('multi-line height calculation', () => {
       const multiLine = 'Line 1\nLine 2\nLine 3';
       expect(Measurement.height(multiLine)).toBe(3);
@@ -168,7 +168,7 @@ describe('Layout System - Lipgloss Compatibility', () => {
         { text: '\x1b[31mRed\x1b[0m text', expected: 8 },
         { text: '\x1b[38;2;255;0;0mTrueColor\x1b[0m', expected: 9 },
         { text: '\x1b[1m\x1b[31mBold Red\x1b[0m', expected: 8 },
-        { text: 'Normal \x1b[4munderline\x1b[0m text', expected: 21 }
+        { text: 'Normal \x1b[4munderline\x1b[0m text', expected: 21 },
       ];
 
       testCases.forEach(({ text, expected }) => {
@@ -184,7 +184,7 @@ describe('Layout System - Lipgloss Compatibility', () => {
         { text: 'With\r\nWindows\r\nline\r\nendings', expected: 4 },
         { text: 'Mixed\nline\r\nendings\rhere', expected: 3 },
         { text: 'Ending\nwith\nnewline\n', expected: 4 },
-        { text: '', expected: 1 }
+        { text: '', expected: 1 },
       ];
 
       testCases.forEach(({ text, expected }) => {
@@ -198,7 +198,7 @@ describe('Layout System - Lipgloss Compatibility', () => {
         { text: '🎉 party', expected: 8 }, // Emoji might count as 2 width
         { text: '中文字符', expected: 8 }, // Chinese characters might count as 2 width each
         { text: 'résumé', expected: 6 },
-        { text: '🌈🎯🎨', expected: 6 } // Multiple emojis
+        { text: '🌈🎯🎨', expected: 6 }, // Multiple emojis
       ];
 
       unicodeTests.forEach(({ text, expected }) => {
@@ -235,15 +235,15 @@ describe('Layout System - Lipgloss Compatibility', () => {
   describe('Layout Performance', () => {
     test('join operations should be efficient', () => {
       const blocks = Array.from({ length: 100 }, (_, i) => `Block ${i}`);
-      
+
       const start = performance.now();
-      
+
       const horizontalResult = Layout.joinHorizontal(0.5, ...blocks);
       const verticalResult = Layout.joinVertical(0.5, ...blocks);
-      
+
       const end = performance.now();
       const duration = end - start;
-      
+
       expect(duration).toBeLessThan(50); // Should complete in under 50ms
       expect(horizontalResult).toBeDefined();
       expect(verticalResult).toBeDefined();
@@ -252,34 +252,35 @@ describe('Layout System - Lipgloss Compatibility', () => {
     test('place operations should be efficient', () => {
       const content = 'Test content with some length';
       const iterations = 1000;
-      
+
       const start = performance.now();
-      
+
       for (let i = 0; i < iterations; i++) {
         Layout.place(50, 20, 0.5, 0.5, content);
       }
-      
+
       const end = performance.now();
       const duration = end - start;
-      
+
       expect(duration).toBeLessThan(100); // Should complete 1000 operations in under 100ms
     });
 
     test('measurement operations should be efficient', () => {
-      const texts = Array.from({ length: 1000 }, (_, i) => 
-        `\x1b[${i % 7 + 30}mColored text ${i}\x1b[0m\nWith newline`
+      const texts = Array.from(
+        { length: 1000 },
+        (_, i) => `\x1b[${(i % 7) + 30}mColored text ${i}\x1b[0m\nWith newline`
       );
-      
+
       const start = performance.now();
-      
-      texts.forEach(text => {
+
+      texts.forEach((text) => {
         Measurement.width(text);
         Measurement.height(text);
       });
-      
+
       const end = performance.now();
       const duration = end - start;
-      
+
       expect(duration).toBeLessThan(50); // Should process 1000 texts in under 50ms
     });
   });
@@ -294,15 +295,15 @@ describe('Layout System - Lipgloss Compatibility', () => {
 
       // Create two-column layout
       const columns = Layout.joinHorizontal(0.0, leftColumn, rightColumn);
-      
+
       // Create full dashboard
       const dashboard = Layout.joinVertical(0.5, header, columns, footer);
-      
+
       expect(dashboard).toContain('System Dashboard');
       expect(dashboard).toContain('CPU: 75%');
       expect(dashboard).toContain('Alerts:');
       expect(dashboard).toContain('Status: Running');
-      
+
       const lines = dashboard.split('\n');
       expect(lines.length).toBeGreaterThan(3);
     });
@@ -311,15 +312,15 @@ describe('Layout System - Lipgloss Compatibility', () => {
       const content = 'Centered Content';
       const width = 40;
       const height = 10;
-      
+
       const result = Layout.place(width, height, 0.5, 0.5, content);
-      
+
       expect(result).toContain(content);
       const lines = result.split('\n');
       expect(lines).toHaveLength(height);
-      
+
       // Find the line with content and check it's roughly centered
-      const contentLine = lines.find(line => line.includes('Centered Content'));
+      const contentLine = lines.find((line) => line.includes('Centered Content'));
       expect(contentLine).toBeDefined();
     });
 
@@ -356,24 +357,24 @@ describe('Layout System - Lipgloss Compatibility', () => {
 
     test('responsive layout pattern', () => {
       const content = 'Content that adapts';
-      
+
       // Test different container sizes
       const sizes = [
         { width: 20, height: 5 },
         { width: 40, height: 10 },
         { width: 80, height: 20 },
-        { width: 120, height: 30 }
+        { width: 120, height: 30 },
       ];
 
       sizes.forEach(({ width, height }) => {
         const result = Layout.place(width, height, 0.5, 0.5, content);
         const lines = result.split('\n');
-        
+
         expect(lines).toHaveLength(height);
         expect(result).toContain(content);
-        
+
         // Check that no line exceeds the width (accounting for content placement)
-        lines.forEach(line => {
+        lines.forEach((line) => {
           // Remove ANSI codes for accurate length measurement
           const plainLine = line.replace(/\x1b\[[0-9;]*m/g, '');
           expect(plainLine.length).toBeLessThanOrEqual(width);
@@ -387,7 +388,7 @@ describe('Layout System - Lipgloss Compatibility', () => {
       expect(() => Layout.joinHorizontal(0.5, '', '', '')).not.toThrow();
       expect(() => Layout.joinVertical(0.5, '', '', '')).not.toThrow();
       expect(() => Layout.place(10, 5, 0.5, 0.5, '')).not.toThrow();
-      
+
       const emptyResult = Layout.joinVertical(0.5, '', '', '');
       expect(typeof emptyResult).toBe('string');
     });
@@ -395,22 +396,22 @@ describe('Layout System - Lipgloss Compatibility', () => {
     test('single content handling', () => {
       const singleH = Layout.joinHorizontal(0.5, 'Single');
       const singleV = Layout.joinVertical(0.5, 'Single');
-      
+
       expect(singleH).toContain('Single');
       expect(singleV).toContain('Single');
     });
 
     test('invalid position values', () => {
       // Should handle invalid positions gracefully
-      expect(() => Layout.place(10, 5, NaN, 0.5, 'Test')).not.toThrow();
-      expect(() => Layout.place(10, 5, 0.5, Infinity, 'Test')).not.toThrow();
-      expect(() => Layout.joinHorizontal(NaN, 'A', 'B')).not.toThrow();
-      expect(() => Layout.joinVertical(Infinity, 'A', 'B')).not.toThrow();
+      expect(() => Layout.place(10, 5, Number.NaN, 0.5, 'Test')).not.toThrow();
+      expect(() => Layout.place(10, 5, 0.5, Number.POSITIVE_INFINITY, 'Test')).not.toThrow();
+      expect(() => Layout.joinHorizontal(Number.NaN, 'A', 'B')).not.toThrow();
+      expect(() => Layout.joinVertical(Number.POSITIVE_INFINITY, 'A', 'B')).not.toThrow();
     });
 
     test('very large content handling', () => {
       const largeContent = 'X'.repeat(10000);
-      
+
       expect(() => Layout.joinHorizontal(0.5, largeContent)).not.toThrow();
       expect(() => Layout.joinVertical(0.5, largeContent)).not.toThrow();
       expect(() => Layout.place(100, 50, 0.5, 0.5, largeContent)).not.toThrow();

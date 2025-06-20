@@ -96,7 +96,7 @@ export class TableChain {
    * @param enabled - Whether to show borders between rows (default: true)
    * @returns New TableChain instance with updated borderRow setting
    */
-  borderRow(enabled: boolean = true): TableChain {
+  borderRow(enabled = true): TableChain {
     return new TableChain(Table.borderRow(enabled)(this.config));
   }
 
@@ -105,7 +105,7 @@ export class TableChain {
    * @param enabled - Whether to show borders between columns (default: true)
    * @returns New TableChain instance with updated borderColumn setting
    */
-  borderColumn(enabled: boolean = true): TableChain {
+  borderColumn(enabled = true): TableChain {
     return new TableChain(Table.borderColumn(enabled)(this.config));
   }
 

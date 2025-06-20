@@ -110,7 +110,7 @@ export namespace Table {
    * @returns Function that takes a table config and returns new config with updated borderRow
    */
   export const borderRow =
-    (enabled: boolean = true) =>
+    (enabled = true) =>
     (table: TableConfig): TableConfig => ({
       ...table,
       borderRow: enabled,
@@ -122,7 +122,7 @@ export namespace Table {
    * @returns Function that takes a table config and returns new config with updated borderColumn
    */
   export const borderColumn =
-    (enabled: boolean = true) =>
+    (enabled = true) =>
     (table: TableConfig): TableConfig => ({
       ...table,
       borderColumn: enabled,
@@ -251,17 +251,18 @@ export namespace Table {
    * @returns Table metrics including dimensions and counts
    */
   export const calculateMetrics = (table: TableConfig): TableMetrics => {
-    const columnCount = table.headers.length > 0 ? table.headers.length : (table.rows[0]?.length ?? 0);
+    const columnCount =
+      table.headers.length > 0 ? table.headers.length : (table.rows[0]?.length ?? 0);
     const rowCount = table.rows.length + (table.headers.length > 0 ? 1 : 0); // +1 for header row if exists
 
     // Calculate column widths based on content
     const columnWidths: number[] = [];
-    
+
     // Initialize column widths
     for (let colIndex = 0; colIndex < columnCount; colIndex++) {
       // First check if style function provides explicit width
       let explicitWidth: number | undefined;
-      
+
       if (table.styleFunc) {
         // Check first data row style for width (this is usually where widths are defined)
         const firstRowStyle = table.styleFunc(0, colIndex);
@@ -275,13 +276,13 @@ export namespace Table {
           }
         }
       }
-      
+
       if (explicitWidth) {
         columnWidths.push(explicitWidth);
       } else {
         // Fall back to content-based width calculation
         let maxWidth = 0;
-        
+
         // Check header width if exists
         if (table.headers.length > 0 && table.headers[colIndex]) {
           maxWidth = Math.max(maxWidth, table.headers[colIndex].length);

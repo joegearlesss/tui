@@ -10,17 +10,17 @@ import { z } from 'zod';
 /**
  * Border type variants supported by the styling system
  */
-export type BorderType = 
-  | 'normal' 
-  | 'rounded' 
-  | 'thick' 
-  | 'double' 
-  | 'block' 
-  | 'outerHalfBlock' 
-  | 'innerHalfBlock' 
-  | 'ascii' 
-  | 'markdown' 
-  | 'hidden' 
+export type BorderType =
+  | 'normal'
+  | 'rounded'
+  | 'thick'
+  | 'double'
+  | 'block'
+  | 'outerHalfBlock'
+  | 'innerHalfBlock'
+  | 'ascii'
+  | 'markdown'
+  | 'hidden'
   | 'custom';
 
 /**
@@ -125,7 +125,19 @@ export const BorderSidesSchema = z
 export const BorderConfigSchema = z
   .object({
     type: z
-      .enum(['normal', 'rounded', 'thick', 'double', 'block', 'outerHalfBlock', 'innerHalfBlock', 'ascii', 'markdown', 'hidden', 'custom'])
+      .enum([
+        'normal',
+        'rounded',
+        'thick',
+        'double',
+        'block',
+        'outerHalfBlock',
+        'innerHalfBlock',
+        'ascii',
+        'markdown',
+        'hidden',
+        'custom',
+      ])
       .describe('Border style type - determines the character set and appearance'),
     chars: BorderCharsSchema.describe('Unicode characters used to draw the border'),
     sides: BorderSidesSchema.describe('Visibility settings for each border side'),

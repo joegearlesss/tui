@@ -1,9 +1,9 @@
 /**
- * Output utilities that mimic lipgloss.Println() behavior
- * Handles TTY detection and automatic ANSI stripping for file output
+ * Output utilities for styled terminal output
+ * Provides proper terminal detection and ANSI handling per TUI styling guidelines
  */
 
-import { StringUtils } from './utils/strings.js';
+import { StringUtils } from './utils/strings';
 
 /**
  * Enhanced ANSI regex that matches all ANSI escape sequences
@@ -12,52 +12,94 @@ import { StringUtils } from './utils/strings.js';
 const ANSI_REGEX = /\u001b\[[0-9;]*[A-Za-z]/g;
 
 /**
- * Strip all ANSI escape sequences from text (enhanced version)
- * @param text - Text containing ANSI sequences
- * @returns Clean text without any ANSI sequences
+ * Terminal capabilities detection namespace
  */
-export const stripAllAnsi = (text: string): string => {
-  return text.replace(ANSI_REGEX, '');
-};
+namespace Terminal {
+  /**
+   * Checks if output is going to a TTY (terminal)
+   * @returns true if output is to a terminal, false if redirected
+   */
+  export const isTerminal = (): boolean => {
+    if (process.stdout.isTTY === false) {
+      return false;
+    }
+    return typeof process.stdout.write === 'function';
+  };
+
+  /**
+   * Checks if stderr is going to a TTY
+   * @returns true if stderr is to a terminal, false if redirected
+   */
+  export const isStderrTerminal = (): boolean => {
+    if (process.stderr.isTTY === false) {
+      return false;
+    }
+    return typeof process.stderr.write === 'function';
+  };
+
+  /**
+   * Strip all ANSI escape sequences from text
+   * @param text - Text containing ANSI sequences
+   * @returns Clean text without any ANSI sequences
+   */
+  export const stripAnsi = (text: string): string => {
+    return text.replace(ANSI_REGEX, '');
+  };
+}
 
 /**
- * Checks if output is going to a TTY (terminal)
- * When output is redirected to a file, this returns false
- * @returns true if output is to a terminal, false if redirected
+ * Output utilities namespace replacing console.log usage
+ * NEVER use console.log for styled output - use these functions instead
  */
-export const isOutputTTY = (): boolean => {
-  // In Bun, process.stdout.isTTY might be undefined, so we need to check differently
-  // If isTTY is explicitly false, then output is redirected
-  // If isTTY is undefined or true, assume it's a TTY unless we can detect otherwise
-  if (process.stdout.isTTY === false) {
-    return false;
-  }
-  
-  // Additional check for Bun: if stdout is a TTY, it should have write method
-  return typeof process.stdout.write === 'function';
-};
+export namespace output {
+  /**
+   * Main print function for styled terminal output
+   * Handles TTY detection and ANSI stripping automatically
+   * @param content - Styled content to output
+   */
+  export const print = (content: string): void => {
+    if (Terminal.isTerminal()) {
+      process.stdout.write(content + '\n');
+    } else {
+      process.stdout.write(Terminal.stripAnsi(content) + '\n');
+    }
+  };
 
-/**
- * Print function that mimics lipgloss.Println() behavior
- * - When output is to a TTY: preserves ANSI codes
- * - When output is redirected: strips all ANSI codes for clean text
- * @param text - Styled text to output
- */
-export const print = (text: string): void => {
-  if (isOutputTTY()) {
-    // Output to terminal - preserve ANSI codes
-    console.log(text);
-  } else {
-    // Output redirected (to file, pipe, etc.) - strip ANSI codes
-    console.log(stripAllAnsi(text));
-  }
-};
+  /**
+   * Direct stdout output with TTY detection
+   * @param content - Styled content for stdout
+   */
+  export const stdout = (content: string): void => {
+    if (Terminal.isTerminal()) {
+      process.stdout.write(content);
+    } else {
+      process.stdout.write(Terminal.stripAnsi(content));
+    }
+  };
 
-/**
- * Println function for compatibility with lipgloss naming
- * Alias for print function
- * @param text - Styled text to output
- */
-export const println = print;
+  /**
+   * Direct stderr output with TTY detection
+   * @param content - Styled content for stderr
+   */
+  export const stderr = (content: string): void => {
+    if (Terminal.isStderrTerminal()) {
+      process.stderr.write(content);
+    } else {
+      process.stderr.write(Terminal.stripAnsi(content));
+    }
+  };
+
+  /**
+   * Check if output is going to a terminal
+   * @returns true if terminal, false if redirected
+   */
+  export const isTerminal = (): boolean => Terminal.isTerminal();
+
+  /**
+   * Println function for compatibility
+   * @param content - Styled content to output
+   */
+  export const println = print;
+}
 
 export { StringUtils };

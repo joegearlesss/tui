@@ -1,6 +1,6 @@
 /**
  * Tree Simple Example - TypeScript/Bun port of lipgloss tree/simple/main.go
- * 
+ *
  * This example demonstrates a simple tree structure with operating systems.
  */
 
@@ -13,28 +13,20 @@ function main() {
     children: [
       TreeNode.create('NixOS'),
       TreeNode.create('Arch Linux (btw)'),
-      TreeNode.create('Void Linux')
-    ]
+      TreeNode.create('Void Linux'),
+    ],
   };
 
-  // Create BSD subtree  
+  // Create BSD subtree
   const bsdTree = {
     ...TreeNode.create('BSD'),
-    children: [
-      TreeNode.create('FreeBSD'),
-      TreeNode.create('OpenBSD')
-    ]
+    children: [TreeNode.create('FreeBSD'), TreeNode.create('OpenBSD')],
   };
 
-  const t = TreeBuilder
-    .fromRoot('.')
+  const t = TreeBuilder.fromRoot('.')
     .customRoot({
       ...TreeNode.create('.'),
-      children: [
-        TreeNode.create('macOS'),
-        linuxTree,
-        bsdTree
-      ]
+      children: [TreeNode.create('macOS'), linuxTree, bsdTree],
     })
     .build();
 

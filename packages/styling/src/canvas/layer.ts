@@ -9,8 +9,8 @@ export interface LayerPosition {
 
 export class Layer {
   private _content: string;
-  private _x: number = 0;
-  private _y: number = 0;
+  private _x = 0;
+  private _y = 0;
 
   constructor(content: string) {
     this._content = content;
@@ -63,7 +63,7 @@ export class Layer {
   getDimensions(): { width: number; height: number } {
     const lines = this._content.split('\n');
     const height = lines.length;
-    const width = Math.max(...lines.map(line => this.getDisplayWidth(line)));
+    const width = Math.max(...lines.map((line) => this.getDisplayWidth(line)));
     return { width, height };
   }
 

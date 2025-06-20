@@ -1,11 +1,12 @@
 /**
  * List Grocery Example - TypeScript/Bun port of lipgloss list/grocery/main.go
- * 
+ *
  * This example demonstrates a grocery list with custom enumerators and styling
  * to show purchased items with checkmarks and strikethrough text.
  */
 
 import { List, ListBuilder } from '@tui/styling';
+import { output } from '@tui/styling/output';
 
 const purchased = [
   'Bananas',
@@ -21,14 +22,26 @@ const purchased = [
 
 const groceryItems = [
   'Artichoke',
-  'Baking Flour', 'Bananas', 'Barley', 'Bean Sprouts',
-  'Cashew Apple', 'Cashews', 'Coconut Milk', 'Curry Paste', 'Currywurst',
-  'Dill', 'Dragonfruit', 'Dried Shrimp',
+  'Baking Flour',
+  'Bananas',
+  'Barley',
+  'Bean Sprouts',
+  'Cashew Apple',
+  'Cashews',
+  'Coconut Milk',
+  'Curry Paste',
+  'Currywurst',
+  'Dill',
+  'Dragonfruit',
+  'Dried Shrimp',
   'Eggs',
-  'Fish Cake', 'Furikake',
+  'Fish Cake',
+  'Furikake',
   'Jicama',
   'Kohlrabi',
-  'Leeks', 'Lentils', 'Licorice Root',
+  'Leeks',
+  'Lentils',
+  'Licorice Root',
 ];
 
 function groceryEnumerator(index: number): string {
@@ -59,14 +72,13 @@ function enumeratorStyleFunc(text: string): string {
 }
 
 function main() {
-  const l = ListBuilder
-    .fromStrings(groceryItems)
+  const l = ListBuilder.fromStrings(groceryItems)
     .enumerator(groceryEnumerator)
     .enumeratorStyle(enumeratorStyleFunc)
     .itemStyle(itemStyleFunc)
     .build();
 
-  console.log(List.render(l));
+  output.print(List.render(l));
 }
 
 main();

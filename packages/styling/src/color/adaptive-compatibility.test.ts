@@ -1,12 +1,12 @@
 /**
  * Adaptive Color System - Lipgloss Compatibility Tests
- * 
+ *
  * Tests the adaptive color functionality to ensure compatibility
  * with lipgloss color patterns, especially background detection
  * and lightDark helper functions.
  */
 
-import { describe, expect, test, beforeEach, afterEach } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import { Color } from '@tui/styling';
 
 // Mock color detection for consistent testing
@@ -22,25 +22,25 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
     test('lightDark helper function with dark background', async () => {
       // Mock dark background detection
       Color.hasDarkBackground = async () => true;
-      
+
       const lightDark = async (light: string, dark: string) => {
         const isDark = await Color.hasDarkBackground();
         return isDark ? dark : light;
       };
-      
+
       const result = await lightDark('#000000', '#FFFFFF');
       expect(result).toBe('#FFFFFF');
     });
-    
+
     test('lightDark helper function with light background', async () => {
       // Mock light background detection
       Color.hasDarkBackground = async () => false;
-      
+
       const lightDark = async (light: string, dark: string) => {
         const isDark = await Color.hasDarkBackground();
         return isDark ? dark : light;
       };
-      
+
       const result = await lightDark('#000000', '#FFFFFF');
       expect(result).toBe('#000000');
     });
@@ -49,10 +49,10 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
       // Pre-determine background for synchronous usage
       const hasDarkBG = await Color.hasDarkBackground();
       const lightDark = (light: string, dark: string) => (hasDarkBG ? dark : light);
-      
+
       const color1 = lightDark('#FF0000', '#00FF00');
       const color2 = lightDark('#0000FF', '#FFFF00');
-      
+
       expect(typeof color1).toBe('string');
       expect(typeof color2).toBe('string');
       expect(color1).toMatch(/^#[0-9A-F]{6}$/i);
@@ -62,15 +62,15 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
     test('lightDark with various color formats', async () => {
       const hasDarkBG = await Color.hasDarkBackground();
       const lightDark = (light: string, dark: string) => (hasDarkBG ? dark : light);
-      
+
       const tests = [
         { light: '#FF0000', dark: '#00FF00' },
         { light: 'red', dark: 'green' },
         { light: '#FFFFFF', dark: '#000000' },
         { light: '#696969', dark: '#bdbdbd' },
-        { light: '#37CD96', dark: '#22C78A' }
+        { light: '#37CD96', dark: '#22C78A' },
       ];
-      
+
       tests.forEach(({ light, dark }) => {
         const result = lightDark(light, dark);
         expect(result).toBeDefined();
@@ -88,17 +88,9 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
     });
 
     test('color parsing consistency', () => {
-      const colors = [
-        '#FF0000',
-        '#00FF00', 
-        '#0000FF',
-        '#FFFFFF',
-        '#000000',
-        '#C5ADF9',
-        '#864EFF'
-      ];
-      
-      colors.forEach(color => {
+      const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFFFF', '#000000', '#C5ADF9', '#864EFF'];
+
+      colors.forEach((color) => {
         const parsed = Color.parse(color);
         expect(parsed).toBeDefined();
         expect(parsed).toBe(color);
@@ -111,9 +103,9 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
         { input: '#ff0000', expected: '#FF0000' }, // case insensitive
         { input: 'red', expected: '#FF0000' },
         { input: '#FFFFFF', expected: '#FFFFFF' },
-        { input: '#000000', expected: '#000000' }
+        { input: '#000000', expected: '#000000' },
       ];
-      
+
       testColors.forEach(({ input, expected }) => {
         const parsed = Color.parse(input);
         expect(parsed).toBe(expected);
@@ -132,9 +124,9 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
       const results = await Promise.all([
         Color.hasDarkBackground(),
         Color.hasDarkBackground(),
-        Color.hasDarkBackground()
+        Color.hasDarkBackground(),
       ]);
-      
+
       // All results should be the same
       expect(results[0]).toBe(results[1]);
       expect(results[1]).toBe(results[2]);
@@ -142,15 +134,15 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
 
     test('background detection performance', async () => {
       const start = performance.now();
-      
+
       // Call background detection multiple times
       for (let i = 0; i < 10; i++) {
         await Color.hasDarkBackground();
       }
-      
+
       const end = performance.now();
       const duration = end - start;
-      
+
       // Should complete reasonably quickly
       expect(duration).toBeLessThan(100); // 100ms for 10 calls
     });
@@ -168,11 +160,11 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
       const keywordColor = lightDark('#37CD96', '#22C78A');
       const buttonBgColors = {
         active: '#FF6AD2',
-        inactive: lightDark('#988F95', '#978692')
+        inactive: lightDark('#988F95', '#978692'),
       };
       const buttonFgColors = {
         active: '#FFFCC2',
-        inactive: lightDark('#FDFCE3', '#FBFAE7')
+        inactive: lightDark('#FDFCE3', '#FBFAE7'),
       };
 
       // Verify all colors are valid
@@ -187,11 +179,11 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
       // Verify colors change based on background
       const lightColors = [
         lightDark('#C5ADF9', '#864EFF'),
-        lightDark('#696969', '#bdbdbd'), 
-        lightDark('#37CD96', '#22C78A')
+        lightDark('#696969', '#bdbdbd'),
+        lightDark('#37CD96', '#22C78A'),
       ];
-      
-      lightColors.forEach(color => {
+
+      lightColors.forEach((color) => {
         expect(['#C5ADF9', '#864EFF', '#696969', '#bdbdbd', '#37CD96', '#22C78A']).toContain(color);
       });
     });
@@ -203,16 +195,16 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
         { light: '#FF0000', dark: '#FF8888', name: 'error' },
         { light: '#00AA00', dark: '#88FF88', name: 'success' },
         { light: '#0066CC', dark: '#6699FF', name: 'info' },
-        { light: '#FF6600', dark: '#FFAA66', name: 'warning' }
+        { light: '#FF6600', dark: '#FFAA66', name: 'warning' },
       ];
 
       adaptiveColors.forEach(({ light, dark, name }) => {
         const lightParsed = Color.parse(light);
         const darkParsed = Color.parse(dark);
-        
+
         expect(lightParsed).toBe(light);
         expect(darkParsed).toBe(dark);
-        
+
         // Both should be valid colors
         expect(lightParsed).toBeDefined();
         expect(darkParsed).toBeDefined();
@@ -234,7 +226,7 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
         border: lightDark('#E1E1E1', '#444444'),
         success: lightDark('#22C78A', '#37CD96'),
         warning: lightDark('#FF6B35', '#FF8C42'),
-        error: lightDark('#FF3838', '#FF5555')
+        error: lightDark('#FF3838', '#FF5555'),
       };
 
       // Verify all colors in the scheme are valid
@@ -253,19 +245,17 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
 
   describe('Performance and Caching', () => {
     test('color parsing performance', () => {
-      const colors = Array.from({ length: 1000 }, (_, i) => 
-        `#${i.toString(16).padStart(6, '0')}`
-      );
+      const colors = Array.from({ length: 1000 }, (_, i) => `#${i.toString(16).padStart(6, '0')}`);
 
       const start = performance.now();
-      
-      colors.forEach(color => {
+
+      colors.forEach((color) => {
         Color.parse(color);
       });
-      
+
       const end = performance.now();
       const duration = end - start;
-      
+
       // Should parse 1000 colors quickly
       expect(duration).toBeLessThan(50); // 50ms threshold
     });
@@ -273,18 +263,18 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
     test('background detection caching', async () => {
       // Multiple calls should be efficient (likely cached internally)
       const start = performance.now();
-      
+
       const results = await Promise.all(
         Array.from({ length: 100 }, () => Color.hasDarkBackground())
       );
-      
+
       const end = performance.now();
       const duration = end - start;
-      
+
       // All results should be the same
       const firstResult = results[0];
-      expect(results.every(result => result === firstResult)).toBe(true);
-      
+      expect(results.every((result) => result === firstResult)).toBe(true);
+
       // Should complete quickly if cached
       expect(duration).toBeLessThan(200); // 200ms for 100 calls
     });
@@ -292,17 +282,9 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
 
   describe('Error Handling and Edge Cases', () => {
     test('invalid color handling', () => {
-      const invalidColors = [
-        '',
-        'not-a-color',
-        '#GGG',
-        '#12345',
-        '#1234567',
-        null,
-        undefined
-      ];
+      const invalidColors = ['', 'not-a-color', '#GGG', '#12345', '#1234567', null, undefined];
 
-      invalidColors.forEach(invalidColor => {
+      invalidColors.forEach((invalidColor) => {
         expect(() => Color.parse(invalidColor as any)).not.toThrow();
         // Should return a reasonable fallback or handle gracefully
       });
@@ -317,7 +299,7 @@ describe('Adaptive Color System - Lipgloss Compatibility', () => {
         { light: '', dark: '#FFFFFF' },
         { light: '#000000', dark: '' },
         { light: 'invalid', dark: '#FFFFFF' },
-        { light: '#000000', dark: 'invalid' }
+        { light: '#000000', dark: 'invalid' },
       ];
 
       edgeCases.forEach(({ light, dark }) => {

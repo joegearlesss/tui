@@ -894,22 +894,22 @@ export namespace Style {
    */
   const applyPadding = (content: string, padding: BoxDimensions): string => {
     if (!content) return '';
-    
+
     const lines = content.split('\n');
-    const contentWidth = Math.max(...lines.map(line => StringUtils.displayWidth(line)));
-    
+    const contentWidth = Math.max(...lines.map((line) => StringUtils.displayWidth(line)));
+
     // Add horizontal padding to each line
-    const paddedLines = lines.map(line => {
+    const paddedLines = lines.map((line) => {
       const lineWidth = StringUtils.displayWidth(line);
       const rightPadding = contentWidth - lineWidth + padding.right;
       return '\u00A0'.repeat(padding.left) + line + '\u00A0'.repeat(rightPadding);
     });
-    
+
     // Add vertical padding
     const emptyLine = '\u00A0'.repeat(contentWidth + padding.left + padding.right);
     const topPadding = Array(padding.top).fill(emptyLine);
     const bottomPadding = Array(padding.bottom).fill(emptyLine);
-    
+
     return [...topPadding, ...paddedLines, ...bottomPadding].join('\n');
   };
 
@@ -921,22 +921,22 @@ export namespace Style {
    */
   const applyMargin = (content: string, margin: BoxDimensions): string => {
     if (!content) return '';
-    
+
     const lines = content.split('\n');
-    const contentWidth = Math.max(...lines.map(line => StringUtils.displayWidth(line)));
-    
+    const contentWidth = Math.max(...lines.map((line) => StringUtils.displayWidth(line)));
+
     // Add horizontal margin (indentation) to each line
-    const marginedLines = lines.map(line => {
+    const marginedLines = lines.map((line) => {
       const lineWidth = StringUtils.displayWidth(line);
       const rightMargin = contentWidth - lineWidth + margin.right;
       return ' '.repeat(margin.left) + line + ' '.repeat(rightMargin);
     });
-    
+
     // Add vertical margin
     const emptyLine = ' '.repeat(contentWidth + margin.left + margin.right);
     const topMargin = Array(margin.top).fill(emptyLine);
     const bottomMargin = Array(margin.bottom).fill(emptyLine);
-    
+
     return [...topMargin, ...marginedLines, ...bottomMargin].join('\n');
   };
 
@@ -948,20 +948,20 @@ export namespace Style {
    */
   const applySizeAndAlignment = (content: string, style: StyleProperties): string => {
     if (!content) return '';
-    
+
     let resultLines = content.split('\n');
-    
+
     // Apply width constraint if specified
     if (style.width !== undefined) {
       const targetWidth = style.width;
       const alignment = style.horizontalAlignment || 'left';
-      
+
       // Wrap long lines to fit target width, then align all lines
       const wrappedLines: string[] = [];
-      
+
       for (const line of resultLines) {
         const lineWidth = StringUtils.displayWidth(line);
-        
+
         if (lineWidth <= targetWidth) {
           // Line fits, just add it
           wrappedLines.push(line);
@@ -971,12 +971,12 @@ export namespace Style {
           wrappedLines.push(...wrapped);
         }
       }
-      
+
       // Now align all lines to the target width
-      resultLines = wrappedLines.map(line => {
+      resultLines = wrappedLines.map((line) => {
         const lineWidth = StringUtils.displayWidth(line);
         const padding = Math.max(0, targetWidth - lineWidth);
-        
+
         switch (alignment) {
           case 'center': {
             const leftPadding = Math.floor(padding / 2);
@@ -990,7 +990,7 @@ export namespace Style {
         }
       });
     }
-    
+
     return resultLines.join('\n');
   };
 
@@ -1113,7 +1113,14 @@ export namespace Style {
     const transformedText = style.transform ? style.transform(text) : text;
 
     // Don't return early if we have a border, padding, margin, width, or height, even with empty content
-    if (transformedText === '' && !style.border && !style.padding && !style.margin && !style.width && !style.height) {
+    if (
+      transformedText === '' &&
+      !style.border &&
+      !style.padding &&
+      !style.margin &&
+      !style.width &&
+      !style.height
+    ) {
       return '';
     }
 

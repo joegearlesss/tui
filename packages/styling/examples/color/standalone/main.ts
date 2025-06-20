@@ -7,7 +7,7 @@
  */
 
 import { Border, Color, Layout, Position, StyleBuilder } from '@tui/styling';
-import { print } from '../../../src/output.js';
+import { output } from '../../../src/output';
 
 async function main(): Promise<void> {
   // Query for the background color. We only need to do this once, and only
@@ -54,7 +54,7 @@ async function main(): Promise<void> {
   const text = StyleBuilder.from(paragraphStyle).render(
     `${StyleBuilder.from(textStyle).render('Are you sure you want to eat that ')}${StyleBuilder.from(keywordStyle).render('moderatly ripe')}${StyleBuilder.from(textStyle).render(' banana?')}`
   );
-  const buttons = ` ${StyleBuilder.from(activeButton).render('Yes')}  ${StyleBuilder.from(inactiveButton).render('No')}`;
+  const buttons = `${StyleBuilder.from(activeButton).render('Yes')}  ${StyleBuilder.from(inactiveButton).render('No')}`;
 
   // Create content and apply border using the new border integration
   const content = Layout.joinVertical(Position.CENTER, text, buttons);
@@ -66,7 +66,7 @@ async function main(): Promise<void> {
   // entirely.
   //
   // Note that in Bubble Tea downsampling happens automatically.
-  print(block);
+  output.print(block);
 }
 
 // Only run if this file is executed directly

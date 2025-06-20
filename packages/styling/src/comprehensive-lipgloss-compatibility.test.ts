@@ -1,12 +1,12 @@
 /**
  * Comprehensive Lipgloss Compatibility Verification
- * 
+ *
  * This file demonstrates and tests the complete 100% compatibility
  * between our TUI styling framework and the original Lipgloss library.
  */
 
 import { describe, expect, test } from 'bun:test';
-import { Border, Color, Layout, StyleBuilder, Style } from '@tui/styling';
+import { Border, Color, Layout, Style, StyleBuilder } from '@tui/styling';
 
 describe('🎨 Complete Lipgloss Compatibility Verification', () => {
   describe('💡 Core Example Replication', () => {
@@ -76,10 +76,7 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
         .alignHorizontal('center')
         .build();
 
-      const infoStyle = StyleBuilder.create()
-        .foreground('#7D56F4')
-        .margin(1, 0)
-        .build();
+      const infoStyle = StyleBuilder.create().foreground('#7D56F4').margin(1, 0).build();
 
       const sidebarStyle = StyleBuilder.create()
         .border(Border.normal())
@@ -98,7 +95,9 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
       // Create content
       const header = StyleBuilder.from(headerStyle).render('🚀 TUI Dashboard');
       const sidebar = StyleBuilder.from(sidebarStyle).render('📊 Metrics\n📈 Charts\n⚙️ Settings');
-      const main = StyleBuilder.from(mainStyle).render('Welcome to the dashboard!\n\nThis demonstrates full lipgloss compatibility.');
+      const main = StyleBuilder.from(mainStyle).render(
+        'Welcome to the dashboard!\n\nThis demonstrates full lipgloss compatibility.'
+      );
 
       // Compose layout
       const content = Layout.joinHorizontal(0.0, sidebar, main);
@@ -158,7 +157,7 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
         .alignVertical('middle')
         // Content
         .setString('Test content')
-        .transform(text => text.toUpperCase())
+        .transform((text) => text.toUpperCase())
         .build();
 
       // Verify all properties are set
@@ -182,10 +181,26 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
 
     test('All Lipgloss Border Types Match', () => {
       const borderTypes = [
-        { name: 'Normal', factory: Border.normal, expectedChars: { topLeft: '┌', topRight: '┐', bottomLeft: '└', bottomRight: '┘' }},
-        { name: 'Rounded', factory: Border.rounded, expectedChars: { topLeft: '╭', topRight: '╮', bottomLeft: '╰', bottomRight: '╯' }},
-        { name: 'Thick', factory: Border.thick, expectedChars: { topLeft: '┏', topRight: '┓', bottomLeft: '┗', bottomRight: '┛' }},
-        { name: 'Double', factory: Border.double, expectedChars: { topLeft: '╔', topRight: '╗', bottomLeft: '╚', bottomRight: '╝' }}
+        {
+          name: 'Normal',
+          factory: Border.normal,
+          expectedChars: { topLeft: '┌', topRight: '┐', bottomLeft: '└', bottomRight: '┘' },
+        },
+        {
+          name: 'Rounded',
+          factory: Border.rounded,
+          expectedChars: { topLeft: '╭', topRight: '╮', bottomLeft: '╰', bottomRight: '╯' },
+        },
+        {
+          name: 'Thick',
+          factory: Border.thick,
+          expectedChars: { topLeft: '┏', topRight: '┓', bottomLeft: '┗', bottomRight: '┛' },
+        },
+        {
+          name: 'Double',
+          factory: Border.double,
+          expectedChars: { topLeft: '╔', topRight: '╗', bottomLeft: '╚', bottomRight: '╝' },
+        },
       ];
 
       borderTypes.forEach(({ name, factory, expectedChars }) => {
@@ -263,18 +278,15 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
         (text: string) => text.toLowerCase(),
         (text: string) => text.replace(/\s+/g, '_'),
         (text: string) => `[${text}]`,
-        (text: string) => text.split('').reverse().join('')
+        (text: string) => text.split('').reverse().join(''),
       ];
 
-      transforms.forEach(transform => {
-        const style = StyleBuilder.create()
-          .transform(transform)
-          .foreground('#FF0000')
-          .build();
+      transforms.forEach((transform) => {
+        const style = StyleBuilder.create().transform(transform).foreground('#FF0000').build();
 
         const result = Style.render(style, 'Hello World');
         const expected = transform('Hello World');
-        
+
         expect(result).toContain(expected);
         expect(result).toMatch(/\x1b\[[0-9;]*m/); // Should have color codes
       });
@@ -297,20 +309,17 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
         .margin(1)
         .build();
 
-      const metricStyle = StyleBuilder.create()
-        .bold(true)
-        .foreground('#22C78A')
-        .build();
+      const metricStyle = StyleBuilder.create().bold(true).foreground('#22C78A').build();
 
       // Create cards
       const card1 = StyleBuilder.from(cardStyle).render(
         `CPU Usage\n${StyleBuilder.from(metricStyle).render('75%')}`
       );
-      
+
       const card2 = StyleBuilder.from(cardStyle).render(
         `Memory\n${StyleBuilder.from(metricStyle).render('45%')}`
       );
-      
+
       const card3 = StyleBuilder.from(cardStyle).render(
         `Disk Space\n${StyleBuilder.from(metricStyle).render('90%')}`
       );
@@ -344,7 +353,7 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
         success: lightDark('#22C78A', '#37CD96'),
         warning: lightDark('#FF6B35', '#FF8C42'),
         error: lightDark('#FF3838', '#FF5555'),
-        muted: lightDark('#666666', '#CCCCCC')
+        muted: lightDark('#666666', '#CCCCCC'),
       };
 
       // Create styles using adaptive colors
@@ -353,7 +362,7 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
       const successStyle = StyleBuilder.create().foreground(colorScheme.success).build();
 
       // Verify all colors are valid hex colors
-      Object.values(colorScheme).forEach(color => {
+      Object.values(colorScheme).forEach((color) => {
         expect(color).toMatch(/^#[0-9A-F]{6}$/i);
       });
 
@@ -367,7 +376,7 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
   describe('🚀 Performance & Quality', () => {
     test('Performance Matches Lipgloss Standards', () => {
       const iterations = 1000;
-      
+
       // Test style creation performance
       const startStyle = performance.now();
       for (let i = 0; i < iterations; i++) {
@@ -381,7 +390,7 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
           .build();
       }
       const endStyle = performance.now();
-      
+
       // Test rendering performance
       const style = StyleBuilder.create()
         .bold(true)
@@ -389,13 +398,13 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
         .border(Border.rounded())
         .padding(1, 2)
         .build();
-      
+
       const startRender = performance.now();
       for (let i = 0; i < iterations; i++) {
         StyleBuilder.from(style).render(`Test content ${i}`);
       }
       const endRender = performance.now();
-      
+
       // Performance should be reasonable
       expect(endStyle - startStyle).toBeLessThan(100); // Style creation under 100ms
       expect(endRender - startRender).toBeLessThan(100); // Rendering under 100ms
@@ -404,21 +413,21 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
     test('Memory Efficiency', () => {
       // Test that we don't leak memory with repeated operations
       const styles: any[] = [];
-      
+
       for (let i = 0; i < 1000; i++) {
         const style = StyleBuilder.create()
           .bold(i % 2 === 0)
           .foreground(`#${i.toString(16).padStart(6, '0')}`)
           .border(i % 4 === 0 ? Border.rounded() : Border.normal())
-          .padding(i % 3 + 1)
+          .padding((i % 3) + 1)
           .build();
-        
+
         styles.push(style);
       }
-      
+
       // Verify we created all styles successfully
       expect(styles).toHaveLength(1000);
-      
+
       // Clean up
       styles.length = 0;
     });
@@ -428,18 +437,18 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
       const promises = Array.from({ length: 100 }, async (_, i) => {
         const hasDarkBG = await Color.hasDarkBackground();
         const lightDark = (light: string, dark: string) => (hasDarkBG ? dark : light);
-        
+
         const style = StyleBuilder.create()
           .foreground(lightDark('#000000', '#FFFFFF'))
           .border(Border.rounded())
           .padding(1)
           .build();
-        
+
         return StyleBuilder.from(style).render(`Concurrent ${i}`);
       });
-      
+
       const results = await Promise.all(promises);
-      
+
       // All operations should complete successfully
       expect(results).toHaveLength(100);
       results.forEach((result, i) => {
@@ -452,7 +461,7 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
     test('100% API Coverage Verification', () => {
       // This test verifies that every method from lipgloss is available
       const builder = StyleBuilder.create();
-      
+
       // Text formatting methods
       expect(typeof builder.bold).toBe('function');
       expect(typeof builder.italic).toBe('function');
@@ -461,11 +470,11 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
       expect(typeof builder.reverse).toBe('function');
       expect(typeof builder.blink).toBe('function');
       expect(typeof builder.faint).toBe('function');
-      
+
       // Color methods
       expect(typeof builder.foreground).toBe('function');
       expect(typeof builder.background).toBe('function');
-      
+
       // Border methods
       expect(typeof builder.border).toBe('function');
       expect(typeof builder.borderForeground).toBe('function');
@@ -478,7 +487,7 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
       expect(typeof builder.borderRightBackground).toBe('function');
       expect(typeof builder.borderBottomBackground).toBe('function');
       expect(typeof builder.borderLeftBackground).toBe('function');
-      
+
       // Layout methods
       expect(typeof builder.width).toBe('function');
       expect(typeof builder.height).toBe('function');
@@ -486,11 +495,11 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
       expect(typeof builder.margin).toBe('function');
       expect(typeof builder.alignHorizontal).toBe('function');
       expect(typeof builder.alignVertical).toBe('function');
-      
+
       // Content methods
       expect(typeof builder.setString).toBe('function');
       expect(typeof builder.transform).toBe('function');
-      
+
       // Utility methods
       expect(typeof builder.inherit).toBe('function');
       expect(typeof builder.build).toBe('function');
@@ -501,17 +510,53 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
     test('Border Character Exactness', () => {
       // Verify our border characters exactly match lipgloss
       const lipglossChars = {
-        normal: { top: '─', right: '│', bottom: '─', left: '│', topLeft: '┌', topRight: '┐', bottomLeft: '└', bottomRight: '┘' },
-        rounded: { top: '─', right: '│', bottom: '─', left: '│', topLeft: '╭', topRight: '╮', bottomLeft: '╰', bottomRight: '╯' },
-        thick: { top: '━', right: '┃', bottom: '━', left: '┃', topLeft: '┏', topRight: '┓', bottomLeft: '┗', bottomRight: '┛' },
-        double: { top: '═', right: '║', bottom: '═', left: '║', topLeft: '╔', topRight: '╗', bottomLeft: '╚', bottomRight: '╝' }
+        normal: {
+          top: '─',
+          right: '│',
+          bottom: '─',
+          left: '│',
+          topLeft: '┌',
+          topRight: '┐',
+          bottomLeft: '└',
+          bottomRight: '┘',
+        },
+        rounded: {
+          top: '─',
+          right: '│',
+          bottom: '─',
+          left: '│',
+          topLeft: '╭',
+          topRight: '╮',
+          bottomLeft: '╰',
+          bottomRight: '╯',
+        },
+        thick: {
+          top: '━',
+          right: '┃',
+          bottom: '━',
+          left: '┃',
+          topLeft: '┏',
+          topRight: '┓',
+          bottomLeft: '┗',
+          bottomRight: '┛',
+        },
+        double: {
+          top: '═',
+          right: '║',
+          bottom: '═',
+          left: '║',
+          topLeft: '╔',
+          topRight: '╗',
+          bottomLeft: '╚',
+          bottomRight: '╝',
+        },
       };
 
       const ourBorders = {
         normal: Border.normal(),
         rounded: Border.rounded(),
         thick: Border.thick(),
-        double: Border.double()
+        double: Border.double(),
       };
 
       Object.entries(lipglossChars).forEach(([type, expectedChars]) => {
@@ -525,19 +570,19 @@ describe('🎨 Complete Lipgloss Compatibility Verification', () => {
     test('Layout System Compatibility', () => {
       // Test that our layout system produces the same results as lipgloss would
       const blocks = ['Block A', 'Block B\nLine 2', 'Block C'];
-      
+
       // Horizontal joining
       const horizontal = Layout.joinHorizontal(0.0, ...blocks);
       expect(horizontal).toContain('Block A');
       expect(horizontal).toContain('Block B');
       expect(horizontal).toContain('Block C');
       expect(horizontal).toContain('Line 2');
-      
+
       // Vertical joining
       const vertical = Layout.joinVertical(0.5, ...blocks);
       const lines = vertical.split('\n');
       expect(lines).toHaveLength(4); // Block A + Block B + Line 2 + Block C = 4 lines
-      
+
       // Placement
       const placed = Layout.place(30, 10, 0.5, 0.5, 'Centered');
       expect(placed).toContain('Centered');

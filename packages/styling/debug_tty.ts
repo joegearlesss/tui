@@ -1,5 +1,6 @@
-import { isOutputTTY } from './src/output.js';
+import { debug } from './src/debug';
+import { output } from './src/output';
 
-console.log('isOutputTTY():', isOutputTTY());
-console.log('process.stdout.isTTY:', process.stdout.isTTY);
-console.log('process.stdout.isTTY type:', typeof process.stdout.isTTY);
+debug.info('isOutputTTY():', output.isTerminal());
+debug.info('process.stdout.isTTY:', process.stdout.isTTY);
+debug.info('process.stdout.isTTY type:', typeof process.stdout.isTTY);

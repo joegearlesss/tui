@@ -2,7 +2,7 @@
  * Canvas system for compositing multiple layers of text content
  */
 
-import { Layer } from './layer';
+import type { Layer } from './layer';
 
 export class Canvas {
   private layers: Layer[];
@@ -27,7 +27,7 @@ export class Canvas {
       const dims = layer.getDimensions();
       const rightEdge = layer.xPos + dims.width;
       const bottomEdge = layer.yPos + dims.height;
-      
+
       maxWidth = Math.max(maxWidth, rightEdge);
       maxHeight = Math.max(maxHeight, bottomEdge);
     }
@@ -70,16 +70,16 @@ export class Canvas {
     for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
       const line = lines[lineIndex];
       const y = startY + lineIndex;
-      
+
       if (y >= canvas.length) continue; // Skip if beyond canvas height
 
       // Parse the line character by character, handling ANSI codes
       let x = startX;
       let i = 0;
-      
+
       while (i < line.length) {
         if (x >= canvas[y].length) break; // Skip if beyond canvas width
-        
+
         // Check for ANSI escape sequence
         if (line[i] === '\x1b' && i + 1 < line.length && line[i + 1] === '[') {
           // Find the end of the ANSI sequence
@@ -90,7 +90,7 @@ export class Canvas {
           if (ansiEnd < line.length) {
             ansiEnd++; // Include the final letter
           }
-          
+
           // Copy the ANSI sequence without advancing x position
           const ansiSequence = line.slice(i, ansiEnd);
           canvas[y][x] = (canvas[y][x] === ' ' ? '' : canvas[y][x]) + ansiSequence;

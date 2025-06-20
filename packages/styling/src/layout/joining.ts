@@ -146,7 +146,7 @@ export namespace Layout {
     // Get whitespace characters and styling
     const whitespaceChars = options?.whitespaceChars || ' ';
     let whitespaceUnit = whitespaceChars;
-    
+
     // Apply styling to whitespace if provided
     if (options?.whitespaceStyle && whitespaceChars !== ' ') {
       const { Style } = require('../style/style');
@@ -176,24 +176,27 @@ export namespace Layout {
     const repeatWhitespace = (count: number): string => {
       if (count <= 0) return '';
       if (whitespaceChars === ' ') return ' '.repeat(count);
-      
+
       // For custom whitespace patterns, repeat the pattern to fill the space
       const pattern = whitespaceUnit;
       const patternLength = getDisplayWidth(whitespaceChars);
       const fullRepeats = Math.floor(count / patternLength);
       const remainder = count % patternLength;
-      
+
       let result = pattern.repeat(fullRepeats);
       if (remainder > 0) {
         // Add partial pattern for remainder
         result += whitespaceChars.slice(0, remainder);
         if (options?.whitespaceStyle && whitespaceChars !== ' ') {
           const { Style } = require('../style/style');
-          const partialPattern = Style.render(options.whitespaceStyle, whitespaceChars.slice(0, remainder));
+          const partialPattern = Style.render(
+            options.whitespaceStyle,
+            whitespaceChars.slice(0, remainder)
+          );
           result = pattern.repeat(fullRepeats) + partialPattern;
         }
       }
-      
+
       return result;
     };
 
@@ -220,11 +223,10 @@ export namespace Layout {
       const leftPad = repeatWhitespace(leftPadding);
       const rightPad = repeatWhitespace(rightPadding);
       const paddedLine = leftPad + line + rightPad;
-      
+
       // Ensure exact width by truncating if necessary
-      const finalLine = getDisplayWidth(paddedLine) > width 
-        ? paddedLine.slice(0, width)
-        : paddedLine;
+      const finalLine =
+        getDisplayWidth(paddedLine) > width ? paddedLine.slice(0, width) : paddedLine;
       result.push(finalLine);
     }
 

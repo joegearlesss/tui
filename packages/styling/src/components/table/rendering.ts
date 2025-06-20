@@ -79,7 +79,12 @@ export namespace TableRender {
       parts.push(...renderedRowLines);
 
       // Row separator (except for last row)
-      if (renderOptions.includeBorders && table.border && table.borderRow && rowIndex < table.rows.length - 1) {
+      if (
+        renderOptions.includeBorders &&
+        table.border &&
+        table.borderRow &&
+        rowIndex < table.rows.length - 1
+      ) {
         parts.push(renderRowSeparator(table.border, columnWidths, table));
       }
     });
@@ -133,7 +138,7 @@ export namespace TableRender {
       const wrappedLines = wrapText(cellValue, contentWidth);
 
       // Format each line as a cell
-      const formattedLines = wrappedLines.map(line => {
+      const formattedLines = wrappedLines.map((line) => {
         let content = line;
 
         // Apply styling to raw content first, if provided
@@ -148,10 +153,10 @@ export namespace TableRender {
         // Handle text alignment within the content width
         const visibleLength = content.replace(/\x1b\[[0-9;]*m/g, '').length;
         const paddingNeeded = contentWidth - visibleLength;
-        
+
         if (paddingNeeded > 0) {
           const alignment = cellStyle?.horizontalAlignment || 'left';
-          
+
           switch (alignment) {
             case 'center': {
               const leftPadding = Math.floor(paddingNeeded / 2);
@@ -352,13 +357,12 @@ export namespace TableRender {
     const leftPadding = style?.padding?.left ?? 1;
     const rightPadding = style?.padding?.right ?? 1;
     const totalHorizontalPadding = leftPadding + rightPadding;
-    
+
     const contentWidth = width - totalHorizontalPadding;
 
     // For single-line cells, truncate with ellipsis if too long
-    let content = value.length > contentWidth 
-      ? `${value.substring(0, contentWidth - 3)}...` 
-      : value;
+    let content =
+      value.length > contentWidth ? `${value.substring(0, contentWidth - 3)}...` : value;
 
     // Apply styling to raw content first, if provided
     if (style) {
@@ -373,10 +377,10 @@ export namespace TableRender {
     // Handle text alignment within the content width
     const visibleLength = content.replace(/\x1b\[[0-9;]*m/g, '').length;
     const paddingNeeded = contentWidth - visibleLength;
-    
+
     if (paddingNeeded > 0) {
       const alignment = style?.horizontalAlignment || 'left';
-      
+
       switch (alignment) {
         case 'center': {
           const leftPadding = Math.floor(paddingNeeded / 2);
@@ -411,7 +415,11 @@ export namespace TableRender {
    * @param table - Table configuration for borderColumn setting
    * @returns Top border string
    */
-  const renderTopBorder = (border: BorderConfig, columnWidths: readonly number[], table?: TableConfig): string => {
+  const renderTopBorder = (
+    border: BorderConfig,
+    columnWidths: readonly number[],
+    table?: TableConfig
+  ): string => {
     const chars = getBorderChars(border);
     const parts: string[] = [];
 
@@ -420,7 +428,7 @@ export namespace TableRender {
     columnWidths.forEach((width, index) => {
       parts.push(chars.top.repeat(width));
       if (index < columnWidths.length - 1) {
-        parts.push(table?.borderColumn ? (chars.topJunction || chars.top) : chars.top);
+        parts.push(table?.borderColumn ? chars.topJunction || chars.top : chars.top);
       }
     });
 
@@ -435,7 +443,11 @@ export namespace TableRender {
    * @param table - Table configuration for borderColumn setting
    * @returns Middle border string
    */
-  const renderMiddleBorder = (border: BorderConfig, columnWidths: readonly number[], table?: TableConfig): string => {
+  const renderMiddleBorder = (
+    border: BorderConfig,
+    columnWidths: readonly number[],
+    table?: TableConfig
+  ): string => {
     const chars = getBorderChars(border);
     const parts: string[] = [];
 
@@ -444,7 +456,7 @@ export namespace TableRender {
     columnWidths.forEach((width, index) => {
       parts.push(chars.top.repeat(width));
       if (index < columnWidths.length - 1) {
-        parts.push(table?.borderColumn ? (chars.middleJunction || chars.top) : chars.top);
+        parts.push(table?.borderColumn ? chars.middleJunction || chars.top : chars.top);
       }
     });
 
@@ -459,7 +471,11 @@ export namespace TableRender {
    * @param table - Table configuration for borderColumn setting
    * @returns Row separator string
    */
-  const renderRowSeparator = (border: BorderConfig, columnWidths: readonly number[], table?: TableConfig): string => {
+  const renderRowSeparator = (
+    border: BorderConfig,
+    columnWidths: readonly number[],
+    table?: TableConfig
+  ): string => {
     // For now, use the same as middle border
     // Could be customized for different separator styles
     return renderMiddleBorder(border, columnWidths, table);
@@ -472,7 +488,11 @@ export namespace TableRender {
    * @param table - Table configuration for borderColumn setting
    * @returns Bottom border string
    */
-  const renderBottomBorder = (border: BorderConfig, columnWidths: readonly number[], table?: TableConfig): string => {
+  const renderBottomBorder = (
+    border: BorderConfig,
+    columnWidths: readonly number[],
+    table?: TableConfig
+  ): string => {
     const chars = getBorderChars(border);
     const parts: string[] = [];
 
@@ -481,7 +501,7 @@ export namespace TableRender {
     columnWidths.forEach((width, index) => {
       parts.push(chars.bottom.repeat(width));
       if (index < columnWidths.length - 1) {
-        parts.push(table?.borderColumn ? (chars.bottomJunction || chars.bottom) : chars.bottom);
+        parts.push(table?.borderColumn ? chars.bottomJunction || chars.bottom : chars.bottom);
       }
     });
 

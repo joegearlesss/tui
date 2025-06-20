@@ -1,6 +1,6 @@
 /**
  * Border Integration Tests with Style System
- * 
+ *
  * Tests the integration between BorderRender and StyleBuilder systems
  * to ensure lipgloss compatibility for border styling.
  */
@@ -11,10 +11,8 @@ import { Border, StyleBuilder } from '@tui/styling';
 describe('Border Integration with Style System', () => {
   describe('StyleBuilder border methods', () => {
     test('should support border() method', () => {
-      const style = StyleBuilder.create()
-        .border(Border.rounded())
-        .build();
-      
+      const style = StyleBuilder.create().border(Border.rounded()).build();
+
       expect(style.border).toBeDefined();
       expect(style.border?.type).toBe('rounded');
       expect(style.border?.chars.topLeft).toBe('╭');
@@ -26,7 +24,7 @@ describe('Border Integration with Style System', () => {
         .border(Border.normal())
         .borderForeground('#FF0000')
         .build();
-      
+
       expect(style.border).toBeDefined();
       expect(style.borderForeground).toBe('#FF0000');
     });
@@ -36,7 +34,7 @@ describe('Border Integration with Style System', () => {
         .border(Border.normal())
         .borderBackground('#00FF00')
         .build();
-      
+
       expect(style.border).toBeDefined();
       expect(style.borderBackground).toBe('#00FF00');
     });
@@ -49,7 +47,7 @@ describe('Border Integration with Style System', () => {
         .borderBottomForeground('#0000FF')
         .borderLeftForeground('#FFFF00')
         .build();
-      
+
       expect(style.borderTopForeground).toBe('#FF0000');
       expect(style.borderRightForeground).toBe('#00FF00');
       expect(style.borderBottomForeground).toBe('#0000FF');
@@ -64,7 +62,7 @@ describe('Border Integration with Style System', () => {
         .borderBottomBackground('#0000FF')
         .borderLeftBackground('#FFFF00')
         .build();
-      
+
       expect(style.borderTopBackground).toBe('#FF0000');
       expect(style.borderRightBackground).toBe('#00FF00');
       expect(style.borderBottomBackground).toBe('#0000FF');
@@ -80,7 +78,7 @@ describe('Border Integration with Style System', () => {
         .padding(1)
         .margin(2)
         .build();
-      
+
       expect(style.border?.type).toBe('rounded');
       expect(style.borderForeground).toBe('#FFFFFF');
       expect(style.borderBackground).toBe('#000000');
@@ -96,7 +94,7 @@ describe('Border Integration with Style System', () => {
         .borderTopBackground('#FF0000')
         .unsetBorder()
         .build();
-      
+
       expect(style.border).toBeUndefined();
       expect(style.borderForeground).toBeUndefined();
       expect(style.borderTopBackground).toBeUndefined();
@@ -105,12 +103,10 @@ describe('Border Integration with Style System', () => {
 
   describe('Border rendering integration', () => {
     test('should render content with border', () => {
-      const style = StyleBuilder.create()
-        .border(Border.rounded())
-        .build();
-      
+      const style = StyleBuilder.create().border(Border.rounded()).build();
+
       const result = StyleBuilder.from(style).render('Hello');
-      
+
       // Should contain border characters
       expect(result).toContain('╭');
       expect(result).toContain('╮');
@@ -120,20 +116,17 @@ describe('Border Integration with Style System', () => {
     });
 
     test('should render border with padding', () => {
-      const style = StyleBuilder.create()
-        .border(Border.normal())
-        .padding(1)
-        .build();
-      
+      const style = StyleBuilder.create().border(Border.normal()).padding(1).build();
+
       const result = StyleBuilder.from(style).render('Test');
-      
+
       // Should contain border characters and proper spacing
       expect(result).toContain('┌');
       expect(result).toContain('┐');
       expect(result).toContain('└');
       expect(result).toContain('┘');
       expect(result).toContain('Test');
-      
+
       // Should have multiple lines due to padding
       const lines = result.split('\n');
       expect(lines.length).toBeGreaterThan(1);
@@ -144,26 +137,22 @@ describe('Border Integration with Style System', () => {
         { border: Border.normal(), expected: '┌' },
         { border: Border.rounded(), expected: '╭' },
         { border: Border.thick(), expected: '┏' },
-        { border: Border.double(), expected: '╔' }
+        { border: Border.double(), expected: '╔' },
       ];
 
       borderTypes.forEach(({ border, expected }) => {
-        const style = StyleBuilder.create()
-          .border(border)
-          .build();
-        
+        const style = StyleBuilder.create().border(border).build();
+
         const result = StyleBuilder.from(style).render('Test');
         expect(result).toContain(expected);
       });
     });
 
     test('should handle multiline content with borders', () => {
-      const style = StyleBuilder.create()
-        .border(Border.rounded())
-        .build();
-      
+      const style = StyleBuilder.create().border(Border.rounded()).build();
+
       const result = StyleBuilder.from(style).render('Line 1\nLine 2\nLine 3');
-      
+
       const lines = result.split('\n');
       expect(lines.length).toBeGreaterThan(3); // Should have border lines + content lines
       expect(result).toContain('Line 1');
@@ -172,12 +161,10 @@ describe('Border Integration with Style System', () => {
     });
 
     test('should render empty content with border', () => {
-      const style = StyleBuilder.create()
-        .border(Border.normal())
-        .build();
-      
+      const style = StyleBuilder.create().border(Border.normal()).build();
+
       const result = StyleBuilder.from(style).render('');
-      
+
       // Should still render border even with empty content
       expect(result).toContain('┌');
       expect(result).toContain('┐');
@@ -195,9 +182,9 @@ describe('Border Integration with Style System', () => {
         .padding(1, 3)
         .margin(1, 3)
         .build();
-      
+
       const result = StyleBuilder.from(frameStyle).render('Test content');
-      
+
       expect(result).toContain('╭');
       expect(result).toContain('╯');
       expect(result).toContain('Test content');
@@ -206,17 +193,14 @@ describe('Border Integration with Style System', () => {
     });
 
     test('should support style composition with borders', () => {
-      const baseStyle = StyleBuilder.create()
-        .border(Border.normal())
-        .padding(1)
-        .build();
-      
+      const baseStyle = StyleBuilder.create().border(Border.normal()).padding(1).build();
+
       const composedStyle = StyleBuilder.from(baseStyle)
         .borderForeground('#FF0000')
         .foreground('#FFFFFF')
         .background('#000000')
         .build();
-      
+
       expect(composedStyle.border?.type).toBe('normal');
       expect(composedStyle.borderForeground).toBe('#FF0000');
       expect(composedStyle.foreground).toBe('#FFFFFF');
@@ -230,12 +214,9 @@ describe('Border Integration with Style System', () => {
         .borderForeground('#FF0000')
         .padding(2)
         .build();
-      
-      const childStyle = StyleBuilder.create()
-        .foreground('#FFFFFF')
-        .inherit(parentStyle)
-        .build();
-      
+
+      const childStyle = StyleBuilder.create().foreground('#FFFFFF').inherit(parentStyle).build();
+
       // Child should inherit border properties from parent
       expect(childStyle.border?.type).toBe('rounded');
       expect(childStyle.borderForeground).toBe('#FF0000');
@@ -246,27 +227,24 @@ describe('Border Integration with Style System', () => {
 
   describe('Performance considerations', () => {
     test('should handle multiple border renders efficiently', () => {
-      const style = StyleBuilder.create()
-        .border(Border.rounded())
-        .padding(1)
-        .build();
-      
+      const style = StyleBuilder.create().border(Border.rounded()).padding(1).build();
+
       const startTime = performance.now();
-      
+
       for (let i = 0; i < 100; i++) {
         StyleBuilder.from(style).render(`Content ${i}`);
       }
-      
+
       const endTime = performance.now();
       const duration = endTime - startTime;
-      
+
       // Should complete 100 renders in reasonable time
       expect(duration).toBeLessThan(50); // 50ms threshold
     });
 
     test('should handle complex border configurations efficiently', () => {
       const startTime = performance.now();
-      
+
       for (let i = 0; i < 50; i++) {
         const style = StyleBuilder.create()
           .border(Border.rounded())
@@ -278,13 +256,13 @@ describe('Border Integration with Style System', () => {
           .padding(1, 2)
           .margin(1)
           .build();
-        
+
         StyleBuilder.from(style).render(`Test content ${i}`);
       }
-      
+
       const endTime = performance.now();
       const duration = endTime - startTime;
-      
+
       // Should handle complex configurations efficiently
       expect(duration).toBeLessThan(100); // 100ms threshold
     });
