@@ -178,6 +178,14 @@ export const TableConfigSchema = z
       .any() // BorderConfig type - will be validated by border module
       .optional()
       .describe('Optional border configuration for table styling'),
+    borderRow: z
+      .boolean()
+      .default(true)
+      .describe('Whether to show borders between rows'),
+    borderColumn: z
+      .boolean()
+      .default(true)
+      .describe('Whether to show borders between columns'),
     styleFunc: z
       .function()
       .args(z.number(), z.number())
@@ -579,7 +587,7 @@ export namespace TableValidation {
    */
   export const validateTableConfigSafe = (config: unknown): Result<TableConfig, z.ZodError> => {
     const result = TableConfigSchema.safeParse(config);
-    return result.success ? Result.ok(result.data) : Result.err(result.error);
+    return result.success ? Result.ok(result.data as TableConfig) : Result.err(result.error);
   };
 
   /**

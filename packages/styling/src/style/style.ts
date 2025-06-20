@@ -1055,7 +1055,7 @@ export namespace Style {
         const rest = line.slice(match[0].length);
         
         // Use ANSI.wrap to respect terminal color support
-        const coloredBorder = ANSI.wrap(borderChars, colorCode);
+        const coloredBorder = (colorCode && colorCode.length > 0) ? ANSI.wrap(borderChars, colorCode as string) : borderChars;
         return `${spaces}${coloredBorder}${rest}`;
       }
       

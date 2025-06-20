@@ -33,7 +33,7 @@ describe('List Validation - Result Types', () => {
         enumeratorSpacing: 1,
       };
 
-      const result = validateListItemSafe(nestedList);
+      const result = validateListConfigSafe(nestedList);
       
       expect(Result.isOk(result)).toBe(true);
       if (Result.isOk(result)) {

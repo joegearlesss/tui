@@ -29,6 +29,14 @@ export interface TerminalEnvironment {
   readonly ciEnvironment: string | undefined;
   readonly forceColor: string | undefined;
   readonly noColor: string | undefined;
+  readonly lcAll: string | undefined;
+  readonly lcCtype: string | undefined;
+  readonly lang: string | undefined;
+  readonly sshConnection: string | undefined;
+  readonly sshClient: string | undefined;
+  readonly msysystem: string | undefined;
+  readonly ci: string | undefined;
+  readonly tmux: string | undefined;
 }
 
 /**

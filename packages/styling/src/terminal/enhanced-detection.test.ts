@@ -150,7 +150,7 @@ describe('Enhanced Terminal Detection', () => {
       
       const capabilities = EnhancedTerminal.detectCapabilities();
       
-      expect(capabilities.colorSupport).toBe(true);
+      expect(capabilities.hasColorSupport).toBe(true);
       expect(capabilities.colorProfile).toBe('trueColor');
       expect(capabilities.unicodeLevel).toBe('full');
       expect(capabilities.cursorPositioning).toBe(true);
@@ -165,7 +165,7 @@ describe('Enhanced Terminal Detection', () => {
       
       const capabilities = EnhancedTerminal.detectCapabilities();
       
-      expect(capabilities.colorSupport).toBe(false);
+      expect(capabilities.hasColorSupport).toBe(false);
       expect(capabilities.colorProfile).toBe('noColor');
       expect(capabilities.cursorPositioning).toBe(false);
       expect(capabilities.mouseSupport).toBe(false);

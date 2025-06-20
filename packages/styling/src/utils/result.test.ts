@@ -61,7 +61,7 @@ describe('Result Type System', () => {
     test('map leaves Err unchanged', () => {
       const error = new Error('test');
       const result = Result.err(error);
-      const mapped = Result.map(result, x => x * 2);
+      const mapped = Result.map(result, (x: number) => x * 2);
       
       expect(Result.isErr(mapped)).toBe(true);
       if (Result.isErr(mapped)) {
@@ -118,7 +118,7 @@ describe('Result Type System', () => {
     test('chain skips Err values', () => {
       const error = new Error('original');
       const result = Result.err(error);
-      const chained = Result.chain(result, x => Result.ok(x * 2));
+      const chained = Result.chain(result, (x: number) => Result.ok(x * 2));
       
       expect(Result.isErr(chained)).toBe(true);
       if (Result.isErr(chained)) {

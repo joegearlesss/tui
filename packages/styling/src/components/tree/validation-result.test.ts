@@ -8,9 +8,10 @@ describe('Tree Validation - Result Types', () => {
     test('returns Ok for valid tree configuration', () => {
       const rootNode: TreeNodeConfig = {
         value: 'Root',
+        style: undefined,
         children: [
-          { value: 'Child 1', children: [], expanded: true },
-          { value: 'Child 2', children: [], expanded: false },
+          { value: 'Child 1', children: [], expanded: true, style: undefined },
+          { value: 'Child 2', children: [], expanded: false, style: undefined },
         ],
         expanded: true,
       };
@@ -73,9 +74,10 @@ describe('Tree Validation - Result Types', () => {
     test('returns Ok for valid tree node', () => {
       const validNode: TreeNodeConfig = {
         value: 'Test Node',
+        style: undefined,
         children: [
-          { value: 'Child 1', children: [], expanded: true },
-          { value: 'Child 2', children: [], expanded: false },
+          { value: 'Child 1', children: [], expanded: true, style: undefined },
+          { value: 'Child 2', children: [], expanded: false, style: undefined },
         ],
         expanded: true,
       };
@@ -93,6 +95,7 @@ describe('Tree Validation - Result Types', () => {
     test('returns Ok for leaf node', () => {
       const leafNode: TreeNodeConfig = {
         value: 'Leaf Node',
+        style: undefined,
         children: [],
         expanded: true,
       };
@@ -279,9 +282,12 @@ describe('Tree Validation - Result Types', () => {
       expect(Result.isOk(allResults)).toBe(true);
       if (Result.isOk(allResults)) {
         expect(allResults.value.length).toBe(3);
-        expect(allResults.value[0].value).toBe('Node 1');
-        expect(allResults.value[1].value).toBe('Node 2');
-        expect(allResults.value[2].value).toBe('Node 3');
+        expect(allResults.value[0]).toBeDefined();
+        expect(allResults.value[1]).toBeDefined();
+        expect(allResults.value[2]).toBeDefined();
+        expect(allResults.value[0]!.value).toBe('Node 1');
+        expect(allResults.value[1]!.value).toBe('Node 2');
+        expect(allResults.value[2]!.value).toBe('Node 3');
       }
     });
 
@@ -290,6 +296,7 @@ describe('Tree Validation - Result Types', () => {
       
       const defaultNode: TreeNodeConfig = {
         value: 'Default Node',
+        style: undefined,
         children: [],
         expanded: true,
       };

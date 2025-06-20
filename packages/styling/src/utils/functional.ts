@@ -61,7 +61,7 @@ namespace FunctionalUtils {
     : () => R => {
     return ((...args: any[]) => {
       if (args.length >= fn.length) {
-        return fn(...(args as T));
+        return fn(...(args as unknown as T));
       }
       return (...nextArgs: any[]) => curry(fn)(...args, ...nextArgs);
     }) as any;
@@ -333,7 +333,7 @@ namespace FunctionalUtils {
       ...functions: readonly [(...args: any[]) => R[0], ...((arg: T) => any)[]]
     ): ((value: T) => R) =>
     (value: T) =>
-      functions.map((fn) => fn(value)) as R;
+      functions.map((fn) => fn(value)) as unknown as R;
 
   /**
    * Creates a function that applies different functions based on predicates

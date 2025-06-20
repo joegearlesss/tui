@@ -220,4 +220,3 @@ export namespace Result {
   };
 }
 
-export type { Ok, Err };

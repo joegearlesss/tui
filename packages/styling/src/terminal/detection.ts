@@ -227,6 +227,14 @@ namespace Terminal {
       ciEnvironment: process.env.CI || process.env.CONTINUOUS_INTEGRATION,
       forceColor: process.env.FORCE_COLOR,
       noColor: process.env.NO_COLOR,
+      lcAll: process.env.LC_ALL,
+      lcCtype: process.env.LC_CTYPE,
+      lang: process.env.LANG,
+      sshConnection: process.env.SSH_CONNECTION,
+      sshClient: process.env.SSH_CLIENT,
+      msysystem: process.env.MSYSTEM,
+      ci: process.env.CI,
+      tmux: process.env.TMUX,
     };
   };
 

@@ -7,6 +7,7 @@ describe('Border Validation - Result Types', () => {
   describe('validateBorderConfigSafe', () => {
     test('returns Ok for valid border configuration', () => {
       const validBorder: BorderConfig = {
+        type: 'normal',
         chars: {
           top: '─',
           right: '│',
@@ -289,7 +290,8 @@ describe('Border Validation - Result Types', () => {
       expect(Result.isOk(allResults)).toBe(true);
       if (Result.isOk(allResults)) {
         expect(allResults.value.length).toBe(3);
-        expect(allResults.value[0].top).toBe('─');
+        expect(allResults.value[0]).toBeDefined();
+        expect(allResults.value[0]!.top).toBe('─');
       }
     });
 
@@ -336,6 +338,7 @@ describe('Border Validation - Result Types', () => {
       const invalidBorder = { invalid: 'data' };
       
       const defaultBorder: BorderConfig = {
+        type: 'normal',
         chars: {
           top: '─',
           right: '│',

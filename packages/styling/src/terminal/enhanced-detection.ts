@@ -13,6 +13,9 @@ import type {
 } from './types';
 
 interface ExtendedTerminalCapabilities extends TerminalCapabilities {
+  /** Background detection result */
+  readonly backgroundDetection: BackgroundDetection;
+  
   /** Unicode support level */
   readonly unicodeLevel: 'none' | 'basic' | 'full';
   
@@ -61,7 +64,12 @@ export namespace EnhancedTerminal {
     const features = detectAdvancedFeatures(env);
     
     return {
-      colorSupport: colorProfile !== 'noColor',
+      hasColorSupport: colorProfile !== 'noColor',
+      hasTrueColorSupport: colorProfile === 'trueColor',
+      hasUnicodeSupport: unicodeLevel !== 'none',
+      width: process.stdout.columns,
+      height: process.stdout.rows,
+      platform: process.platform === 'win32' ? 'windows' : process.platform === 'darwin' || process.platform === 'linux' ? 'unix' : 'unknown',
       colorProfile,
       backgroundDetection: detectBackground(),
       unicodeLevel,
@@ -368,6 +376,7 @@ export namespace EnhancedTerminal {
     noColor: process.env.NO_COLOR,
     forceColor: process.env.FORCE_COLOR,
     ci: process.env.CI,
+    ciEnvironment: process.env.CI || process.env.CONTINUOUS_INTEGRATION,
     tmux: process.env.TMUX,
     sshConnection: process.env.SSH_CONNECTION,
     sshClient: process.env.SSH_CLIENT,
@@ -383,7 +392,11 @@ export namespace EnhancedTerminal {
   const detectBackground = (): BackgroundDetection => {
     // This would typically involve terminal queries or heuristics
     // For now, return a sensible default
-    return 'unknown';
+    return {
+      isDark: undefined,
+      confidence: 'unknown',
+      method: 'fallback'
+    };
   };
   
   // Helper functions

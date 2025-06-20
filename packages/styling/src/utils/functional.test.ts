@@ -43,10 +43,10 @@ describe('FunctionalUtils', () => {
       const add = (a: number, b: number, c: number) => a + b + c;
       const curried = FunctionalUtils.curry(add);
 
-      expect(curried(1)(2)(3)).toBe(6);
-      expect(curried(1, 2)(3)).toBe(6);
-      expect(curried(1)(2, 3)).toBe(6);
-      expect(curried(1, 2, 3)).toBe(6);
+      expect((curried as any)(1)(2)(3)).toBe(6);
+      expect((curried as any)(1, 2)(3)).toBe(6);
+      expect((curried as any)(1)(2, 3)).toBe(6);
+      expect((curried as any)(1, 2, 3)).toBe(6);
     });
 
     test('should handle single argument function', () => {

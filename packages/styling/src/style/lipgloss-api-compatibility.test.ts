@@ -45,7 +45,7 @@ describe('Lipgloss API Compatibility - Style System', () => {
       ['blink', true],
       ['faint', true],
     ])('%s formatting', (method, value) => {
-      const styleChain = StyleBuilder.create()[method as keyof typeof StyleBuilder.create](value);
+      const styleChain = (StyleBuilder.create() as any)[method](value);
       const style = styleChain.build();
       expect(style[method as keyof typeof style]).toBe(value);
     });
@@ -89,7 +89,7 @@ describe('Lipgloss API Compatibility - Style System', () => {
 
       tests.forEach(({ args, expected }) => {
         const style = StyleBuilder.create()
-          .padding(...args)
+          .padding(...(args as [number] | [number, number] | [number, number, number] | [number, number, number, number]))
           .build();
         expect(style.padding).toEqual(expected);
       });

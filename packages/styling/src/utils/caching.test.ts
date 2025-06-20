@@ -354,13 +354,15 @@ describe('CachingUtils', () => {
       cache.get('b'); // Miss in both
 
       const stats = cache.getStats();
-      expect(stats.levels[0].name).toBe('L1');
-      expect(stats.levels[0].hits).toBe(1);
-      expect(stats.levels[0].misses).toBe(2);
+      expect(stats.levels[0]).toBeDefined();
+      expect(stats.levels[1]).toBeDefined();
+      expect(stats.levels[0]!.name).toBe('L1');
+      expect(stats.levels[0]!.hits).toBe(1);
+      expect(stats.levels[0]!.misses).toBe(2);
 
-      expect(stats.levels[1].name).toBe('L2');
-      expect(stats.levels[1].hits).toBe(1);
-      expect(stats.levels[1].misses).toBe(1);
+      expect(stats.levels[1]!.name).toBe('L2');
+      expect(stats.levels[1]!.hits).toBe(1);
+      expect(stats.levels[1]!.misses).toBe(1);
     });
   });
 

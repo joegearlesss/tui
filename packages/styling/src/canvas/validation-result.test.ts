@@ -342,9 +342,12 @@ describe('Canvas Validation - Result Types', () => {
       expect(Result.isOk(allResults)).toBe(true);
       if (Result.isOk(allResults)) {
         expect(allResults.value.length).toBe(3);
-        expect(allResults.value[0].content).toBe('Layer 1');
-        expect(allResults.value[1].x).toBe(10);
-        expect(allResults.value[2].y).toBe(10);
+        expect(allResults.value[0]).toBeDefined();
+        expect(allResults.value[1]).toBeDefined();
+        expect(allResults.value[2]).toBeDefined();
+        expect(allResults.value[0]!.content).toBe('Layer 1');
+        expect(allResults.value[1]!.x).toBe(10);
+        expect(allResults.value[2]!.y).toBe(10);
       }
     });
 
@@ -380,6 +383,9 @@ describe('Canvas Validation - Result Types', () => {
       const combinedResult = Result.chain(
         Result.all([layerResult, positionResult]),
         ([layer, position]) => {
+          if (!layer || !position) {
+            return Result.err(new Error('Layer or position validation failed'));
+          }
           const isConsistent = layer.x === position.x && layer.y === position.y;
           return isConsistent
             ? Result.ok({ layer, position })
@@ -389,8 +395,10 @@ describe('Canvas Validation - Result Types', () => {
 
       expect(Result.isOk(combinedResult)).toBe(true);
       if (Result.isOk(combinedResult)) {
-        expect(combinedResult.value.layer.content).toBe('Multi-line\nLayer Content');
-        expect(combinedResult.value.position.x).toBe(15);
+        expect(combinedResult.value.layer).toBeDefined();
+        expect(combinedResult.value.position).toBeDefined();
+        expect(combinedResult.value.layer!.content).toBe('Multi-line\nLayer Content');
+        expect(combinedResult.value.position!.x).toBe(15);
       }
     });
   });
