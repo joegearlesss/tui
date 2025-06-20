@@ -489,11 +489,13 @@ import { validateEmail } from '@real-project-name/core/validators';
 import { formatDate } from '@real-project-name/core/utils';
 import { Modal } from '@real-project-name/components/modal';
 
-// ❌ Bad - Relative path imports
+// ❌ FORBIDDEN - Multi-level relative path imports
 import { Database } from '../../src/database';
 import { UserService } from '../../../core/src/user-service';
 import { Button } from '../../components/src/button';
 import { Theme } from '../../../styling/src/theme';
+import { Style } from '../../style/style';
+import { Color } from '../../../color/color';
 ```
 
 #### Package Configuration
@@ -589,17 +591,33 @@ import { Theme } from '@real-project-name/styling/theme';
 import type { User, UserRole } from '@real-project-name/core/types';
 ```
 
-#### Exception: Same-Package Imports
-```typescript
-// ✅ Acceptable - Relative imports within the same package
-// In packages/core/src/user-service.ts
-import { validateUser } from './validators';  // Same package
-import { Database } from './database';        // Same package
+#### Same-Package Import Rules
 
-// But prefer absolute even within package when possible
-import { validateUser } from '@real-project-name/core/validators';
-import { Database } from '@real-project-name/core/database';
+**RULE: If files are NOT in the same folder, use package-based imports**
+
+```typescript
+// ✅ Acceptable - Relative imports ONLY within the same directory
+// In packages/styling/src/components/table.ts
+import { TableRenderer } from './table-renderer';     // Same folder ✅
+import { TableValidator } from './table-validator';   // Same folder ✅
+
+// ❌ FORBIDDEN - Relative imports across folders (even in same package)
+import { Style } from '../../style/style';             // Different folder ❌
+import { Color } from '../color/color';                // Different folder ❌
+import { Border } from '../../border/border';          // Different folder ❌
+
+// ✅ REQUIRED - Use package imports across folders
+import { Style } from '@tui/styling/style';            // Package import ✅
+import { Color } from '@tui/styling/color';            // Package import ✅  
+import { Border } from '@tui/styling/border';          // Package import ✅
 ```
+
+**Summary of Import Rules:**
+- ✅ **Same folder**: `import { File } from './file'` (relative OK)
+- ❌ **Different folder**: `import { File } from '../folder/file'` (FORBIDDEN)
+- ✅ **Different folder**: `import { File } from '@package/folder/file'` (REQUIRED)
+- ❌ **Cross-package**: `import { File } from '../../other-package/file'` (FORBIDDEN)
+- ✅ **Cross-package**: `import { File } from '@package/file'` (REQUIRED)
 
 #### Cross-Package Dependencies
 ```typescript
@@ -1569,6 +1587,7 @@ namespace UserUtils {
 - Node.js APIs (use Bun equivalents)
 - `npm` or `yarn` (use `bun` only)
 - **Non-null assertion operator (`!`)** - Use explicit undefined checks instead
+- **Multi-level relative imports** - Use package-based imports (`@package/module`) for different folders
 
 ### Avoid
 - Deep nesting (max 3 levels)
@@ -1577,7 +1596,7 @@ namespace UserUtils {
 - Circular dependencies
 - Global state
 - Generic `string` types when union types would be more precise
-- Relative imports (use package-based imports instead)
+- Cross-folder relative imports (use package-based imports instead)
 
 ## Development Commands
 
