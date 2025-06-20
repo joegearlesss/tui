@@ -144,7 +144,7 @@ namespace Unicode {
       if (char === '\u001B' && i + 1 < text.length && text[i + 1] === '[') {
         // Find the end of the escape sequence
         i += 2;
-        while (i < text.length && !/[a-zA-Z]/.test(text[i])) {
+        while (i < text.length && text[i] && !/[a-zA-Z]/.test(text[i]!)) {
           i++;
         }
         i++; // Skip the final letter
@@ -152,18 +152,20 @@ namespace Unicode {
       }
 
       // Control characters don't take space (except tab which we treat as 1)
-      const code = char.codePointAt(0);
-      if (code !== undefined && code < 32 && code !== 9) {
-        // 9 is tab
-        i++;
-        continue;
-      }
+      if (char) {
+        const code = char.codePointAt(0);
+        if (code !== undefined && code < 32 && code !== 9) {
+          // 9 is tab
+          i++;
+          continue;
+        }
 
-      // Wide characters take 2 columns
-      if (isWideChar(char)) {
-        width += 2;
-      } else {
-        width += 1;
+        // Wide characters take 2 columns
+        if (isWideChar(char)) {
+          width += 2;
+        } else {
+          width += 1;
+        }
       }
 
       i++;
@@ -195,7 +197,7 @@ namespace Unicode {
     // First, try to fit as much as possible without ellipsis
     while (i < text.length) {
       const char = text[i];
-      const charWidth = isWideChar(char) ? 2 : 1;
+      const charWidth = char && isWideChar(char) ? 2 : 1;
 
       if (width + charWidth > maxWidth) {
         break;
@@ -219,7 +221,7 @@ namespace Unicode {
     // Otherwise, we need to remove characters to make room for ellipsis
     while (result.length > 0 && width + ellipsisWidth > maxWidth) {
       const lastChar = result[result.length - 1];
-      const lastCharWidth = isWideChar(lastChar) ? 2 : 1;
+      const lastCharWidth = lastChar && isWideChar(lastChar) ? 2 : 1;
       result = result.slice(0, -1);
       width -= lastCharWidth;
     }

@@ -1,0 +1,1516 @@
+{
+  "timestamp": "2025-06-20T03:13:09.029Z",
+  "stats": {
+    "totalLines": 9,
+    "differentLines": 0,
+    "characterDifferences": 128,
+    "ansiDifferences": 8,
+    "accuracyPercentage": 85.4875283446712
+  },
+  "criticalIssues": [
+    {
+      "type": "ansi",
+      "position": {
+        "line": 1,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[38;2;134;78;255m\",\"\\u001b[0m\"]",
+      "context": "Line 2: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 2,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[38;2;134;78;255m\",\"\\u001b[0m\"]",
+      "context": "Line 3: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 3,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[38;2;134;78;255m\",\"\\u001b[0m\",\"\\u001b[38;2;189;189;189m\"]",
+      "context": "Line 4: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 4,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[38;2;134;78;255m\",\"\\u001b[0m\",\"\\u001b[0m\",\"\\u001b[1m\",\"\\u001b[38;2;34;199;138m\",\"\\u001b[0m\",\"\\u001b[38;2;189;189;189m\",\"\\u001b[0m\"]",
+      "context": "Line 5: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 5,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[38;2;134;78;255m\",\"\\u001b[0m\"]",
+      "context": "Line 6: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 6,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[38;2;134;78;255m\",\"\\u001b[0m\",\"\\u001b[38;2;255;252;194m\",\"\\u001b[48;2;255;106;210m\",\"\\u001b[0m\",\"\\u001b[38;2;251;250;231m\",\"\\u001b[48;2;151;134;146m\",\"\\u001b[0m\"]",
+      "context": "Line 7: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 7,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[38;2;134;78;255m\",\"\\u001b[0m\"]",
+      "context": "Line 8: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 8,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[38;2;134;78;255m\",\"\\u001b[0m\"]",
+      "context": "Line 9: ANSI sequence mismatch",
+      "severity": "critical"
+    }
+  ],
+  "majorIssues": [
+    {
+      "type": "character",
+      "position": {
+        "line": 6,
+        "column": 20
+      },
+      "expected": " ",
+      "actual": "Y",
+      "context": "Expected: \"      Yes  \" | Actual: \"     Yes   \"",
+      "severity": "major"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 6,
+        "column": 21
+      },
+      "expected": "Y",
+      "actual": "e",
+      "context": "Expected: \"     Yes   \" | Actual: \"    Yes    \"",
+      "severity": "major"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 6,
+        "column": 22
+      },
+      "expected": "e",
+      "actual": "s",
+      "context": "Expected: \"    Yes    \" | Actual: \"   Yes     \"",
+      "severity": "major"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 6,
+        "column": 23
+      },
+      "expected": "s",
+      "actual": " ",
+      "context": "Expected: \"   Yes     \" | Actual: \"  Yes      \"",
+      "severity": "major"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 6,
+        "column": 31
+      },
+      "expected": " ",
+      "actual": "N",
+      "context": "Expected: \"      No   \" | Actual: \"     No    \"",
+      "severity": "major"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 6,
+        "column": 32
+      },
+      "expected": "N",
+      "actual": "o",
+      "context": "Expected: \"     No    \" | Actual: \"    No     \"",
+      "severity": "major"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 6,
+        "column": 33
+      },
+      "expected": "o",
+      "actual": " ",
+      "context": "Expected: \"    No     \" | Actual: \"   No      \"",
+      "severity": "major"
+    }
+  ],
+  "minorIssues": [
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 4
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"   │      \" | Actual: \"   │      \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 5
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"   │       \" | Actual: \"   │       \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 6
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"  │        \" | Actual: \"  │        \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 7
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \" │         \" | Actual: \" │         \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 8
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"│          \" | Actual: \"│          \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 9
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 10
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 11
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 12
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 13
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 14
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 15
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 16
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 17
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 18
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 19
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 20
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 21
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 22
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 23
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 24
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 25
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 26
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 27
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 28
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 29
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 30
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 31
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 32
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 33
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 34
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 35
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 36
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 37
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 38
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 39
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 40
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 41
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 42
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 43
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 44
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 45
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"          │\" | Actual: \"          │\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 46
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"         │ \" | Actual: \"         │ \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 47
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"        │  \" | Actual: \"        │  \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 48
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"       │   \" | Actual: \"       │   \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 49
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"      │   \" | Actual: \"      │   \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 3,
+        "column": 7
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \" │      Are\" | Actual: \" │      Are\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 3,
+        "column": 8
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"│      Are \" | Actual: \"│      Are \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 3,
+        "column": 9
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"      Are y\" | Actual: \"      Are y\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 3,
+        "column": 43
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \" that      \" | Actual: \" that      \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 3,
+        "column": 44
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"that       \" | Actual: \"that       \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 3,
+        "column": 45
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"hat       │\" | Actual: \"hat       │\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 3,
+        "column": 46
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"at       │ \" | Actual: \"at       │ \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 7
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \" │         \" | Actual: \" │         \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 8
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"│          \" | Actual: \"│          \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 9
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 10
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 11
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"          m\" | Actual: \"          m\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 12
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"         mo\" | Actual: \"         mo\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 13
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"        mod\" | Actual: \"        mod\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 14
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"       mode\" | Actual: \"       mode\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 15
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"      moder\" | Actual: \"      moder\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 38
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"nana?      \" | Actual: \"nana?      \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 39
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"ana?       \" | Actual: \"ana?       \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 40
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"na?        \" | Actual: \"na?        \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 41
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"a?         \" | Actual: \"a?         \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 42
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"?          \" | Actual: \"?          \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 43
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 44
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 45
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"          │\" | Actual: \"          │\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 46
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"         │ \" | Actual: \"         │ \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 6,
+        "column": 17
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"         Ye\" | Actual: \"        Yes\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 6,
+        "column": 26
+      },
+      "expected": " ",
+      "actual": "<SPACE>",
+      "context": "Expected: \"Yes        \" | Actual: \"es        N\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 6,
+        "column": 28
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"s        No\" | Actual: \"        No \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 6,
+        "column": 36
+      },
+      "expected": " ",
+      "actual": "<SPACE>",
+      "context": "Expected: \" No        \" | Actual: \"No         \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 4
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"   │      \" | Actual: \"   │      \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 5
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"   │       \" | Actual: \"   │       \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 6
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"  │        \" | Actual: \"  │        \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 7
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \" │         \" | Actual: \" │         \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 8
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"│          \" | Actual: \"│          \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 9
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 10
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 11
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 12
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 13
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 14
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 15
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 16
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 17
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 18
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 19
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 20
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 21
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 22
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 23
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 24
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 25
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 26
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 27
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 28
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 29
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 30
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 31
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 32
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 33
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 34
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 35
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 36
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 37
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 38
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 39
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 40
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 41
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 42
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 43
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 44
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"           \" | Actual: \"           \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 45
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"          │\" | Actual: \"          │\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 46
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"         │ \" | Actual: \"         │ \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 47
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"        │  \" | Actual: \"        │  \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 48
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"       │   \" | Actual: \"       │   \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 7,
+        "column": 49
+      },
+      "expected": "<SPACE>",
+      "actual": " ",
+      "context": "Expected: \"      │   \" | Actual: \"      │   \"",
+      "severity": "minor"
+    }
+  ],
+  "recommendations": [
+    "Check ANSI escape sequence generation in color and style modules",
+    "Verify text rendering and layout positioning logic"
+  ]
+}

@@ -116,8 +116,8 @@ describe('Terminal Performance Tests', () => {
         const _sequence = [
           ANSI.BOLD,
           ANSI.ITALIC,
-          ANSI.foreground('#FF0000'),
-          ANSI.background('#00FF00'),
+          ANSI.foreground({ hex: '#FF0000' }),
+          ANSI.background({ hex: '#00FF00' }),
           ANSI.Cursor.position(i % 80, i % 24),
           'Hello, world!',
           ANSI.RESET,
@@ -136,10 +136,10 @@ describe('Terminal Performance Tests', () => {
         const g = (i * 5) % 256;
         const b = (i * 7) % 256;
 
-        ANSI.foreground(`rgb(${r}, ${g}, ${b})`);
-        ANSI.background(
-          `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
-        );
+        ANSI.foreground({ trueColor: `rgb(${r}, ${g}, ${b})` });
+        ANSI.background({
+          hex: `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+        });
         ANSI.Cursor.position(i % 80, i % 24);
       }
 
@@ -176,8 +176,8 @@ describe('Terminal Performance Tests', () => {
       for (let i = 0; i < 5000; i++) {
         ANSI.BOLD;
         ANSI.ITALIC;
-        ANSI.foreground(`#${(i % 256).toString(16).padStart(2, '0')}0000`);
-        ANSI.background(`#00${(i % 256).toString(16).padStart(2, '0')}00`);
+        ANSI.foreground({ hex: `#${(i % 256).toString(16).padStart(2, '0')}0000` });
+        ANSI.background({ hex: `#00${(i % 256).toString(16).padStart(2, '0')}00` });
         ANSI.Cursor.position(i % 80, i % 24);
         ANSI.RESET;
       }
@@ -219,7 +219,7 @@ describe('Terminal Performance Tests', () => {
       const promises = Array.from({ length: 100 }, async (_, i) => {
         return [
           ANSI.BOLD,
-          ANSI.foreground(`#${(i % 256).toString(16).padStart(2, '0')}0000`),
+          ANSI.foreground({ hex: `#${(i % 256).toString(16).padStart(2, '0')}0000` }),
           ANSI.Cursor.position(i % 80, i % 24),
           `Content ${i}`,
           ANSI.RESET,
@@ -259,8 +259,8 @@ describe('Terminal Performance Tests', () => {
       for (let i = 0; i < 500; i++) {
         const color = invalidColors[i % invalidColors.length];
         try {
-          ANSI.foreground(color);
-          ANSI.background(color);
+          ANSI.foreground({ hex: color });
+          ANSI.background({ hex: color });
         } catch {
           // Expected for invalid colors
         }

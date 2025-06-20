@@ -1,0 +1,127 @@
+{
+  "timestamp": "2025-06-20T03:13:09.030Z",
+  "stats": {
+    "totalLines": 7,
+    "differentLines": 0,
+    "characterDifferences": 10,
+    "ansiDifferences": 0,
+    "accuracyPercentage": 76.74418604651163
+  },
+  "criticalIssues": [],
+  "majorIssues": [],
+  "minorIssues": [
+    {
+      "type": "character",
+      "position": {
+        "line": 0,
+        "column": 1
+      },
+      "expected": " ",
+      "actual": "<SPACE>",
+      "context": "Expected: \"• A\" | Actual: \"• A\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 1,
+        "column": 1
+      },
+      "expected": " ",
+      "actual": "<SPACE>",
+      "context": "Expected: \"• B\" | Actual: \"• B\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 2,
+        "column": 1
+      },
+      "expected": " ",
+      "actual": "<SPACE>",
+      "context": "Expected: \"• C\" | Actual: \"• C\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 3,
+        "column": 1
+      },
+      "expected": " ",
+      "actual": "<SPACE>",
+      "context": "Expected: \"    I. \" | Actual: \"    I. \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 3,
+        "column": 6
+      },
+      "expected": " ",
+      "actual": "<SPACE>",
+      "context": "Expected: \"   I. D\" | Actual: \"   I. D\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 1
+      },
+      "expected": " ",
+      "actual": "<SPACE>",
+      "context": "Expected: \"   II. \" | Actual: \"   II. \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 4,
+        "column": 6
+      },
+      "expected": " ",
+      "actual": "<SPACE>",
+      "context": "Expected: \"  II. E\" | Actual: \"  II. E\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 5,
+        "column": 1
+      },
+      "expected": " ",
+      "actual": "<SPACE>",
+      "context": "Expected: \"  III. \" | Actual: \"  III. \"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 5,
+        "column": 6
+      },
+      "expected": " ",
+      "actual": "<SPACE>",
+      "context": "Expected: \" III. F\" | Actual: \" III. F\"",
+      "severity": "minor"
+    },
+    {
+      "type": "character",
+      "position": {
+        "line": 6,
+        "column": 1
+      },
+      "expected": " ",
+      "actual": "<SPACE>",
+      "context": "Expected: \"• G\" | Actual: \"• G\"",
+      "severity": "minor"
+    }
+  ],
+  "recommendations": [
+    "Verify text rendering and layout positioning logic"
+  ]
+}

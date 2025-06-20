@@ -1,0 +1,248 @@
+{
+  "timestamp": "2025-06-20T03:13:09.031Z",
+  "stats": {
+    "totalLines": 21,
+    "differentLines": 0,
+    "characterDifferences": 0,
+    "ansiDifferences": 21,
+    "accuracyPercentage": 100
+  },
+  "criticalIssues": [
+    {
+      "type": "ansi",
+      "position": {
+        "line": 0,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 1: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 1,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 2: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 2,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[32m\",\"\\u001b[0m\",\"\\u001b[9m\",\"\\u001b[29m\"]",
+      "context": "Line 3: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 3,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[32m\",\"\\u001b[0m\",\"\\u001b[9m\",\"\\u001b[29m\"]",
+      "context": "Line 4: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 4,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 5: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 5,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 6: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 6,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[32m\",\"\\u001b[0m\",\"\\u001b[9m\",\"\\u001b[29m\"]",
+      "context": "Line 7: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 7,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[32m\",\"\\u001b[0m\",\"\\u001b[9m\",\"\\u001b[29m\"]",
+      "context": "Line 8: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 8,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 9: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 9,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 10: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 10,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[32m\",\"\\u001b[0m\",\"\\u001b[9m\",\"\\u001b[29m\"]",
+      "context": "Line 11: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 11,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 12: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 12,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 13: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 13,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[32m\",\"\\u001b[0m\",\"\\u001b[9m\",\"\\u001b[29m\"]",
+      "context": "Line 14: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 14,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[32m\",\"\\u001b[0m\",\"\\u001b[9m\",\"\\u001b[29m\"]",
+      "context": "Line 15: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 15,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 16: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 16,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 17: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 17,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 18: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 18,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[32m\",\"\\u001b[0m\",\"\\u001b[9m\",\"\\u001b[29m\"]",
+      "context": "Line 19: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 19,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 20: ANSI sequence mismatch",
+      "severity": "critical"
+    },
+    {
+      "type": "ansi",
+      "position": {
+        "line": 20,
+        "column": 0
+      },
+      "expected": "[]",
+      "actual": "[\"\\u001b[90m\",\"\\u001b[0m\"]",
+      "context": "Line 21: ANSI sequence mismatch",
+      "severity": "critical"
+    }
+  ],
+  "majorIssues": [],
+  "minorIssues": [],
+  "recommendations": [
+    "Check ANSI escape sequence generation in color and style modules"
+  ]
+}

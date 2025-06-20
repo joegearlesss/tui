@@ -94,7 +94,9 @@ namespace CachingUtils {
         } else if (cache.size >= maxSize) {
           // Remove least recently used (first entry)
           const firstKey = cache.keys().next().value;
-          cache.delete(firstKey);
+          if (firstKey !== undefined) {
+            cache.delete(firstKey);
+          }
         }
         cache.set(key, value);
       },
@@ -166,7 +168,9 @@ namespace CachingUtils {
         if (cache.size >= maxSize && !cache.has(key)) {
           // Remove oldest entry
           const oldestKey = cache.keys().next().value;
-          cache.delete(oldestKey);
+          if (oldestKey !== undefined) {
+            cache.delete(oldestKey);
+          }
         }
 
         cache.set(key, {
@@ -339,7 +343,9 @@ namespace CachingUtils {
           if (keys.size >= maxSize) {
             // Remove oldest reference
             const oldestRef = keys.values().next().value;
-            keys.delete(oldestRef);
+            if (oldestRef !== undefined) {
+              keys.delete(oldestRef);
+            }
           }
         }
 
@@ -377,25 +383,36 @@ namespace CachingUtils {
       readonly name: string;
     }[]
   ) => {
-    let stats = levels.map((level) => ({ name: level.name, hits: 0, misses: 0 }));
+    let stats = levels.map((level) => ({ name: level?.name || 'unknown', hits: 0, misses: 0 }));
 
     return {
       get: (key: K): V | undefined => {
         for (let i = 0; i < levels.length; i++) {
           const level = levels[i];
+          if (!level) continue;
+          
           const value = level.cache.get(key);
 
           if (value !== undefined) {
-            stats[i].hits++;
+            const stat = stats[i];
+            if (stat) {
+              stat.hits++;
+            }
 
             // Promote to higher levels
             for (let j = 0; j < i; j++) {
-              levels[j].cache.set(key, value);
+              const upperLevel = levels[j];
+              if (upperLevel) {
+                upperLevel.cache.set(key, value);
+              }
             }
 
             return value;
           }
-          stats[i].misses++;
+          const stat = stats[i];
+          if (stat) {
+            stat.misses++;
+          }
         }
 
         return undefined;

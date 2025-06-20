@@ -1030,20 +1030,36 @@ export namespace Style {
    * @returns Content with colored border
    */
   const applyBorderColors = (style: StyleProperties, borderedContent: string): string => {
-    // For now, apply general border foreground color if specified
-    // TODO: Implement per-side border coloring in a future enhancement
-    if (style.borderForeground) {
-      const color = Color.toComplete(style.borderForeground);
-      if (color) {
-        const colorCode = ANSI.foreground(color);
-        // Apply color to border characters only
-        // This is a simplified implementation - a more sophisticated approach
-        // would parse the border structure and apply colors selectively
-        return borderedContent.replace(/(^[^\w\s]|[^\w\s]$)/gm, `${colorCode}$1${ANSI.RESET}`);
-      }
+    if (!style.borderForeground) {
+      return borderedContent;
     }
 
-    return borderedContent;
+    const color = Color.toComplete(style.borderForeground);
+    if (!color) {
+      return borderedContent;
+    }
+
+    const colorCode = ANSI.foreground(color);
+    const lines = borderedContent.split('\n');
+    
+    return lines.map(line => {
+      if (line.trim() === '') return line;
+      
+      // Apply color to border characters more efficiently
+      // Match common border patterns: corners, horizontals, verticals
+      const borderPattern = /^(\s*)([\u2500-\u257F\u2580-\u259F\u25A0-\u25FF\u2800-\u28FF╭╮╯╰├┤┬┴┼│─┌┐└┘]+)/;
+      const match = line.match(borderPattern);
+      
+      if (match) {
+        const [, spaces, borderChars] = match;
+        const rest = line.slice(match[0].length);
+        
+        // Apply color to border characters only, then reset
+        return `${spaces}${colorCode}${borderChars}${ANSI.RESET}${rest}`;
+      }
+      
+      return line;
+    }).join('\n');
   };
 
   /**
@@ -1485,3 +1501,6 @@ export namespace StyleBuilder {
   export const from = (properties: StyleProperties): StyleChain =>
     StyleChain.from(Style.from(properties));
 }
+
+// Export both interface and namespace
+export { StyleChain };

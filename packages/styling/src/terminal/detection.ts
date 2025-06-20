@@ -30,6 +30,12 @@ namespace Terminal {
       if (forceLevel >= 1) return 'ansi';
     }
 
+    // Check if output is a TTY - this is critical for matching Go Lipgloss behavior
+    // Must come before COLORTERM check to ensure redirected output has no colors
+    if (process.stdout.isTTY !== true) {
+      return 'noColor';
+    }
+
     // Check COLORTERM for true color support
     if (env.colorTerm === 'truecolor' || env.colorTerm === '24bit') {
       return 'trueColor';

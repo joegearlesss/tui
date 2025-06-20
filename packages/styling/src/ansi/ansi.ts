@@ -96,12 +96,25 @@ export namespace ANSI {
    * Wraps text with ANSI codes and ensures proper reset
    * @param text - Text to wrap
    * @param codes - ANSI codes to apply
-   * @returns Text wrapped with ANSI codes
+   * @returns Text wrapped with ANSI codes or plain text if terminal doesn't support colors
    */
   export const wrap = (text: string, ...codes: string[]): string => {
     if (codes.length === 0 || text === '') {
       return text;
     }
+    
+    // Check terminal color support before applying ANSI codes
+    // Import here to avoid circular dependencies
+    try {
+      const { Terminal } = require('../terminal/detection');
+      if (!Terminal.hasColorSupport()) {
+        return text; // Return plain text if no color support
+      }
+    } catch {
+      // Fallback to plain text if terminal detection fails
+      return text;
+    }
+    
     return `${codes.join('')}${text}${RESET}`;
   };
 
