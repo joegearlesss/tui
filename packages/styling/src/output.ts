@@ -102,4 +102,9 @@ export namespace output {
   export const println = print;
 }
 
+// Direct exports for common functions
+export const print = output.print;
+export const isOutputTTY = Terminal.isTerminal;
+export const stripAllAnsi = Terminal.stripAnsi;
+
 export { StringUtils };

@@ -20,7 +20,7 @@ describe('Table Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 500; i++) {
-        Table.headers(Table.create(), headers);
+        Table.headers(...headers)(Table.create());
       }
 
       const end = performance.now();
@@ -29,7 +29,7 @@ describe('Table Performance Tests', () => {
 
     test('should add rows efficiently', () => {
       const table = Table.create();
-      const tableWithHeaders = Table.headers(table, ['Name', 'Age', 'City']);
+      const tableWithHeaders = Table.headers('Name', 'Age', 'City')(table);
       const rows = [
         ['John', '25', 'New York'],
         ['Jane', '30', 'London'],
@@ -39,7 +39,7 @@ describe('Table Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 200; i++) {
-        Table.rows(tableWithHeaders, rows);
+        Table.rows(...rows)(tableWithHeaders);
       }
 
       const end = performance.now();
@@ -121,8 +121,8 @@ describe('Table Performance Tests', () => {
 
       for (let i = 0; i < 10; i++) {
         const table = Table.create();
-        const withHeaders = Table.headers(table, headers);
-        Table.rows(withHeaders, largeDataset);
+        const withHeaders = Table.headers(...headers)(table);
+        Table.rows(...largeDataset)(withHeaders);
       }
 
       const end = performance.now();
@@ -165,16 +165,17 @@ describe('Table Performance Tests', () => {
 
     test('should render large tables efficiently', () => {
       const headers = ['ID', 'Name', 'Email', 'Department'];
+      const departments = ['Engineering', 'Marketing', 'Sales', 'HR'];
       const rows = Array.from({ length: 50 }, (_, i) => [
         `${i + 1}`,
         `User ${i + 1}`,
         `user${i + 1}@example.com`,
-        ['Engineering', 'Marketing', 'Sales', 'HR'][i % 4],
+        departments[i % 4] || 'Engineering',
       ]);
 
       const table = TableBuilder.create()
         .headers(...headers)
-        .rows(...rows)
+        .fromArray(rows)
         .build();
 
       const start = performance.now();

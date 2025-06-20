@@ -236,7 +236,8 @@ export namespace TableRender {
 
       // Add each cell for this line
       cellLines.forEach((cellLineArray, colIndex) => {
-        lineCells.push(cellLineArray[lineIndex]);
+        const cellLine = cellLineArray[lineIndex] || '';
+        lineCells.push(cellLine);
 
         // Column separator (except for last column)
         if (table.border && table.borderColumn && colIndex < cellLines.length - 1) {

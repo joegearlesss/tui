@@ -285,13 +285,17 @@ export namespace Table {
 
         // Check header width if exists
         if (table.headers.length > 0 && table.headers[colIndex]) {
-          maxWidth = Math.max(maxWidth, table.headers[colIndex].length);
+          const header = table.headers[colIndex];
+          if (header) {
+            maxWidth = Math.max(maxWidth, header.length);
+          }
         }
 
         // Check all row widths
         for (const row of table.rows) {
-          if (row[colIndex]) {
-            maxWidth = Math.max(maxWidth, row[colIndex].length);
+          const cell = row[colIndex];
+          if (cell) {
+            maxWidth = Math.max(maxWidth, cell.length);
           }
         }
 

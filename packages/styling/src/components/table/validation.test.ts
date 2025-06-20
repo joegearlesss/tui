@@ -1,21 +1,16 @@
 import { describe, expect, test } from 'bun:test';
 import type { TableConfig } from './types';
 import { TableValidation } from './validation';
+import { Table } from './operations';
 
 describe('TableValidation', () => {
   describe('validateTableConfig', () => {
     test('validates valid table configuration', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [
-          ['John', '25'],
-          ['Jane', '30'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config: TableConfig = Table.rows(['John', '25'], ['Jane', '30'])(
+        Table.headers('Name', 'Age')(
+          Table.create()
+        )
+      );
 
       const result = TableValidation.validateTableConfig(config);
       expect(result.isValid).toBe(true);
@@ -23,14 +18,7 @@ describe('TableValidation', () => {
     });
 
     test('validates empty table configuration', () => {
-      const config: TableConfig = {
-        headers: [],
-        rows: [],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config: TableConfig = Table.create();
 
       const result = TableValidation.validateTableConfig(config);
       expect(result.isValid).toBe(true);
@@ -38,14 +26,9 @@ describe('TableValidation', () => {
     });
 
     test('validates table with headers only', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age', 'City'],
-        rows: [],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config: TableConfig = Table.headers('Name', 'Age', 'City')(
+        Table.create()
+      );
 
       const result = TableValidation.validateTableConfig(config);
       expect(result.isValid).toBe(true);
@@ -54,12 +37,10 @@ describe('TableValidation', () => {
 
     test('detects missing headers array', () => {
       const config: TableConfig = {
+        ...Table.rows(['John', '25'])(
+          Table.create()
+        ),
         headers: undefined as any,
-        rows: [['John', '25']],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
       };
 
       const result = TableValidation.validateTableConfig(config);
@@ -69,12 +50,10 @@ describe('TableValidation', () => {
 
     test('detects missing rows array', () => {
       const config: TableConfig = {
-        headers: ['Name', 'Age'],
+        ...Table.headers('Name', 'Age')(
+          Table.create()
+        ),
         rows: undefined as any,
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
       };
 
       const result = TableValidation.validateTableConfig(config);
@@ -83,14 +62,13 @@ describe('TableValidation', () => {
     });
 
     test('detects invalid width', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [['John', '25']],
-        border: undefined,
-        styleFunc: undefined,
-        width: -10,
-        height: undefined,
-      };
+      const config: TableConfig = Table.width(-10)(
+        Table.rows(['John', '25'])(
+          Table.headers('Name', 'Age')(
+            Table.create()
+          )
+        )
+      );
 
       const result = TableValidation.validateTableConfig(config);
       expect(result.isValid).toBe(false);
@@ -98,14 +76,13 @@ describe('TableValidation', () => {
     });
 
     test('detects invalid height', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [['John', '25']],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: 0,
-      };
+      const config: TableConfig = Table.height(0)(
+        Table.rows(['John', '25'])(
+          Table.headers('Name', 'Age')(
+            Table.create()
+          )
+        )
+      );
 
       const result = TableValidation.validateTableConfig(config);
       expect(result.isValid).toBe(false);
@@ -114,12 +91,12 @@ describe('TableValidation', () => {
 
     test('detects non-function style function', () => {
       const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [['John', '25']],
-        border: undefined,
+        ...Table.rows(['John', '25'])(
+          Table.headers('Name', 'Age')(
+            Table.create()
+          )
+        ),
         styleFunc: 'not a function' as any,
-        width: undefined,
-        height: undefined,
       };
 
       const result = TableValidation.validateTableConfig(config);
@@ -420,17 +397,11 @@ describe('TableValidation', () => {
 
   describe('validateTableStructure', () => {
     test('validates consistent table structure', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age', 'City'],
-        rows: [
-          ['John', '25', 'NYC'],
-          ['Jane', '30', 'LA'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config: TableConfig = Table.rows(['John', '25', 'NYC'], ['Jane', '30', 'LA'])(
+        Table.headers('Name', 'Age', 'City')(
+          Table.create()
+        )
+      );
 
       const result = TableValidation.validateTableStructure(config);
       expect(result.isValid).toBe(true);
@@ -438,17 +409,11 @@ describe('TableValidation', () => {
     });
 
     test('detects inconsistent column counts', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [
-          ['John', '25', 'NYC'], // Extra column
-          ['Jane', '30'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config: TableConfig = Table.rows(['John', '25', 'NYC'], ['Jane', '30'])( // First row has extra column
+        Table.headers('Name', 'Age')(
+          Table.create()
+        )
+      );
 
       const result = TableValidation.validateTableStructure(config);
       expect(result.isValid).toBe(false);
@@ -456,14 +421,7 @@ describe('TableValidation', () => {
     });
 
     test('validates empty table structure', () => {
-      const config: TableConfig = {
-        headers: [],
-        rows: [],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config: TableConfig = Table.create();
 
       const result = TableValidation.validateTableStructure(config);
       expect(result.isValid).toBe(true);
@@ -476,14 +434,11 @@ describe('TableValidation', () => {
         Array.from({ length: 50 }, (_, j) => `Cell${i}-${j}`)
       );
 
-      const config: TableConfig = {
-        headers,
-        rows,
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config: TableConfig = Table.addRows(rows)(
+        Table.headers(...headers)(
+          Table.create()
+        )
+      );
 
       const result = TableValidation.validateTableStructure(config);
       expect(result.isValid).toBe(true);
@@ -513,35 +468,38 @@ describe('TableValidation', () => {
     });
 
     test('validates complex table with all features', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age', 'City', 'Country'],
-        rows: [
-          ['John Doe', '25', 'New York', 'USA'],
-          ['Jane Smith', '30', 'Los Angeles', 'USA'],
-          ['Bob Johnson', '35', 'Chicago', 'USA'],
-        ],
-        border: {
-          type: 'rounded',
-          chars: {
-            top: '─',
-            right: '│',
-            bottom: '─',
-            left: '│',
-            topLeft: '╭',
-            topRight: '╮',
-            bottomLeft: '╰',
-            bottomRight: '╯',
-          },
-          sides: [true, true, true, true],
-        },
-        styleFunc: (row, col) => {
+      const config: TableConfig = Table.dimensions(80, 10)(
+        Table.styleFunc((row, col) => {
           if (row === -1) return { bold: true };
           if (col === 1) return { italic: true };
           return {};
-        },
-        width: 80,
-        height: 10,
-      };
+        })(
+          Table.border({
+            type: 'rounded',
+            chars: {
+              top: '─',
+              right: '│',
+              bottom: '─',
+              left: '│',
+              topLeft: '╭',
+              topRight: '╮',
+              bottomLeft: '╰',
+              bottomRight: '╯',
+            },
+            sides: [true, true, true, true],
+          })(
+            Table.rows(
+              ['John Doe', '25', 'New York', 'USA'],
+              ['Jane Smith', '30', 'Los Angeles', 'USA'],
+              ['Bob Johnson', '35', 'Chicago', 'USA']
+            )(
+              Table.headers('Name', 'Age', 'City', 'Country')(
+                Table.create()
+              )
+            )
+          )
+        )
+      );
 
       const result = TableValidation.validateTableConfig(config);
       expect(result.isValid).toBe(true);
@@ -550,12 +508,16 @@ describe('TableValidation', () => {
 
     test('accumulates multiple validation errors', () => {
       const config: TableConfig = {
-        headers: ['Name', 123] as any, // Invalid header
-        rows: [['John', '25', 'Extra']], // Wrong column count
-        border: undefined,
+        ...Table.height(0)( // Invalid height
+          Table.width(-10)( // Invalid width
+            Table.rows(['John', '25', 'Extra'])( // Wrong column count
+              Table.headers('Name', 123 as any)( // Invalid header
+                Table.create()
+              )
+            )
+          )
+        ),
         styleFunc: 'not a function' as any, // Invalid style function
-        width: -10, // Invalid width
-        height: 0, // Invalid height
       };
 
       const result = TableValidation.validateTableConfig(config);

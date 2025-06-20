@@ -115,7 +115,7 @@ export interface BorderChain {
 /**
  * Functional border chain namespace providing method chaining without classes
  */
-namespace BorderChain {
+export namespace BorderChain {
   /**
    * Creates a border chain from configuration
    * @param config - Border configuration to wrap

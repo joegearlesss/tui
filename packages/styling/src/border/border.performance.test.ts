@@ -266,7 +266,9 @@ describe('Border Performance Tests', () => {
 
       for (let i = 0; i < 1000; i++) {
         const char = chars[i % chars.length];
-        BorderBuilder.create().top(char).build();
+        if (char) {
+          BorderBuilder.create().top(char).build();
+        }
       }
 
       const end = performance.now();

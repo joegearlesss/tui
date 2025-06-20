@@ -1,32 +1,20 @@
 import { describe, expect, test } from 'bun:test';
+import { Border } from '../../border/presets';
+import { Table } from './operations';
 import { TableRender } from './rendering';
 import type { TableConfig } from './types';
 
 describe('TableRenderer', () => {
   describe('basic rendering', () => {
     test('renders empty table', () => {
-      const config: TableConfig = {
-        headers: [],
-        rows: [],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.create();
 
       const result = TableRender.render(config);
       expect(result).toBe('');
     });
 
     test('renders table with headers only', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.headers('Name', 'Age')(Table.create());
 
       const result = TableRender.render(config);
       expect(result).toContain('Name');
@@ -34,17 +22,7 @@ describe('TableRenderer', () => {
     });
 
     test('renders simple table with data', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [
-          ['John', '25'],
-          ['Jane', '30'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(['John', '25'], ['Jane', '30'])(Table.headers('Name', 'Age')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('Name');
@@ -56,17 +34,10 @@ describe('TableRenderer', () => {
     });
 
     test('renders table with multiple columns', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age', 'City', 'Country'],
-        rows: [
-          ['John Doe', '25', 'New York', 'USA'],
-          ['Jane Smith', '30', 'Los Angeles', 'USA'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(
+        ['John Doe', '25', 'New York', 'USA'],
+        ['Jane Smith', '30', 'Los Angeles', 'USA']
+      )(Table.headers('Name', 'Age', 'City', 'Country')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('John Doe');
@@ -78,27 +49,9 @@ describe('TableRenderer', () => {
 
   describe('border rendering', () => {
     test('renders table with normal border', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [['John', '25']],
-        border: {
-          type: 'normal',
-          chars: {
-            top: '─',
-            right: '│',
-            bottom: '─',
-            left: '│',
-            topLeft: '┌',
-            topRight: '┐',
-            bottomLeft: '└',
-            bottomRight: '┘',
-          },
-          sides: [true, true, true, true],
-        },
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.border(Border.normal())(
+        Table.rows(['John', '25'])(Table.headers('Name', 'Age')(Table.create()))
+      );
 
       const result = TableRender.render(config);
       expect(result).toContain('┌');
@@ -110,27 +63,9 @@ describe('TableRenderer', () => {
     });
 
     test('renders table with rounded border', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [['John', '25']],
-        border: {
-          type: 'rounded',
-          chars: {
-            top: '─',
-            right: '│',
-            bottom: '─',
-            left: '│',
-            topLeft: '╭',
-            topRight: '╮',
-            bottomLeft: '╰',
-            bottomRight: '╯',
-          },
-          sides: [true, true, true, true],
-        },
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.border(Border.rounded())(
+        Table.rows(['John', '25'])(Table.headers('Name', 'Age')(Table.create()))
+      );
 
       const result = TableRender.render(config);
       expect(result).toContain('╭');
@@ -140,27 +75,9 @@ describe('TableRenderer', () => {
     });
 
     test('renders table with partial borders', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [['John', '25']],
-        border: {
-          type: 'normal',
-          chars: {
-            top: '─',
-            right: '│',
-            bottom: '─',
-            left: '│',
-            topLeft: '┌',
-            topRight: '┐',
-            bottomLeft: '└',
-            bottomRight: '┘',
-          },
-          sides: [true, false, true, false], // Only top and bottom
-        },
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.border(Border.withSides(Border.normal(), true, false, true, false))(
+        Table.rows(['John', '25'])(Table.headers('Name', 'Age')(Table.create()))
+      );
 
       const result = TableRender.render(config);
       expect(result).toContain('─'); // Top and bottom borders
@@ -169,14 +86,7 @@ describe('TableRenderer', () => {
     });
 
     test('renders table without borders', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [['John', '25']],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(['John', '25'])(Table.headers('Name', 'Age')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).not.toContain('┌');
@@ -189,17 +99,10 @@ describe('TableRenderer', () => {
 
   describe('column width calculation', () => {
     test('auto-calculates column widths', () => {
-      const config: TableConfig = {
-        headers: ['Short', 'Very Long Header Name'],
-        rows: [
-          ['A', 'Short'],
-          ['Longer', 'Even longer content here'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(
+        ['A', 'Short'],
+        ['Longer', 'Even longer content here']
+      )(Table.headers('Short', 'Very Long Header Name')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('Very Long Header Name');
@@ -210,18 +113,11 @@ describe('TableRenderer', () => {
     });
 
     test('handles empty cells in width calculation', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age', 'City'],
-        rows: [
-          ['John', '', 'New York'],
-          ['', '30', ''],
-          ['Jane', '25', 'Los Angeles'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(
+        ['John', '', 'New York'],
+        ['', '30', ''],
+        ['Jane', '25', 'Los Angeles']
+      )(Table.headers('Name', 'Age', 'City')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('John');
@@ -230,17 +126,10 @@ describe('TableRenderer', () => {
     });
 
     test('handles single character content', () => {
-      const config: TableConfig = {
-        headers: ['A', 'B', 'C'],
-        rows: [
-          ['1', '2', '3'],
-          ['X', 'Y', 'Z'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(
+        ['1', '2', '3'],
+        ['X', 'Y', 'Z']
+      )(Table.headers('A', 'B', 'C')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('A');
@@ -251,17 +140,10 @@ describe('TableRenderer', () => {
 
   describe('style function application', () => {
     test('applies style function to header row', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [['John', '25']],
-        border: undefined,
-        styleFunc: (row, _col) => {
-          if (row === -1) return { bold: true }; // Header row
-          return {};
-        },
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.styleFunc((row, _col) => {
+        if (row === -1) return { bold: true }; // Header row
+        return {};
+      })(Table.rows(['John', '25'])(Table.headers('Name', 'Age')(Table.create())));
 
       const result = TableRender.render(config);
       expect(result).toContain('Name');
@@ -270,20 +152,15 @@ describe('TableRenderer', () => {
     });
 
     test('applies style function to specific columns', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age', 'Status'],
-        rows: [
+      const config = Table.styleFunc((_row, col) => {
+        if (col === 2) return { italic: true }; // Status column
+        return {};
+      })(
+        Table.rows(
           ['John', '25', 'Active'],
-          ['Jane', '30', 'Inactive'],
-        ],
-        border: undefined,
-        styleFunc: (_row, col) => {
-          if (col === 2) return { italic: true }; // Status column
-          return {};
-        },
-        width: undefined,
-        height: undefined,
-      };
+          ['Jane', '30', 'Inactive']
+        )(Table.headers('Name', 'Age', 'Status')(Table.create()))
+      );
 
       const result = TableRender.render(config);
       expect(result).toContain('Active');
@@ -291,22 +168,17 @@ describe('TableRenderer', () => {
     });
 
     test('applies style function to alternating rows', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [
+      const config = Table.styleFunc((row, _col) => {
+        if (row >= 0 && row % 2 === 0) return { background: 'gray' };
+        return {};
+      })(
+        Table.rows(
           ['John', '25'],
           ['Jane', '30'],
           ['Bob', '35'],
-          ['Alice', '28'],
-        ],
-        border: undefined,
-        styleFunc: (row, _col) => {
-          if (row >= 0 && row % 2 === 0) return { background: 'gray' };
-          return {};
-        },
-        width: undefined,
-        height: undefined,
-      };
+          ['Alice', '28']
+        )(Table.headers('Name', 'Age')(Table.create()))
+      );
 
       const result = TableRender.render(config);
       expect(result).toContain('John');
@@ -316,14 +188,9 @@ describe('TableRenderer', () => {
 
   describe('fixed dimensions', () => {
     test('respects fixed table width', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [['John', '25']],
-        border: undefined,
-        styleFunc: undefined,
-        width: 50,
-        height: undefined,
-      };
+      const config = Table.width(50)(
+        Table.rows(['John', '25'])(Table.headers('Name', 'Age')(Table.create()))
+      );
 
       const result = TableRender.render(config);
       const lines = result.split('\n').filter((line) => line.trim().length > 0);
@@ -336,20 +203,15 @@ describe('TableRenderer', () => {
     });
 
     test('respects fixed table height', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [
+      const config = Table.height(4)(
+        Table.rows(
           ['John', '25'],
           ['Jane', '30'],
           ['Bob', '35'],
           ['Alice', '28'],
-          ['Charlie', '40'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: 4,
-      };
+          ['Charlie', '40']
+        )(Table.headers('Name', 'Age')(Table.create()))
+      );
 
       const result = TableRender.render(config);
       const lines = result.split('\n').filter((line) => line.trim().length > 0);
@@ -358,17 +220,12 @@ describe('TableRenderer', () => {
     });
 
     test('handles both width and height constraints', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age', 'City'],
-        rows: [
+      const config = Table.dimensions(30, 3)(
+        Table.rows(
           ['John Doe', '25', 'New York'],
-          ['Jane Smith', '30', 'Los Angeles'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: 30,
-        height: 3,
-      };
+          ['Jane Smith', '30', 'Los Angeles']
+        )(Table.headers('Name', 'Age', 'City')(Table.create()))
+      );
 
       const result = TableRender.render(config);
       const lines = result.split('\n').filter((line) => line.trim().length > 0);
@@ -381,17 +238,10 @@ describe('TableRenderer', () => {
 
   describe('renderLines method', () => {
     test('returns array of lines', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [
-          ['John', '25'],
-          ['Jane', '30'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(
+        ['John', '25'],
+        ['Jane', '30']
+      )(Table.headers('Name', 'Age')(Table.create()));
 
       const result = TableRender.render(config);
       const lines = result.split('\n');
@@ -402,14 +252,7 @@ describe('TableRenderer', () => {
     });
 
     test('empty table returns empty array', () => {
-      const config: TableConfig = {
-        headers: [],
-        rows: [],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.create();
 
       const result = TableRender.render(config);
       const lines = result.split('\n').filter((line) => line.trim().length > 0);
@@ -419,17 +262,10 @@ describe('TableRenderer', () => {
 
   describe('edge cases', () => {
     test('handles mismatched column counts', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age', 'City'],
-        rows: [
-          ['John', '25'], // Missing city
-          ['Jane', '30', 'Los Angeles', 'Extra'], // Extra column
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(
+        ['John', '25'], // Missing city
+        ['Jane', '30', 'Los Angeles', 'Extra'] // Extra column
+      )(Table.headers('Name', 'Age', 'City')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('John');
@@ -440,14 +276,7 @@ describe('TableRenderer', () => {
     test('handles very long cell content', () => {
       const longContent =
         'This is a very long piece of content that should be handled gracefully by the table renderer';
-      const config: TableConfig = {
-        headers: ['Short', 'Long Content'],
-        rows: [['A', longContent]],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(['A', longContent])(Table.headers('Short', 'Long Content')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('Short');
@@ -455,18 +284,11 @@ describe('TableRenderer', () => {
     });
 
     test('handles special characters in content', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Special'],
-        rows: [
-          ['John', '!@#$%^&*()'],
-          ['Jane', 'Unicode: 🎉✨🚀'],
-          ['Bob', 'Newline\nContent'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(
+        ['John', '!@#$%^&*()'],
+        ['Jane', 'Unicode: 🎉✨🚀'],
+        ['Bob', 'Newline\nContent']
+      )(Table.headers('Name', 'Special')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('!@#$%^&*()');
@@ -475,18 +297,11 @@ describe('TableRenderer', () => {
     });
 
     test('handles empty string content', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Empty'],
-        rows: [
-          ['John', ''],
-          ['', 'Value'],
-          ['', ''],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(
+        ['John', ''],
+        ['', 'Value'],
+        ['', '']
+      )(Table.headers('Name', 'Empty')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('John');
@@ -494,14 +309,7 @@ describe('TableRenderer', () => {
     });
 
     test('handles single row table', () => {
-      const config: TableConfig = {
-        headers: ['Single'],
-        rows: [['Value']],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(['Value'])(Table.headers('Single')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('Single');
@@ -509,14 +317,7 @@ describe('TableRenderer', () => {
     });
 
     test('handles single column table', () => {
-      const config: TableConfig = {
-        headers: ['Column'],
-        rows: [['Row1'], ['Row2'], ['Row3']],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(['Row1'], ['Row2'], ['Row3'])(Table.headers('Column')(Table.create()));
 
       const result = TableRender.render(config);
       expect(result).toContain('Column');

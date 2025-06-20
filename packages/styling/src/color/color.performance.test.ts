@@ -153,7 +153,9 @@ describe('Color Performance Tests', () => {
 
       for (let i = 0; i < 5000; i++) {
         const color = colors[i % colors.length];
-        Color.parse(color);
+        if (color) {
+          Color.parse(color);
+        }
       }
 
       if (global.gc) global.gc();
@@ -199,7 +201,9 @@ describe('Color Performance Tests', () => {
 
       for (let i = 0; i < 1000; i++) {
         const name = names[i % names.length];
-        Color.isValidColorName(name);
+        if (name) {
+          Color.isValidColorName(name);
+        }
       }
 
       const end = performance.now();
@@ -223,7 +227,9 @@ describe('Color Performance Tests', () => {
 
       for (let i = 0; i < 1000; i++) {
         const color = colors[i % colors.length];
-        Color.toComplete(color);
+        if (color) {
+          Color.toComplete(color);
+        }
       }
 
       const end = performance.now();

@@ -122,12 +122,12 @@ describe('List Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 1000; i++) {
-        Enumerator.bullet()([], i);
-        Enumerator.dash()([], i);
-        Enumerator.asterisk()([], i);
-        Enumerator.arabic()([], i);
-        Enumerator.alphabet()([], i);
-        Enumerator.roman()([], i);
+        Enumerator.bullet()(i);
+        Enumerator.dash()(i);
+        Enumerator.asterisk()(i);
+        Enumerator.arabic()(i);
+        Enumerator.alphabet()(i);
+        Enumerator.roman()(i);
       }
 
       const end = performance.now();
@@ -138,9 +138,9 @@ describe('List Performance Tests', () => {
       const start = performance.now();
 
       for (let i = 0; i < 100; i++) {
-        Enumerator.arabic()([], i * 100);
-        Enumerator.alphabet()([], i * 10);
-        Enumerator.roman()([], i * 5);
+        Enumerator.arabic()(i * 100);
+        Enumerator.alphabet()(i * 10);
+        Enumerator.roman()(i * 5);
       }
 
       const end = performance.now();
@@ -363,7 +363,9 @@ describe('List Performance Tests', () => {
 
       for (let i = 0; i < 100; i++) {
         const enumerator = enumerators[i % enumerators.length];
-        ListBuilder.create().items('Item 1', 'Item 2', 'Item 3').enumerator(enumerator).build();
+        if (enumerator) {
+          ListBuilder.create().items('Item 1', 'Item 2', 'Item 3').enumerator(enumerator).build();
+        }
       }
 
       const end = performance.now();

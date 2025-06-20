@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'bun:test';
+import { Table } from './operations';
 import { TableBuilder } from './builder';
 import type { TableConfig } from './types';
 
@@ -12,17 +13,7 @@ describe('TableBuilder', () => {
     });
 
     test('creates table builder from existing config', () => {
-      const config: TableConfig = {
-        headers: ['Name', 'Age'],
-        rows: [
-          ['John', '25'],
-          ['Jane', '30'],
-        ],
-        border: undefined,
-        styleFunc: undefined,
-        width: undefined,
-        height: undefined,
-      };
+      const config = Table.rows(['John', '25'], ['Jane', '30'])(Table.headers('Name', 'Age')(Table.create()));
       const builder = TableBuilder.from(config);
       expect(builder.getColumnCount()).toBe(2);
       expect(builder.getRowCount()).toBe(2);

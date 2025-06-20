@@ -1,4 +1,4 @@
-import type { EnumeratorFunction } from './types';
+import type { EnumeratorFunction, DepthAwareEnumeratorFunction } from './types';
 
 /**
  * Built-in enumerator functions for common list styles
@@ -187,7 +187,7 @@ export namespace Enumerator {
   /**
    * Depth-aware enumerator that changes style based on nesting level
    */
-  export function depthAware(enumerators: EnumeratorFunction[]): EnumeratorFunction {
+  export function depthAware(enumerators: EnumeratorFunction[]): DepthAwareEnumeratorFunction {
     if (enumerators.length === 0) {
       throw new Error('Depth-aware enumerator requires at least one enumerator function');
     }

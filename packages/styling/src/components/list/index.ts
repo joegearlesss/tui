@@ -43,6 +43,7 @@ export { List } from './operations';
 // Core types and interfaces
 export type {
   EnumeratorFunction,
+  DepthAwareEnumeratorFunction,
   ListConfig,
   ListItem,
   ListMetrics,

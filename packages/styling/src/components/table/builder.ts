@@ -68,7 +68,7 @@ export interface TableChain {
 /**
  * Functional table chain namespace providing method chaining without classes
  */
-namespace TableChain {
+export namespace TableChain {
   /**
    * Creates a table chain from configuration
    * @param config - Table configuration to wrap

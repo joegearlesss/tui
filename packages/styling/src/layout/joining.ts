@@ -14,7 +14,7 @@ export interface PlaceOptions {
   readonly whitespace?: boolean;
   readonly tabWidth?: number;
   readonly whitespaceChars?: string;
-  readonly whitespaceStyle?: import('../style/types').StyleProperties;
+  readonly whitespaceStyle?: import('../style/style').StyleProperties;
 }
 
 /**

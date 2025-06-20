@@ -18,6 +18,11 @@ export type ListItem = string | ListConfig;
 export type EnumeratorFunction = (index: number) => string;
 
 /**
+ * Depth-aware enumerator function type - takes index and optional depth
+ */
+export type DepthAwareEnumeratorFunction = (index: number, depth?: number) => string;
+
+/**
  * List configuration interface with readonly properties for immutability
  */
 export interface ListConfig {
