@@ -2,340 +2,181 @@ import { List } from './operations';
 import type { EnumeratorFunction, ListConfig, ListItem } from './types';
 
 /**
- * Fluent API builder for creating lists with method chaining
- * Provides a more intuitive interface while maintaining functional core
+ * Functional list builder interface for method chaining
  */
-export class ListBuilder {
-  private config: ListConfig;
+export interface ListBuilder {
+  readonly config: ListConfig;
 
-  private constructor(config: ListConfig) {
-    this.config = config;
-  }
+  // Configuration methods
+  enumerator(enumerator: EnumeratorFunction): ListBuilder;
+  items(...items: ListItem[]): ListBuilder;
+  indent(indent: number): ListBuilder;
+  spacing(spacing: number): ListBuilder;
+  itemStyle(itemStyle: (text: string) => string): ListBuilder;
+  enumeratorStyle(enumeratorStyle: (text: string) => string): ListBuilder;
 
-  /**
-   * Creates a new ListBuilder with the specified items
-   */
-  static create(items: ListItem[] = []): ListBuilder {
-    return new ListBuilder(List.create(items));
-  }
+  // Manipulation methods
+  append(item: ListItem): ListBuilder;
+  prepend(item: ListItem): ListBuilder;
+  insert(index: number, item: ListItem): ListBuilder;
+  remove(index: number): ListBuilder;
+  replace(index: number, item: ListItem): ListBuilder;
+  filter(predicate: (item: ListItem, index: number) => boolean): ListBuilder;
+  map(transform: (item: ListItem, index: number) => ListItem): ListBuilder;
+  concat(other: ListConfig): ListBuilder;
+  reverse(): ListBuilder;
 
-  /**
-   * Creates a ListBuilder from an existing list configuration
-   */
-  static from(config: ListConfig): ListBuilder {
-    return new ListBuilder(List.clone(config));
-  }
-
-  /**
-   * Creates a ListBuilder from an array of strings
-   */
-  static fromStrings(strings: string[]): ListBuilder {
-    return new ListBuilder(List.fromStrings(strings));
-  }
-
-  /**
-   * Creates a ListBuilder for nested lists
-   */
-  static nested(items: (string | ListConfig)[]): ListBuilder {
-    return new ListBuilder(List.nested(items));
-  }
-
-  /**
-   * Sets the enumerator function
-   */
-  enumerator(enumerator: EnumeratorFunction): ListBuilder {
-    return new ListBuilder(List.withEnumerator(this.config, enumerator));
-  }
-
-  /**
-   * Sets the items for the list
-   */
-  items(...items: ListItem[]): ListBuilder {
-    return new ListBuilder(List.create(items));
-  }
-
-  /**
-   * Sets the indentation
-   */
-  indent(indent: number): ListBuilder {
-    return new ListBuilder(List.withIndent(this.config, indent));
-  }
-
-  /**
-   * Sets the spacing between enumerator and item content
-   */
-  spacing(spacing: number): ListBuilder {
-    return new ListBuilder(List.withEnumeratorSpacing(this.config, spacing));
-  }
-
-  /**
-   * Sets the item style function
-   */
-  itemStyle(itemStyle: (text: string) => string): ListBuilder {
-    return new ListBuilder(List.withItemStyle(this.config, itemStyle));
-  }
-
-  /**
-   * Sets the enumerator style function
-   */
-  enumeratorStyle(enumeratorStyle: (text: string) => string): ListBuilder {
-    return new ListBuilder(List.withEnumeratorStyle(this.config, enumeratorStyle));
-  }
-
-  /**
-   * Adds an item to the end of the list
-   */
-  append(item: ListItem): ListBuilder {
-    return new ListBuilder(List.append(this.config, item));
-  }
-
-  /**
-   * Adds an item to the beginning of the list
-   */
-  prepend(item: ListItem): ListBuilder {
-    return new ListBuilder(List.prepend(this.config, item));
-  }
-
-  /**
-   * Inserts an item at a specific index
-   */
-  insert(index: number, item: ListItem): ListBuilder {
-    return new ListBuilder(List.insert(this.config, index, item));
-  }
-
-  /**
-   * Removes an item at a specific index
-   */
-  remove(index: number): ListBuilder {
-    return new ListBuilder(List.remove(this.config, index));
-  }
-
-  /**
-   * Replaces an item at a specific index
-   */
-  replace(index: number, item: ListItem): ListBuilder {
-    return new ListBuilder(List.replace(this.config, index, item));
-  }
-
-  /**
-   * Filters list items based on a predicate function
-   */
-  filter(predicate: (item: ListItem, index: number) => boolean): ListBuilder {
-    return new ListBuilder(List.filter(this.config, predicate));
-  }
-
-  /**
-   * Maps over list items with a transformation function
-   */
-  map(transform: (item: ListItem, index: number) => ListItem): ListBuilder {
-    return new ListBuilder(List.map(this.config, transform));
-  }
-
-  /**
-   * Concatenates with another list
-   */
-  concat(other: ListConfig): ListBuilder {
-    return new ListBuilder(List.concat(this.config, other));
-  }
-
-  /**
-   * Reverses the order of items
-   */
-  reverse(): ListBuilder {
-    return new ListBuilder(List.reverse(this.config));
-  }
-
-  /**
-   * Returns the built list configuration
-   */
-  build(): ListConfig {
-    return List.clone(this.config);
-  }
-
-  /**
-   * Gets the current configuration (read-only access)
-   */
-  get(): ListConfig {
-    return this.config;
-  }
-
-  /**
-   * Gets the number of items in the list
-   */
-  length(): number {
-    return List.length(this.config);
-  }
-
-  /**
-   * Checks if the list is empty
-   */
-  isEmpty(): boolean {
-    return List.isEmpty(this.config);
-  }
-
-  /**
-   * Gets an item at a specific index
-   */
-  getItem(index: number): ListItem | undefined {
-    return List.get(this.config, index);
-  }
-
-  /**
-   * Finds the index of an item
-   */
-  indexOf(item: ListItem): number {
-    return List.indexOf(this.config, item);
-  }
-
-  /**
-   * Checks if the list contains a specific item
-   */
-  contains(item: ListItem): boolean {
-    return List.contains(this.config, item);
-  }
-
-  /**
-   * Calculates metrics for the list
-   */
-  metrics() {
-    return List.calculateMetrics(this.config);
-  }
-
-  /**
-   * Flattens the list to an array of strings
-   */
-  flatten(): string[] {
-    return List.flatten(this.config);
-  }
-
-  /**
-   * Converts to an array of strings
-   */
-  toStrings(): string[] {
-    return List.toStrings(this.config);
-  }
+  // Terminal methods
+  build(): ListConfig;
+  get(): ListConfig;
+  length(): number;
+  isEmpty(): boolean;
+  getItem(index: number): ListItem | undefined;
+  indexOf(item: ListItem): number;
+  contains(item: ListItem): boolean;
+  metrics(): any;
+  flatten(): string[];
+  toStrings(): string[];
 }
 
 /**
- * Chainable list operations that return a new ListChain for continued chaining
- * This allows for more complex fluent operations
+ * Functional list builder namespace providing method chaining without classes
  */
-export class ListChain {
-  private config: ListConfig;
+namespace ListBuilder {
+  /**
+   * Creates a list builder from configuration
+   * @param config - List configuration to wrap
+   * @returns ListBuilder interface with method chaining
+   */
+  export const from = (config: ListConfig): ListBuilder => {
+    return {
+      config,
 
-  constructor(config: ListConfig) {
-    this.config = config;
-  }
+      // Configuration methods
+      enumerator: (enumerator) => from(List.withEnumerator(config, enumerator)),
+      items: (...items) => from(List.create(items)),
+      indent: (indent) => from(List.withIndent(config, indent)),
+      spacing: (spacing) => from(List.withEnumeratorSpacing(config, spacing)),
+      itemStyle: (itemStyle) => from(List.withItemStyle(config, itemStyle)),
+      enumeratorStyle: (enumeratorStyle) => from(List.withEnumeratorStyle(config, enumeratorStyle)),
+
+      // Manipulation methods
+      append: (item) => from(List.append(config, item)),
+      prepend: (item) => from(List.prepend(config, item)),
+      insert: (index, item) => from(List.insert(config, index, item)),
+      remove: (index) => from(List.remove(config, index)),
+      replace: (index, item) => from(List.replace(config, index, item)),
+      filter: (predicate) => from(List.filter(config, predicate)),
+      map: (transform) => from(List.map(config, transform)),
+      concat: (other) => from(List.concat(config, other)),
+      reverse: () => from(List.reverse(config)),
+
+      // Terminal methods
+      build: () => List.clone(config),
+      get: () => config,
+      length: () => List.length(config),
+      isEmpty: () => List.isEmpty(config),
+      getItem: (index) => List.get(config, index),
+      indexOf: (item) => List.indexOf(config, item),
+      contains: (item) => List.contains(config, item),
+      metrics: () => List.calculateMetrics(config),
+      flatten: () => List.flatten(config),
+      toStrings: () => List.toStrings(config),
+    };
+  };
 
   /**
-   * Creates a new ListChain from a ListConfig
+   * Creates a new list builder with the specified items
+   * @param items - Initial list items
+   * @returns New ListBuilder instance
    */
-  static from(config: ListConfig): ListChain {
-    return new ListChain(config);
-  }
+  export const create = (items: ListItem[] = []): ListBuilder => from(List.create(items));
 
   /**
-   * Creates a new ListChain with items
+   * Creates a list builder from an array of strings
+   * @param strings - Array of strings to convert to list items
+   * @returns New ListBuilder instance
    */
-  static create(items: ListItem[] = []): ListChain {
-    return new ListChain(List.create(items));
-  }
+  export const fromStrings = (strings: string[]): ListBuilder => from(List.fromStrings(strings));
 
   /**
-   * Applies an enumerator function
+   * Creates a list builder for nested lists
+   * @param items - Array of string or list configurations
+   * @returns New ListBuilder instance
    */
-  withEnumerator(enumerator: EnumeratorFunction): ListChain {
-    return new ListChain(List.withEnumerator(this.config, enumerator));
-  }
-
-  /**
-   * Applies indentation
-   */
-  withIndent(indent: number): ListChain {
-    return new ListChain(List.withIndent(this.config, indent));
-  }
-
-  /**
-   * Applies spacing
-   */
-  withSpacing(spacing: number): ListChain {
-    return new ListChain(List.withEnumeratorSpacing(this.config, spacing));
-  }
-
-  /**
-   * Applies item styling
-   */
-  withItemStyle(itemStyle: (text: string) => string): ListChain {
-    return new ListChain(List.withItemStyle(this.config, itemStyle));
-  }
-
-  /**
-   * Applies enumerator styling
-   */
-  withEnumeratorStyle(enumeratorStyle: (text: string) => string): ListChain {
-    return new ListChain(List.withEnumeratorStyle(this.config, enumeratorStyle));
-  }
-
-  /**
-   * Appends an item
-   */
-  append(item: ListItem): ListChain {
-    return new ListChain(List.append(this.config, item));
-  }
-
-  /**
-   * Prepends an item
-   */
-  prepend(item: ListItem): ListChain {
-    return new ListChain(List.prepend(this.config, item));
-  }
-
-  /**
-   * Filters items
-   */
-  filter(predicate: (item: ListItem, index: number) => boolean): ListChain {
-    return new ListChain(List.filter(this.config, predicate));
-  }
-
-  /**
-   * Maps items
-   */
-  map(transform: (item: ListItem, index: number) => ListItem): ListChain {
-    return new ListChain(List.map(this.config, transform));
-  }
-
-  /**
-   * Concatenates with another list
-   */
-  concat(other: ListConfig): ListChain {
-    return new ListChain(List.concat(this.config, other));
-  }
-
-  /**
-   * Reverses items
-   */
-  reverse(): ListChain {
-    return new ListChain(List.reverse(this.config));
-  }
-
-  /**
-   * Converts to ListBuilder for additional operations
-   */
-  toBuilder(): ListBuilder {
-    return ListBuilder.create([...this.config.items]);
-  }
-
-  /**
-   * Returns the final configuration
-   */
-  build(): ListConfig {
-    return List.clone(this.config);
-  }
-
-  /**
-   * Gets the current configuration
-   */
-  get(): ListConfig {
-    return this.config;
-  }
+  export const nested = (items: (string | ListConfig)[]): ListBuilder => from(List.nested(items));
 }
+
+/**
+ * Functional list chain interface for method chaining
+ */
+export interface ListChain {
+  readonly config: ListConfig;
+
+  // Configuration methods
+  withEnumerator(enumerator: EnumeratorFunction): ListChain;
+  withIndent(indent: number): ListChain;
+  withSpacing(spacing: number): ListChain;
+  withItemStyle(itemStyle: (text: string) => string): ListChain;
+  withEnumeratorStyle(enumeratorStyle: (text: string) => string): ListChain;
+
+  // Manipulation methods
+  append(item: ListItem): ListChain;
+  prepend(item: ListItem): ListChain;
+  filter(predicate: (item: ListItem, index: number) => boolean): ListChain;
+  map(transform: (item: ListItem, index: number) => ListItem): ListChain;
+  concat(other: ListConfig): ListChain;
+  reverse(): ListChain;
+
+  // Terminal methods
+  toBuilder(): ListBuilder;
+  build(): ListConfig;
+  get(): ListConfig;
+}
+
+/**
+ * Functional list chain namespace providing method chaining without classes
+ */
+namespace ListChain {
+  /**
+   * Creates a list chain from configuration
+   * @param config - List configuration to wrap
+   * @returns ListChain interface with method chaining
+   */
+  export const from = (config: ListConfig): ListChain => {
+    return {
+      config,
+
+      // Configuration methods
+      withEnumerator: (enumerator) => from(List.withEnumerator(config, enumerator)),
+      withIndent: (indent) => from(List.withIndent(config, indent)),
+      withSpacing: (spacing) => from(List.withEnumeratorSpacing(config, spacing)),
+      withItemStyle: (itemStyle) => from(List.withItemStyle(config, itemStyle)),
+      withEnumeratorStyle: (enumeratorStyle) =>
+        from(List.withEnumeratorStyle(config, enumeratorStyle)),
+
+      // Manipulation methods
+      append: (item) => from(List.append(config, item)),
+      prepend: (item) => from(List.prepend(config, item)),
+      filter: (predicate) => from(List.filter(config, predicate)),
+      map: (transform) => from(List.map(config, transform)),
+      concat: (other) => from(List.concat(config, other)),
+      reverse: () => from(List.reverse(config)),
+
+      // Terminal methods
+      toBuilder: () => ListBuilder.create([...config.items]),
+      build: () => List.clone(config),
+      get: () => config,
+    };
+  };
+
+  /**
+   * Creates a new list chain with items
+   * @param items - Initial list items
+   * @returns New ListChain instance
+   */
+  export const create = (items: ListItem[] = []): ListChain => from(List.create(items));
+}
+
+// Export both interfaces and namespaces
+export { ListBuilder, ListChain };

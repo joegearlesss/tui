@@ -51,7 +51,7 @@ function main() {
       };
 
       // Arabic is a right-to-left language, so right align the text
-      if (row < rows.length && rows[row][0] === 'Arabic' && col !== 0) {
+      if (row < rows.length && rows[row]?.[0] === 'Arabic' && col !== 0) {
         style.horizontalAlignment = 'right';
       }
 

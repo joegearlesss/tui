@@ -1266,289 +1266,205 @@ export namespace Style {
 }
 
 /**
- * Function chaining builder for fluent style API
- * Provides method chaining while maintaining functional principles
+ * Functional style chain interface for method chaining
  */
-export class StyleChain {
-  constructor(private readonly config: StyleProperties) {}
+export interface StyleChain {
+  readonly config: StyleProperties;
 
   // Text formatting methods
-  bold(value = true): StyleChain {
-    return new StyleChain(Style.bold(this.config, value));
-  }
-
-  italic(value = true): StyleChain {
-    return new StyleChain(Style.italic(this.config, value));
-  }
-
-  underline(value = true): StyleChain {
-    return new StyleChain(Style.underline(this.config, value));
-  }
-
-  strikethrough(value = true): StyleChain {
-    return new StyleChain(Style.strikethrough(this.config, value));
-  }
-
-  reverse(value = true): StyleChain {
-    return new StyleChain(Style.reverse(this.config, value));
-  }
-
-  blink(value = true): StyleChain {
-    return new StyleChain(Style.blink(this.config, value));
-  }
-
-  faint(value = true): StyleChain {
-    return new StyleChain(Style.faint(this.config, value));
-  }
-
-  underlineSpaces(value = true): StyleChain {
-    return new StyleChain(Style.underlineSpaces(this.config, value));
-  }
-
-  strikethroughSpaces(value = true): StyleChain {
-    return new StyleChain(Style.strikethroughSpaces(this.config, value));
-  }
-
-  colorWhitespace(value = true): StyleChain {
-    return new StyleChain(Style.colorWhitespace(this.config, value));
-  }
+  bold(value?: boolean): StyleChain;
+  italic(value?: boolean): StyleChain;
+  underline(value?: boolean): StyleChain;
+  strikethrough(value?: boolean): StyleChain;
+  reverse(value?: boolean): StyleChain;
+  blink(value?: boolean): StyleChain;
+  faint(value?: boolean): StyleChain;
+  underlineSpaces(value?: boolean): StyleChain;
+  strikethroughSpaces(value?: boolean): StyleChain;
+  colorWhitespace(value?: boolean): StyleChain;
 
   // Color methods
-  foreground(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.foreground(this.config, color));
-  }
-
-  background(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.background(this.config, color));
-  }
+  foreground(color: ColorValue | string | number): StyleChain;
+  background(color: ColorValue | string | number): StyleChain;
 
   // Size and layout methods
-  width(width: number): StyleChain {
-    return new StyleChain(Style.width(this.config, width));
-  }
-
-  height(height: number): StyleChain {
-    return new StyleChain(Style.height(this.config, height));
-  }
-
-  maxWidth(maxWidth: number): StyleChain {
-    return new StyleChain(Style.maxWidth(this.config, maxWidth));
-  }
-
-  maxHeight(maxHeight: number): StyleChain {
-    return new StyleChain(Style.maxHeight(this.config, maxHeight));
-  }
-
-  inline(value = true): StyleChain {
-    return new StyleChain(Style.inline(this.config, value));
-  }
-
-  tabWidth(width: number): StyleChain {
-    return new StyleChain(Style.tabWidth(this.config, width));
-  }
+  width(width: number): StyleChain;
+  height(height: number): StyleChain;
+  maxWidth(maxWidth: number): StyleChain;
+  maxHeight(maxHeight: number): StyleChain;
+  inline(value?: boolean): StyleChain;
+  tabWidth(width: number): StyleChain;
 
   // Padding methods
-  padding(top: number, right?: number, bottom?: number, left?: number): StyleChain {
-    return new StyleChain(Style.padding(this.config, top, right, bottom, left));
-  }
-
-  paddingTop(value: number): StyleChain {
-    return new StyleChain(Style.paddingTop(this.config, value));
-  }
-
-  paddingRight(value: number): StyleChain {
-    return new StyleChain(Style.paddingRight(this.config, value));
-  }
-
-  paddingBottom(value: number): StyleChain {
-    return new StyleChain(Style.paddingBottom(this.config, value));
-  }
-
-  paddingLeft(value: number): StyleChain {
-    return new StyleChain(Style.paddingLeft(this.config, value));
-  }
+  padding(top: number, right?: number, bottom?: number, left?: number): StyleChain;
+  paddingTop(value: number): StyleChain;
+  paddingRight(value: number): StyleChain;
+  paddingBottom(value: number): StyleChain;
+  paddingLeft(value: number): StyleChain;
 
   // Margin methods
-  margin(top: number, right?: number, bottom?: number, left?: number): StyleChain {
-    return new StyleChain(Style.margin(this.config, top, right, bottom, left));
-  }
-
-  marginTop(value: number): StyleChain {
-    return new StyleChain(Style.marginTop(this.config, value));
-  }
-
-  marginRight(value: number): StyleChain {
-    return new StyleChain(Style.marginRight(this.config, value));
-  }
-
-  marginBottom(value: number): StyleChain {
-    return new StyleChain(Style.marginBottom(this.config, value));
-  }
-
-  marginLeft(value: number): StyleChain {
-    return new StyleChain(Style.marginLeft(this.config, value));
-  }
-
-  marginBackground(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.marginBackground(this.config, color));
-  }
+  margin(top: number, right?: number, bottom?: number, left?: number): StyleChain;
+  marginTop(value: number): StyleChain;
+  marginRight(value: number): StyleChain;
+  marginBottom(value: number): StyleChain;
+  marginLeft(value: number): StyleChain;
+  marginBackground(color: ColorValue | string | number): StyleChain;
 
   // Border methods
-  border(border: BorderConfig): StyleChain {
-    return new StyleChain(Style.border(this.config, border));
-  }
-
-  borderForeground(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.borderForeground(this.config, color));
-  }
-
-  borderBackground(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.borderBackground(this.config, color));
-  }
-
-  borderTopForeground(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.borderTopForeground(this.config, color));
-  }
-
-  borderRightForeground(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.borderRightForeground(this.config, color));
-  }
-
-  borderBottomForeground(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.borderBottomForeground(this.config, color));
-  }
-
-  borderLeftForeground(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.borderLeftForeground(this.config, color));
-  }
-
-  borderTopBackground(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.borderTopBackground(this.config, color));
-  }
-
-  borderRightBackground(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.borderRightBackground(this.config, color));
-  }
-
-  borderBottomBackground(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.borderBottomBackground(this.config, color));
-  }
-
-  borderLeftBackground(color: ColorValue | string | number): StyleChain {
-    return new StyleChain(Style.borderLeftBackground(this.config, color));
-  }
+  border(border: BorderConfig): StyleChain;
+  borderForeground(color: ColorValue | string | number): StyleChain;
+  borderBackground(color: ColorValue | string | number): StyleChain;
+  borderTopForeground(color: ColorValue | string | number): StyleChain;
+  borderRightForeground(color: ColorValue | string | number): StyleChain;
+  borderBottomForeground(color: ColorValue | string | number): StyleChain;
+  borderLeftForeground(color: ColorValue | string | number): StyleChain;
+  borderTopBackground(color: ColorValue | string | number): StyleChain;
+  borderRightBackground(color: ColorValue | string | number): StyleChain;
+  borderBottomBackground(color: ColorValue | string | number): StyleChain;
+  borderLeftBackground(color: ColorValue | string | number): StyleChain;
 
   // Alignment methods
   align(
     horizontal: HorizontalPosition | TextAlignment,
     vertical?: VerticalPosition | VerticalAlignment
-  ): StyleChain {
-    return new StyleChain(Style.align(this.config, horizontal, vertical));
-  }
-
-  alignHorizontal(alignment: HorizontalPosition | TextAlignment): StyleChain {
-    return new StyleChain(Style.alignHorizontal(this.config, alignment));
-  }
-
-  alignVertical(alignment: VerticalPosition | VerticalAlignment): StyleChain {
-    return new StyleChain(Style.alignVertical(this.config, alignment));
-  }
+  ): StyleChain;
+  alignHorizontal(alignment: HorizontalPosition | TextAlignment): StyleChain;
+  alignVertical(alignment: VerticalPosition | VerticalAlignment): StyleChain;
 
   // Content methods
-  setString(content: string): StyleChain {
-    return new StyleChain(Style.setString(this.config, content));
-  }
-
-  transform(transform: TextTransform): StyleChain {
-    return new StyleChain(Style.transform(this.config, transform));
-  }
+  setString(content: string): StyleChain;
+  transform(transform: TextTransform): StyleChain;
 
   // Inheritance methods
-  inherit(parent: StyleProperties): StyleChain {
-    return new StyleChain(Style.inherit(this.config, parent));
-  }
+  inherit(parent: StyleProperties): StyleChain;
 
   // Unset methods
-  unsetBold(): StyleChain {
-    return new StyleChain(Style.unsetBold(this.config));
-  }
-
-  unsetItalic(): StyleChain {
-    return new StyleChain(Style.unsetItalic(this.config));
-  }
-
-  unsetUnderline(): StyleChain {
-    return new StyleChain(Style.unsetUnderline(this.config));
-  }
-
-  unsetStrikethrough(): StyleChain {
-    return new StyleChain(Style.unsetStrikethrough(this.config));
-  }
-
-  unsetReverse(): StyleChain {
-    return new StyleChain(Style.unsetReverse(this.config));
-  }
-
-  unsetBlink(): StyleChain {
-    return new StyleChain(Style.unsetBlink(this.config));
-  }
-
-  unsetFaint(): StyleChain {
-    return new StyleChain(Style.unsetFaint(this.config));
-  }
-
-  unsetForeground(): StyleChain {
-    return new StyleChain(Style.unsetForeground(this.config));
-  }
-
-  unsetBackground(): StyleChain {
-    return new StyleChain(Style.unsetBackground(this.config));
-  }
-
-  unsetWidth(): StyleChain {
-    return new StyleChain(Style.unsetWidth(this.config));
-  }
-
-  unsetHeight(): StyleChain {
-    return new StyleChain(Style.unsetHeight(this.config));
-  }
-
-  unsetMaxWidth(): StyleChain {
-    return new StyleChain(Style.unsetMaxWidth(this.config));
-  }
-
-  unsetMaxHeight(): StyleChain {
-    return new StyleChain(Style.unsetMaxHeight(this.config));
-  }
-
-  unsetPadding(): StyleChain {
-    return new StyleChain(Style.unsetPadding(this.config));
-  }
-
-  unsetMargin(): StyleChain {
-    return new StyleChain(Style.unsetMargin(this.config));
-  }
-
-  unsetBorder(): StyleChain {
-    return new StyleChain(Style.unsetBorder(this.config));
-  }
+  unsetBold(): StyleChain;
+  unsetItalic(): StyleChain;
+  unsetUnderline(): StyleChain;
+  unsetStrikethrough(): StyleChain;
+  unsetReverse(): StyleChain;
+  unsetBlink(): StyleChain;
+  unsetFaint(): StyleChain;
+  unsetForeground(): StyleChain;
+  unsetBackground(): StyleChain;
+  unsetWidth(): StyleChain;
+  unsetHeight(): StyleChain;
+  unsetMaxWidth(): StyleChain;
+  unsetMaxHeight(): StyleChain;
+  unsetPadding(): StyleChain;
+  unsetMargin(): StyleChain;
+  unsetBorder(): StyleChain;
 
   // Terminal methods
-  build(): StyleProperties {
-    return this.config;
-  }
+  build(): StyleProperties;
+  render(text?: string): string;
+  toString(): string;
+  copy(): StyleChain;
+}
 
-  render(text?: string): string {
-    return Style.render(this.config, text);
-  }
+/**
+ * Functional style chain namespace providing method chaining without classes
+ */
+namespace StyleChain {
+  /**
+   * Creates a style chain from properties
+   * @param config - Style properties to wrap
+   * @returns StyleChain interface with method chaining
+   */
+  export const from = (config: StyleProperties): StyleChain => {
+    return {
+      config,
 
-  toString(): string {
-    return Style.renderString(this.config);
-  }
+      // Text formatting methods
+      bold: (value = true) => from(Style.bold(config, value)),
+      italic: (value = true) => from(Style.italic(config, value)),
+      underline: (value = true) => from(Style.underline(config, value)),
+      strikethrough: (value = true) => from(Style.strikethrough(config, value)),
+      reverse: (value = true) => from(Style.reverse(config, value)),
+      blink: (value = true) => from(Style.blink(config, value)),
+      faint: (value = true) => from(Style.faint(config, value)),
+      underlineSpaces: (value = true) => from(Style.underlineSpaces(config, value)),
+      strikethroughSpaces: (value = true) => from(Style.strikethroughSpaces(config, value)),
+      colorWhitespace: (value = true) => from(Style.colorWhitespace(config, value)),
 
-  copy(): StyleChain {
-    return new StyleChain(Style.copy(this.config));
-  }
+      // Color methods
+      foreground: (color) => from(Style.foreground(config, color)),
+      background: (color) => from(Style.background(config, color)),
+
+      // Size and layout methods
+      width: (width) => from(Style.width(config, width)),
+      height: (height) => from(Style.height(config, height)),
+      maxWidth: (maxWidth) => from(Style.maxWidth(config, maxWidth)),
+      maxHeight: (maxHeight) => from(Style.maxHeight(config, maxHeight)),
+      inline: (value = true) => from(Style.inline(config, value)),
+      tabWidth: (width) => from(Style.tabWidth(config, width)),
+
+      // Padding methods
+      padding: (top, right, bottom, left) => from(Style.padding(config, top, right, bottom, left)),
+      paddingTop: (value) => from(Style.paddingTop(config, value)),
+      paddingRight: (value) => from(Style.paddingRight(config, value)),
+      paddingBottom: (value) => from(Style.paddingBottom(config, value)),
+      paddingLeft: (value) => from(Style.paddingLeft(config, value)),
+
+      // Margin methods
+      margin: (top, right, bottom, left) => from(Style.margin(config, top, right, bottom, left)),
+      marginTop: (value) => from(Style.marginTop(config, value)),
+      marginRight: (value) => from(Style.marginRight(config, value)),
+      marginBottom: (value) => from(Style.marginBottom(config, value)),
+      marginLeft: (value) => from(Style.marginLeft(config, value)),
+      marginBackground: (color) => from(Style.marginBackground(config, color)),
+
+      // Border methods
+      border: (border) => from(Style.border(config, border)),
+      borderForeground: (color) => from(Style.borderForeground(config, color)),
+      borderBackground: (color) => from(Style.borderBackground(config, color)),
+      borderTopForeground: (color) => from(Style.borderTopForeground(config, color)),
+      borderRightForeground: (color) => from(Style.borderRightForeground(config, color)),
+      borderBottomForeground: (color) => from(Style.borderBottomForeground(config, color)),
+      borderLeftForeground: (color) => from(Style.borderLeftForeground(config, color)),
+      borderTopBackground: (color) => from(Style.borderTopBackground(config, color)),
+      borderRightBackground: (color) => from(Style.borderRightBackground(config, color)),
+      borderBottomBackground: (color) => from(Style.borderBottomBackground(config, color)),
+      borderLeftBackground: (color) => from(Style.borderLeftBackground(config, color)),
+
+      // Alignment methods
+      align: (horizontal, vertical) => from(Style.align(config, horizontal, vertical)),
+      alignHorizontal: (alignment) => from(Style.alignHorizontal(config, alignment)),
+      alignVertical: (alignment) => from(Style.alignVertical(config, alignment)),
+
+      // Content methods
+      setString: (content) => from(Style.setString(config, content)),
+      transform: (transform) => from(Style.transform(config, transform)),
+
+      // Inheritance methods
+      inherit: (parent) => from(Style.inherit(config, parent)),
+
+      // Unset methods
+      unsetBold: () => from(Style.unsetBold(config)),
+      unsetItalic: () => from(Style.unsetItalic(config)),
+      unsetUnderline: () => from(Style.unsetUnderline(config)),
+      unsetStrikethrough: () => from(Style.unsetStrikethrough(config)),
+      unsetReverse: () => from(Style.unsetReverse(config)),
+      unsetBlink: () => from(Style.unsetBlink(config)),
+      unsetFaint: () => from(Style.unsetFaint(config)),
+      unsetForeground: () => from(Style.unsetForeground(config)),
+      unsetBackground: () => from(Style.unsetBackground(config)),
+      unsetWidth: () => from(Style.unsetWidth(config)),
+      unsetHeight: () => from(Style.unsetHeight(config)),
+      unsetMaxWidth: () => from(Style.unsetMaxWidth(config)),
+      unsetMaxHeight: () => from(Style.unsetMaxHeight(config)),
+      unsetPadding: () => from(Style.unsetPadding(config)),
+      unsetMargin: () => from(Style.unsetMargin(config)),
+      unsetBorder: () => from(Style.unsetBorder(config)),
+
+      // Terminal methods
+      build: () => config,
+      render: (text) => Style.render(config, text),
+      toString: () => Style.renderString(config),
+      copy: () => from(Style.copy(config)),
+    };
+  };
 }
 
 /**
@@ -1559,7 +1475,7 @@ export namespace StyleBuilder {
    * Creates a new style builder with empty configuration
    * @returns New StyleChain for method chaining
    */
-  export const create = (): StyleChain => new StyleChain(Style.create());
+  export const create = (): StyleChain => StyleChain.from(Style.create());
 
   /**
    * Creates a style builder from existing properties
@@ -1567,5 +1483,5 @@ export namespace StyleBuilder {
    * @returns New StyleChain for method chaining
    */
   export const from = (properties: StyleProperties): StyleChain =>
-    new StyleChain(Style.from(properties));
+    StyleChain.from(Style.from(properties));
 }

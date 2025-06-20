@@ -37,12 +37,11 @@ function main() {
     [' 1 ', ' 2 ', ' 3 ', ' 4 ', ' 5 ', ' 6 ', ' 7 ', ' 8 '].join('\n\n')
   );
 
-  const result =
-    Layout.joinVertical(
-      1.0, // right alignment
-      Layout.joinHorizontal(0.5, files, Table.render(t)), // center alignment
-      ranks
-    ) + '\n';
+  const result = `${Layout.joinVertical(
+    1.0, // right alignment
+    Layout.joinHorizontal(0.5, files, Table.render(t)), // center alignment
+    ranks
+  )}\n`;
 
   print(result);
 }

@@ -30,7 +30,7 @@ export namespace debug {
 
     const debugStyle = createDebugStyle('#888888');
     const prefix = Style.render(debugStyle, '[DEBUG] ');
-    output.stderr(prefix + message + (data ? ' ' + formatData(data) : ''));
+    output.stderr(prefix + message + (data ? ` ${formatData(data)}` : ''));
   };
 
   /**
@@ -41,7 +41,7 @@ export namespace debug {
   export const error = (message: string, error?: unknown): void => {
     const errorStyle = createDebugStyle('#FF4444', true);
     const prefix = Style.render(errorStyle, '[ERROR] ');
-    output.stderr(prefix + message + (error ? ' ' + formatData(error) : ''));
+    output.stderr(prefix + message + (error ? ` ${formatData(error)}` : ''));
   };
 
   /**
@@ -52,7 +52,7 @@ export namespace debug {
   export const warn = (message: string, data?: unknown): void => {
     const warnStyle = createDebugStyle('#FFAA00', true);
     const prefix = Style.render(warnStyle, '[WARN]  ');
-    output.stderr(prefix + message + (data ? ' ' + formatData(data) : ''));
+    output.stderr(prefix + message + (data ? ` ${formatData(data)}` : ''));
   };
 
   /**
@@ -65,7 +65,7 @@ export namespace debug {
 
     const infoStyle = createDebugStyle('#4488FF');
     const prefix = Style.render(infoStyle, '[INFO]  ');
-    output.stderr(prefix + message + (data ? ' ' + formatData(data) : ''));
+    output.stderr(prefix + message + (data ? ` ${formatData(data)}` : ''));
   };
 
   /**
@@ -78,7 +78,7 @@ export namespace debug {
 
     const successStyle = createDebugStyle('#44AA44', true);
     const prefix = Style.render(successStyle, '[SUCCESS] ');
-    output.stderr(prefix + message + (data ? ' ' + formatData(data) : ''));
+    output.stderr(prefix + message + (data ? ` ${formatData(data)}` : ''));
   };
 
   /**
@@ -91,7 +91,7 @@ export namespace debug {
 
     const traceStyle = createDebugStyle('#666666');
     const prefix = Style.render(traceStyle, '[TRACE] ');
-    output.stderr(prefix + message + (data ? ' ' + formatData(data) : ''));
+    output.stderr(prefix + message + (data ? ` ${formatData(data)}` : ''));
   };
 
   /**
@@ -105,7 +105,7 @@ export namespace debug {
     const duration = performance.now() - startTime;
     const timeStyle = createDebugStyle('#AA44AA');
     const prefix = Style.render(timeStyle, '[TIME]  ');
-    output.stderr(prefix + `${label}: ${duration.toFixed(2)}ms`);
+    output.stderr(`${prefix}${label}: ${duration.toFixed(2)}ms`);
   };
 
   /**

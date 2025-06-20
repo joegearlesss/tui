@@ -144,9 +144,9 @@ export namespace TableRender {
         // Apply styling to raw content first, if provided
         if (cellStyle) {
           const styleForContent = { ...cellStyle };
-          delete styleForContent.padding;
-          delete styleForContent.width;
-          delete styleForContent.horizontalAlignment;
+          styleForContent.padding = undefined;
+          styleForContent.width = undefined;
+          styleForContent.horizontalAlignment = undefined;
           content = Style.render(styleForContent, content);
         }
 
@@ -168,7 +168,6 @@ export namespace TableRender {
               content = '\u00A0'.repeat(paddingNeeded) + content;
               break;
             }
-            case 'left':
             default: {
               content = content + '\u00A0'.repeat(paddingNeeded);
               break;
@@ -205,9 +204,9 @@ export namespace TableRender {
         // Apply styling to empty content if provided
         if (cellStyle) {
           const styleForContent = { ...cellStyle };
-          delete styleForContent.padding;
-          delete styleForContent.width;
-          delete styleForContent.horizontalAlignment;
+          styleForContent.padding = undefined;
+          styleForContent.width = undefined;
+          styleForContent.horizontalAlignment = undefined;
           emptyContent = Style.render(styleForContent, emptyContent);
         }
 
@@ -368,9 +367,9 @@ export namespace TableRender {
     if (style) {
       // Create a style without padding, width, and alignment since we handle those manually
       const styleForContent = { ...style };
-      delete styleForContent.padding;
-      delete styleForContent.width;
-      delete styleForContent.horizontalAlignment;
+      styleForContent.padding = undefined;
+      styleForContent.width = undefined;
+      styleForContent.horizontalAlignment = undefined;
       content = Style.render(styleForContent, content);
     }
 
@@ -392,7 +391,6 @@ export namespace TableRender {
           content = '\u00A0'.repeat(paddingNeeded) + content;
           break;
         }
-        case 'left':
         default: {
           content = content + '\u00A0'.repeat(paddingNeeded);
           break;
@@ -539,8 +537,6 @@ export namespace TableRender {
           middleJunction: '╬',
         };
         break;
-      case 'normal':
-      case 'rounded':
       default:
         junctionChars = {
           topJunction: '┬',

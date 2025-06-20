@@ -61,7 +61,7 @@ export namespace ListRenderer {
 
         // Special handling for Roman numerals - right-align within the indent space
         let fullPrefix = '';
-        if (styledEnumerator && styledEnumerator.match(/^[IVX]+\./)) {
+        if (styledEnumerator?.match(/^[IVX]+\./)) {
           // For Roman numerals, right-align within the available indent space
           // Use 6 spaces total width to match Go lipgloss behavior
           const totalIndentWidth = 6;

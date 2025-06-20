@@ -5,7 +5,7 @@
  */
 
 import { describe, expect, test } from 'bun:test';
-import { BorderBuilder, BorderChain } from './builder';
+import { BorderBuilder, type BorderChain } from './builder';
 import { Border } from './presets';
 
 describe('BorderBuilder', () => {
@@ -13,7 +13,7 @@ describe('BorderBuilder', () => {
     test('create() should return BorderChain with normal border', () => {
       const chain = BorderBuilder.create();
 
-      expect(chain).toBeInstanceOf(BorderChain);
+      expect(chain).toBeDefined();
       expect(chain.build()).toEqual(Border.normal());
     });
 

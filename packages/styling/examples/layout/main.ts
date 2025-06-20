@@ -5,7 +5,16 @@
  * including tabs, dialogs, lists, color grids, and status bars.
  */
 
-import { Border, Canvas, Color, Layout, StyleBuilder, newLayer, print } from '@tui/styling';
+import {
+  Border,
+  Canvas,
+  Color,
+  Layout,
+  StyleBuilder,
+  newCanvas,
+  newLayer,
+  print,
+} from '@tui/styling';
 
 const width = 96;
 const columnWidth = 30;
@@ -196,7 +205,7 @@ let doc = '';
 
   const gap = tabGap.render(' '.repeat(Math.max(0, width - row.length - 2)));
   const fullRow = Layout.joinHorizontal(1.0, row, gap); // bottom alignment
-  doc += fullRow + '\n\n';
+  doc += `${fullRow}\n\n`;
 }
 
 // Title
@@ -206,11 +215,11 @@ let doc = '';
 
   for (let i = 0; i < colors.length; i++) {
     const offset = 2;
-    const c = colors[i][0];
+    const c = colors[i]?.[0];
     const titleLine = StyleBuilder.create()
       .inherit(titleStyle.build())
       .marginLeft(i * offset)
-      .background(c)
+      .background(c || '#000000')
       .render('');
     title += titleLine;
     if (i < colors.length - 1) {
@@ -221,11 +230,11 @@ let doc = '';
   const desc = Layout.joinVertical(
     0.0, // left alignment
     descStyle.render('Style Definitions for Nice Terminal Layouts'),
-    infoStyle.render('From Charm' + divider + url('https://github.com/charmbracelet/lipgloss'))
+    infoStyle.render(`From Charm${divider}${url('https://github.com/charmbracelet/lipgloss')}`)
   );
 
   const row = Layout.joinHorizontal(0.0, title, desc); // top alignment
-  doc += row + '\n\n';
+  doc += `${row}\n\n`;
 }
 
 // Dialog
@@ -261,7 +270,7 @@ let doc = '';
     }
   );
 
-  doc += dialog + '\n\n';
+  doc += `${dialog}\n\n`;
 }
 
 // Color grid
@@ -338,7 +347,7 @@ doc += Layout.joinHorizontal(0.0, lists, colors); // top alignment
 
   const statusVal = statusText
     .width(width - statusKey.length - encoding.length - fishCake.length)
-    .render('Ravishingly ' + lightDarkState + '!');
+    .render(`Ravishingly ${lightDarkState}!`);
 
   const bar = Layout.joinHorizontal(
     0.0, // top alignment
@@ -356,7 +365,7 @@ const document = docStyle.render(doc);
 
 // Surprise! Composite some bonus content on top of the document.
 const modal = floatingStyle.render('Now with Compositing!');
-const canvas = new Canvas(newLayer(document), newLayer(modal).x(58).y(44));
+const canvas = newCanvas(newLayer(document), newLayer(modal).x(58).y(44));
 
 // Print the result
 print(canvas.render());

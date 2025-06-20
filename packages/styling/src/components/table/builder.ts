@@ -17,257 +17,98 @@ export namespace TableBuilder {
    * Creates a new table builder chain
    * @returns New TableChain instance for method chaining
    */
-  export const create = () => new TableChain(Table.create());
+  export const create = () => TableChain.from(Table.create());
 
   /**
    * Creates a table builder from an existing table configuration
    * @param config - Existing table configuration
    * @returns New TableChain instance for method chaining
    */
-  export const from = (config: TableConfig) => new TableChain(config);
+  export const from = (config: TableConfig) => TableChain.from(config);
 }
 
 /**
- * TableChain class providing fluent API for table construction
- * Uses immutable operations from Table namespace under the hood
+ * Functional table chain interface for method chaining
  */
-export class TableChain {
-  /**
-   * Creates a new TableChain instance
-   * @param config - Current table configuration (readonly)
-   */
-  constructor(private readonly config: TableConfig) {}
+export interface TableChain {
+  readonly config: TableConfig;
 
-  /**
-   * Sets the headers for the table
-   * @param headerList - Array of header strings
-   * @returns New TableChain instance with updated headers
-   */
-  headers(...headerList: readonly string[]): TableChain {
-    return new TableChain(Table.headers(...headerList)(this.config));
-  }
+  // Configuration methods
+  headers(...headerList: readonly string[]): TableChain;
+  rows(...rowList: readonly (readonly string[])[]): TableChain;
+  addRow(row: readonly string[]): TableChain;
+  addRows(newRows: readonly (readonly string[])[]): TableChain;
+  border(borderConfig: BorderConfig): TableChain;
+  noBorder(): TableChain;
+  borderRow(enabled?: boolean): TableChain;
+  borderColumn(enabled?: boolean): TableChain;
+  styleFunc(fn: TableStyleFunction): TableChain;
+  noStyleFunc(): TableChain;
+  width(tableWidth: number): TableChain;
+  height(tableHeight: number): TableChain;
+  dimensions(tableWidth: number, tableHeight: number): TableChain;
+  fromArray(data: readonly (readonly string[])[]): TableChain;
 
-  /**
-   * Sets the rows for the table
-   * @param rowList - Array of row data where each row is an array of strings
-   * @returns New TableChain instance with updated rows
-   */
-  rows(...rowList: readonly (readonly string[])[]): TableChain {
-    return new TableChain(Table.rows(...rowList)(this.config));
-  }
+  // Terminal methods
+  build(): TableConfig;
+  getConfig(): TableConfig;
+  validate(): any;
+  calculateMetrics(): any;
+  isEmpty(): boolean;
+  getColumnCount(): number;
+  getRowCount(): number;
+  getTotalRowCount(): number;
+  toArray(): readonly (readonly string[])[];
+  clone(): TableChain;
+  transform(transform: (config: TableConfig) => TableConfig): TableChain;
+  when(condition: boolean, transform: (chain: TableChain) => TableChain): TableChain;
+  pipe(transform: (chain: TableChain) => TableChain): TableChain;
+}
 
+/**
+ * Functional table chain namespace providing method chaining without classes
+ */
+namespace TableChain {
   /**
-   * Adds a single row to the table
-   * @param row - Array of cell values for the new row
-   * @returns New TableChain instance with added row
+   * Creates a table chain from configuration
+   * @param config - Table configuration to wrap
+   * @returns TableChain interface with method chaining
    */
-  addRow(row: readonly string[]): TableChain {
-    return new TableChain(Table.addRow(row)(this.config));
-  }
+  export const from = (config: TableConfig): TableChain => {
+    return {
+      config,
 
-  /**
-   * Adds multiple rows to the table
-   * @param newRows - Array of rows to add
-   * @returns New TableChain instance with added rows
-   */
-  addRows(newRows: readonly (readonly string[])[]): TableChain {
-    return new TableChain(Table.addRows(newRows)(this.config));
-  }
+      // Configuration methods
+      headers: (...headerList) => from(Table.headers(...headerList)(config)),
+      rows: (...rowList) => from(Table.rows(...rowList)(config)),
+      addRow: (row) => from(Table.addRow(row)(config)),
+      addRows: (newRows) => from(Table.addRows(newRows)(config)),
+      border: (borderConfig) => from(Table.border(borderConfig)(config)),
+      noBorder: () => from(Table.noBorder()(config)),
+      borderRow: (enabled = true) => from(Table.borderRow(enabled)(config)),
+      borderColumn: (enabled = true) => from(Table.borderColumn(enabled)(config)),
+      styleFunc: (fn) => from(Table.styleFunc(fn)(config)),
+      noStyleFunc: () => from(Table.noStyleFunc()(config)),
+      width: (tableWidth) => from(Table.width(tableWidth)(config)),
+      height: (tableHeight) => from(Table.height(tableHeight)(config)),
+      dimensions: (tableWidth, tableHeight) =>
+        from(Table.dimensions(tableWidth, tableHeight)(config)),
+      fromArray: (data) => from(Table.fromArray(data)),
 
-  /**
-   * Sets the border configuration for the table
-   * @param borderConfig - Border configuration to apply
-   * @returns New TableChain instance with border
-   */
-  border(borderConfig: BorderConfig): TableChain {
-    return new TableChain(Table.border(borderConfig)(this.config));
-  }
-
-  /**
-   * Removes the border from the table
-   * @returns New TableChain instance without border
-   */
-  noBorder(): TableChain {
-    return new TableChain(Table.noBorder()(this.config));
-  }
-
-  /**
-   * Enables or disables borders between rows
-   * @param enabled - Whether to show borders between rows (default: true)
-   * @returns New TableChain instance with updated borderRow setting
-   */
-  borderRow(enabled = true): TableChain {
-    return new TableChain(Table.borderRow(enabled)(this.config));
-  }
-
-  /**
-   * Enables or disables borders between columns
-   * @param enabled - Whether to show borders between columns (default: true)
-   * @returns New TableChain instance with updated borderColumn setting
-   */
-  borderColumn(enabled = true): TableChain {
-    return new TableChain(Table.borderColumn(enabled)(this.config));
-  }
-
-  /**
-   * Sets the style function for the table
-   * @param fn - Function that returns style config for specific cells
-   * @returns New TableChain instance with style function
-   */
-  styleFunc(fn: TableStyleFunction): TableChain {
-    return new TableChain(Table.styleFunc(fn)(this.config));
-  }
-
-  /**
-   * Removes the style function from the table
-   * @returns New TableChain instance without style function
-   */
-  noStyleFunc(): TableChain {
-    return new TableChain(Table.noStyleFunc()(this.config));
-  }
-
-  /**
-   * Sets the width for the table
-   * @param tableWidth - Fixed width for the table
-   * @returns New TableChain instance with width
-   */
-  width(tableWidth: number): TableChain {
-    return new TableChain(Table.width(tableWidth)(this.config));
-  }
-
-  /**
-   * Sets the height for the table
-   * @param tableHeight - Fixed height for the table
-   * @returns New TableChain instance with height
-   */
-  height(tableHeight: number): TableChain {
-    return new TableChain(Table.height(tableHeight)(this.config));
-  }
-
-  /**
-   * Sets both width and height for the table
-   * @param tableWidth - Fixed width for the table
-   * @param tableHeight - Fixed height for the table
-   * @returns New TableChain instance with dimensions
-   */
-  dimensions(tableWidth: number, tableHeight: number): TableChain {
-    return new TableChain(Table.dimensions(tableWidth, tableHeight)(this.config));
-  }
-
-  /**
-   * Creates a table from a 2D array of data
-   * @param data - 2D array where first row is headers and rest are data rows
-   * @returns New TableChain instance with data from array
-   */
-  fromArray(data: readonly (readonly string[])[]): TableChain {
-    return new TableChain(Table.fromArray(data));
-  }
-
-  /**
-   * Builds and returns the final table configuration
-   * @returns Immutable table configuration
-   */
-  build(): TableConfig {
-    return this.config;
-  }
-
-  /**
-   * Gets the current table configuration without building
-   * @returns Current table configuration (readonly)
-   */
-  getConfig(): TableConfig {
-    return this.config;
-  }
-
-  /**
-   * Validates the current table configuration
-   * @returns Validation result with errors and warnings
-   */
-  validate() {
-    return Table.validate(this.config);
-  }
-
-  /**
-   * Calculates metrics for the current table configuration
-   * @returns Table metrics including dimensions and counts
-   */
-  calculateMetrics() {
-    return Table.calculateMetrics(this.config);
-  }
-
-  /**
-   * Checks if the current table configuration is empty
-   * @returns True if table has no headers or rows
-   */
-  isEmpty(): boolean {
-    return Table.isEmpty(this.config);
-  }
-
-  /**
-   * Gets the number of columns in the current table
-   * @returns Number of columns
-   */
-  getColumnCount(): number {
-    return Table.getColumnCount(this.config);
-  }
-
-  /**
-   * Gets the number of rows in the current table (excluding header)
-   * @returns Number of data rows
-   */
-  getRowCount(): number {
-    return Table.getRowCount(this.config);
-  }
-
-  /**
-   * Gets the total number of rows including header
-   * @returns Total number of rows including header
-   */
-  getTotalRowCount(): number {
-    return Table.getTotalRowCount(this.config);
-  }
-
-  /**
-   * Converts the current table configuration to a 2D array
-   * @returns 2D array with headers as first row and data rows following
-   */
-  toArray(): readonly (readonly string[])[] {
-    return Table.toArray(this.config);
-  }
-
-  /**
-   * Creates a copy of the current table chain
-   * @returns New TableChain instance with the same configuration
-   */
-  clone(): TableChain {
-    return new TableChain(this.config);
-  }
-
-  /**
-   * Applies a custom transformation function to the table configuration
-   * @param transform - Function that takes a table config and returns a new one
-   * @returns New TableChain instance with transformed configuration
-   */
-  transform(transform: (config: TableConfig) => TableConfig): TableChain {
-    return new TableChain(transform(this.config));
-  }
-
-  /**
-   * Conditionally applies a transformation if the condition is true
-   * @param condition - Boolean condition to check
-   * @param transform - Function to apply if condition is true
-   * @returns New TableChain instance, potentially transformed
-   */
-  when(condition: boolean, transform: (chain: TableChain) => TableChain): TableChain {
-    return condition ? transform(this) : this;
-  }
-
-  /**
-   * Applies a transformation function to the table chain
-   * @param transform - Function that takes a TableChain and returns a new one
-   * @returns Result of the transformation function
-   */
-  pipe(transform: (chain: TableChain) => TableChain): TableChain {
-    return transform(this);
-  }
+      // Terminal methods
+      build: () => config,
+      getConfig: () => config,
+      validate: () => Table.validate(config),
+      calculateMetrics: () => Table.calculateMetrics(config),
+      isEmpty: () => Table.isEmpty(config),
+      getColumnCount: () => Table.getColumnCount(config),
+      getRowCount: () => Table.getRowCount(config),
+      getTotalRowCount: () => Table.getTotalRowCount(config),
+      toArray: () => Table.toArray(config),
+      clone: () => from(config),
+      transform: (transform) => from(transform(config)),
+      when: (condition, transform) => (condition ? transform(from(config)) : from(config)),
+      pipe: (transform) => transform(from(config)),
+    };
+  };
 }

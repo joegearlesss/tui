@@ -59,9 +59,9 @@ export namespace output {
    */
   export const print = (content: string): void => {
     if (Terminal.isTerminal()) {
-      process.stdout.write(content + '\n');
+      process.stdout.write(`${content}\n`);
     } else {
-      process.stdout.write(Terminal.stripAnsi(content) + '\n');
+      process.stdout.write(`${Terminal.stripAnsi(content)}\n`);
     }
   };
 

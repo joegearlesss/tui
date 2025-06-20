@@ -1,5 +1,6 @@
 /**
  * Layer system for compositing multiple text elements at different positions
+ * Uses functional programming patterns with immutable layer operations
  */
 
 export interface LayerPosition {
@@ -7,78 +8,95 @@ export interface LayerPosition {
   readonly y?: number;
 }
 
-export class Layer {
-  private _content: string;
-  private _x = 0;
-  private _y = 0;
+export interface LayerConfig {
+  readonly content: string;
+  readonly x: number;
+  readonly y: number;
+}
 
-  constructor(content: string) {
-    this._content = content;
-  }
+/**
+ * Functional layer interface for method chaining
+ */
+export interface Layer {
+  readonly config: LayerConfig;
 
-  /**
-   * Set the X position of this layer
-   */
-  x(position: number): Layer {
-    const newLayer = new Layer(this._content);
-    newLayer._x = position;
-    newLayer._y = this._y;
-    return newLayer;
-  }
+  // Position methods
+  x(position: number): Layer;
+  y(position: number): Layer;
+  position(x: number, y: number): Layer;
 
-  /**
-   * Set the Y position of this layer
-   */
-  y(position: number): Layer {
-    const newLayer = new Layer(this._content);
-    newLayer._x = this._x;
-    newLayer._y = position;
-    return newLayer;
-  }
+  // Getters
+  readonly content: string;
+  readonly xPos: number;
+  readonly yPos: number;
 
-  /**
-   * Get the content of this layer
-   */
-  get content(): string {
-    return this._content;
-  }
+  // Utility methods
+  getDimensions(): { width: number; height: number };
+  clone(): Layer;
+}
 
-  /**
-   * Get the X position of this layer
-   */
-  get xPos(): number {
-    return this._x;
-  }
-
-  /**
-   * Get the Y position of this layer
-   */
-  get yPos(): number {
-    return this._y;
-  }
-
-  /**
-   * Get the dimensions of this layer's content
-   */
-  getDimensions(): { width: number; height: number } {
-    const lines = this._content.split('\n');
-    const height = lines.length;
-    const width = Math.max(...lines.map((line) => this.getDisplayWidth(line)));
-    return { width, height };
-  }
-
+/**
+ * Functional layer namespace providing method chaining without classes
+ */
+namespace Layer {
   /**
    * Get display width of a string (accounting for ANSI codes)
    */
-  private getDisplayWidth(text: string): number {
+  const getDisplayWidth = (text: string): number => {
     // Remove ANSI escape sequences for width calculation
     return text.replace(/\x1b\[[0-9;]*m/g, '').length;
-  }
+  };
+
+  /**
+   * Creates a layer from configuration
+   * @param config - Layer configuration
+   * @returns Layer interface with method chaining
+   */
+  export const from = (config: LayerConfig): Layer => {
+    return {
+      config,
+
+      // Position methods
+      x: (position) => from({ ...config, x: position }),
+      y: (position) => from({ ...config, y: position }),
+      position: (x, y) => from({ ...config, x, y }),
+
+      // Getters
+      get content() {
+        return config.content;
+      },
+      get xPos() {
+        return config.x;
+      },
+      get yPos() {
+        return config.y;
+      },
+
+      // Utility methods
+      getDimensions: () => {
+        const lines = config.content.split('\n');
+        const height = lines.length;
+        const width = Math.max(...lines.map((line) => getDisplayWidth(line)));
+        return { width, height };
+      },
+      clone: () => from({ ...config }),
+    };
+  };
+
+  /**
+   * Creates a new layer with content
+   * @param content - Layer content
+   * @returns New Layer instance
+   */
+  export const create = (content: string): Layer => from({ content, x: 0, y: 0 });
 }
 
 /**
  * Helper function to create a new layer
  */
 export function newLayer(content: string): Layer {
-  return new Layer(content);
+  return Layer.create(content);
 }
+
+// Export both interface and namespace
+export { Layer };

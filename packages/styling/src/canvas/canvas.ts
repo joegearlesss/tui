@@ -1,76 +1,60 @@
 /**
  * Canvas system for compositing multiple layers of text content
+ * Uses functional programming patterns with immutable canvas operations
  */
 
 import type { Layer } from './layer';
 
-export class Canvas {
-  private layers: Layer[];
+export interface CanvasConfig {
+  readonly layers: readonly Layer[];
+}
 
-  constructor(...layers: Layer[]) {
-    this.layers = layers;
-  }
+/**
+ * Functional canvas interface for compositing layers
+ */
+export interface Canvas {
+  readonly config: CanvasConfig;
 
+  // Layer management methods
+  addLayer(layer: Layer): Canvas;
+  addLayers(...layers: Layer[]): Canvas;
+  removeLayer(index: number): Canvas;
+  clearLayers(): Canvas;
+
+  // Rendering methods
+  render(): string;
+  getDimensions(): { width: number; height: number };
+
+  // Utility methods
+  clone(): Canvas;
+  isEmpty(): boolean;
+  getLayerCount(): number;
+}
+
+/**
+ * Functional canvas namespace providing compositing operations without classes
+ */
+namespace Canvas {
   /**
-   * Render all layers composited together
+   * Get display width of a string (accounting for ANSI codes)
    */
-  render(): string {
-    if (this.layers.length === 0) {
-      return '';
-    }
-
-    // Calculate the total canvas dimensions needed
-    let maxWidth = 0;
-    let maxHeight = 0;
-
-    for (const layer of this.layers) {
-      const dims = layer.getDimensions();
-      const rightEdge = layer.xPos + dims.width;
-      const bottomEdge = layer.yPos + dims.height;
-
-      maxWidth = Math.max(maxWidth, rightEdge);
-      maxHeight = Math.max(maxHeight, bottomEdge);
-    }
-
-    // Create a 2D array to represent the canvas
-    const canvas: string[][] = [];
-    for (let y = 0; y < maxHeight; y++) {
-      canvas[y] = new Array(maxWidth).fill(' ');
-    }
-
-    // Apply each layer to the canvas
-    for (const layer of this.layers) {
-      this.applyLayer(canvas, layer);
-    }
-
-    // Convert canvas to string
-    const result: string[] = [];
-    for (let y = 0; y < maxHeight; y++) {
-      // Trim trailing spaces from each line
-      const line = canvas[y].join('').trimEnd();
-      result.push(line);
-    }
-
-    // Remove trailing empty lines
-    while (result.length > 0 && result[result.length - 1] === '') {
-      result.pop();
-    }
-
-    return result.join('\n');
-  }
+  const getDisplayWidth = (text: string): number => {
+    return text.replace(/\x1b\[[0-9;]*m/g, '').length;
+  };
 
   /**
    * Apply a single layer to the canvas at its specified position
    */
-  private applyLayer(canvas: string[][], layer: Layer): void {
+  const applyLayer = (canvas: string[][], layer: Layer): void => {
     const lines = layer.content.split('\n');
     const startY = layer.yPos;
     const startX = layer.xPos;
 
     for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
       const line = lines[lineIndex];
+      if (!line) continue; // Skip undefined lines
+      
       const y = startY + lineIndex;
-
       if (y >= canvas.length) continue; // Skip if beyond canvas height
 
       // Parse the line character by character, handling ANSI codes
@@ -78,13 +62,14 @@ export class Canvas {
       let i = 0;
 
       while (i < line.length) {
-        if (x >= canvas[y].length) break; // Skip if beyond canvas width
+        const canvasRow = canvas[y];
+        if (!canvasRow || x >= canvasRow.length) break; // Skip if beyond canvas width
 
         // Check for ANSI escape sequence
         if (line[i] === '\x1b' && i + 1 < line.length && line[i + 1] === '[') {
           // Find the end of the ANSI sequence
           let ansiEnd = i + 2;
-          while (ansiEnd < line.length && !/[a-zA-Z]/.test(line[ansiEnd])) {
+          while (ansiEnd < line.length && line[ansiEnd] && !/[a-zA-Z]/.test(line[ansiEnd] ?? '')) {
             ansiEnd++;
           }
           if (ansiEnd < line.length) {
@@ -93,29 +78,127 @@ export class Canvas {
 
           // Copy the ANSI sequence without advancing x position
           const ansiSequence = line.slice(i, ansiEnd);
-          canvas[y][x] = (canvas[y][x] === ' ' ? '' : canvas[y][x]) + ansiSequence;
+          canvasRow[x] = (canvasRow[x] === ' ' ? '' : canvasRow[x]) + ansiSequence;
           i = ansiEnd;
         } else {
           // Regular character
-          canvas[y][x] = line[i];
+          const char = line[i];
+          if (char !== undefined) {
+            canvasRow[x] = char;
+          }
           x++;
           i++;
         }
       }
     }
-  }
+  };
 
   /**
-   * Get display width of a string (accounting for ANSI codes)
+   * Creates a canvas from configuration
+   * @param config - Canvas configuration
+   * @returns Canvas interface with compositing operations
    */
-  private getDisplayWidth(text: string): number {
-    return text.replace(/\x1b\[[0-9;]*m/g, '').length;
-  }
+  export const from = (config: CanvasConfig): Canvas => {
+    return {
+      config,
+
+      // Layer management methods
+      addLayer: (layer) => from({ layers: [...config.layers, layer] }),
+      addLayers: (...layers) => from({ layers: [...config.layers, ...layers] }),
+      removeLayer: (index) =>
+        from({
+          layers: config.layers.filter((_, i) => i !== index),
+        }),
+      clearLayers: () => from({ layers: [] }),
+
+      // Rendering methods
+      render: () => {
+        if (config.layers.length === 0) {
+          return '';
+        }
+
+        // Calculate the total canvas dimensions needed
+        let maxWidth = 0;
+        let maxHeight = 0;
+
+        for (const layer of config.layers) {
+          const dims = layer.getDimensions();
+          const rightEdge = layer.xPos + dims.width;
+          const bottomEdge = layer.yPos + dims.height;
+
+          maxWidth = Math.max(maxWidth, rightEdge);
+          maxHeight = Math.max(maxHeight, bottomEdge);
+        }
+
+        // Create a 2D array to represent the canvas
+        const canvas: string[][] = [];
+        for (let y = 0; y < maxHeight; y++) {
+          canvas[y] = new Array(maxWidth).fill(' ');
+        }
+
+        // Apply each layer to the canvas
+        for (const layer of config.layers) {
+          applyLayer(canvas, layer);
+        }
+
+        // Convert canvas to string
+        const result: string[] = [];
+        for (let y = 0; y < maxHeight; y++) {
+          // Trim trailing spaces from each line
+          const canvasRow = canvas[y];
+          const line = canvasRow ? canvasRow.join('').trimEnd() : '';
+          result.push(line);
+        }
+
+        // Remove trailing empty lines
+        while (result.length > 0 && result[result.length - 1] === '') {
+          result.pop();
+        }
+
+        return result.join('\n');
+      },
+
+      getDimensions: () => {
+        if (config.layers.length === 0) {
+          return { width: 0, height: 0 };
+        }
+
+        let maxWidth = 0;
+        let maxHeight = 0;
+
+        for (const layer of config.layers) {
+          const dims = layer.getDimensions();
+          const rightEdge = layer.xPos + dims.width;
+          const bottomEdge = layer.yPos + dims.height;
+
+          maxWidth = Math.max(maxWidth, rightEdge);
+          maxHeight = Math.max(maxHeight, bottomEdge);
+        }
+
+        return { width: maxWidth, height: maxHeight };
+      },
+
+      // Utility methods
+      clone: () => from({ layers: [...config.layers] }),
+      isEmpty: () => config.layers.length === 0,
+      getLayerCount: () => config.layers.length,
+    };
+  };
+
+  /**
+   * Creates a new canvas with layers
+   * @param layers - Initial layers
+   * @returns New Canvas instance
+   */
+  export const create = (...layers: Layer[]): Canvas => from({ layers });
 }
 
 /**
  * Helper function to create a new canvas
  */
 export function newCanvas(...layers: Layer[]): Canvas {
-  return new Canvas(...layers);
+  return Canvas.create(...layers);
 }
+
+// Export both interface and namespace
+export { Canvas };
