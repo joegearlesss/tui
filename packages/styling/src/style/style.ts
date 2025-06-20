@@ -902,11 +902,11 @@ export namespace Style {
     const paddedLines = lines.map(line => {
       const lineWidth = StringUtils.displayWidth(line);
       const rightPadding = contentWidth - lineWidth + padding.right;
-      return ' '.repeat(padding.left) + line + ' '.repeat(rightPadding);
+      return '\u00A0'.repeat(padding.left) + line + '\u00A0'.repeat(rightPadding);
     });
     
     // Add vertical padding
-    const emptyLine = ' '.repeat(contentWidth + padding.left + padding.right);
+    const emptyLine = '\u00A0'.repeat(contentWidth + padding.left + padding.right);
     const topPadding = Array(padding.top).fill(emptyLine);
     const bottomPadding = Array(padding.bottom).fill(emptyLine);
     

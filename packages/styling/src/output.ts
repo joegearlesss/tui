@@ -26,7 +26,15 @@ export const stripAllAnsi = (text: string): string => {
  * @returns true if output is to a terminal, false if redirected
  */
 export const isOutputTTY = (): boolean => {
-  return process.stdout.isTTY ?? false;
+  // In Bun, process.stdout.isTTY might be undefined, so we need to check differently
+  // If isTTY is explicitly false, then output is redirected
+  // If isTTY is undefined or true, assume it's a TTY unless we can detect otherwise
+  if (process.stdout.isTTY === false) {
+    return false;
+  }
+  
+  // Additional check for Bun: if stdout is a TTY, it should have write method
+  return typeof process.stdout.write === 'function';
 };
 
 /**
