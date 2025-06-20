@@ -607,9 +607,9 @@ import { Color } from '../color/color';                // Different folder ❌
 import { Border } from '../../border/border';          // Different folder ❌
 
 // ✅ REQUIRED - Use package imports across folders
-import { Style } from '@tui/styling/style';            // Package import ✅
-import { Color } from '@tui/styling/color';            // Package import ✅  
-import { Border } from '@tui/styling/border';          // Package import ✅
+import { Style } from '@real-project-name/styling/style';            // Package import ✅
+import { Color } from '@real-project-name/styling/color';            // Package import ✅  
+import { Border } from '@real-project-name/styling/border';          // Package import ✅
 ```
 
 **Summary of Import Rules:**
