@@ -1054,8 +1054,9 @@ export namespace Style {
         const [, spaces, borderChars] = match;
         const rest = line.slice(match[0].length);
         
-        // Apply color to border characters only, then reset
-        return `${spaces}${colorCode}${borderChars}${ANSI.RESET}${rest}`;
+        // Use ANSI.wrap to respect terminal color support
+        const coloredBorder = ANSI.wrap(borderChars, colorCode);
+        return `${spaces}${coloredBorder}${rest}`;
       }
       
       return line;

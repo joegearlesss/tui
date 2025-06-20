@@ -5,6 +5,7 @@
  */
 
 import { z } from 'zod';
+import { Result } from '../utils/result';
 
 /**
  * Schema for layer position coordinates
@@ -167,6 +168,73 @@ export namespace CanvasValidation {
       .max(maxIndex, `Index must be less than or equal to ${maxIndex}`)
       .describe('Layer index for canvas operations');
     return IndexSchema.safeParse(index);
+  };
+
+  // Result-based validation functions for functional error handling
+
+  /**
+   * Validates layer configuration using Result type
+   */
+  export const validateLayerConfigSafe = (config: unknown): Result<z.infer<typeof LayerConfigSchema>, z.ZodError> => {
+    const result = LayerConfigSchema.safeParse(config);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates canvas configuration using Result type
+   */
+  export const validateCanvasConfigSafe = (config: unknown): Result<z.infer<typeof CanvasConfigSchema>, z.ZodError> => {
+    const result = CanvasConfigSchema.safeParse(config);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates layer position coordinates using Result type
+   */
+  export const validateLayerPositionSafe = (position: unknown): Result<LayerPosition, z.ZodError> => {
+    const result = LayerPositionSchema.safeParse(position);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates canvas dimensions using Result type
+   */
+  export const validateCanvasDimensionsSafe = (dimensions: unknown): Result<CanvasDimensions, z.ZodError> => {
+    const result = CanvasDimensionsSchema.safeParse(dimensions);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates layer dimensions using Result type
+   */
+  export const validateLayerDimensionsSafe = (dimensions: unknown): Result<LayerDimensions, z.ZodError> => {
+    const result = LayerDimensionsSchema.safeParse(dimensions);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates content string for layers using Result type
+   */
+  export const validateLayerContentSafe = (content: unknown): Result<string, z.ZodError> => {
+    const ContentSchema = z
+      .string()
+      .describe('Layer content must be a string, can contain ANSI codes and newlines');
+    const result = ContentSchema.safeParse(content);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates layer index for canvas operations using Result type
+   */
+  export const validateLayerIndexSafe = (index: unknown, maxIndex: number): Result<number, z.ZodError> => {
+    const IndexSchema = z
+      .number()
+      .int('Index must be an integer')
+      .min(0, 'Index must be non-negative')
+      .max(maxIndex, `Index must be less than or equal to ${maxIndex}`)
+      .describe('Layer index for canvas operations');
+    const result = IndexSchema.safeParse(index);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
   };
 }
 

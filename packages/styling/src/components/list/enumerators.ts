@@ -1,4 +1,5 @@
 import type { DepthAwareEnumeratorFunction, EnumeratorFunction } from './types';
+import { Result } from '../../utils/result';
 
 /**
  * Built-in enumerator functions for common list styles
@@ -168,13 +169,27 @@ export namespace Enumerator {
   }
 
   /**
-   * Custom enumerator that cycles through multiple symbols
+   * Custom enumerator that cycles through multiple symbols (throws on error - legacy)
+   * @deprecated Use cycleSafe for functional error handling
    */
   export function cycle(symbols: string[]): EnumeratorFunction {
     if (symbols.length === 0) {
       throw new Error('Cycle enumerator requires at least one symbol');
     }
     return (index: number) => symbols[index % symbols.length] ?? '';
+  }
+
+  /**
+   * Custom enumerator that cycles through multiple symbols using Result type
+   * @param symbols - Array of symbols to cycle through
+   * @returns Result containing the enumerator function or an error
+   */
+  export function cycleSafe(symbols: string[]): Result<EnumeratorFunction, Error> {
+    if (symbols.length === 0) {
+      return Result.err(new Error('Cycle enumerator requires at least one symbol'));
+    }
+    const enumerator: EnumeratorFunction = (index: number) => symbols[index % symbols.length] ?? '';
+    return Result.ok(enumerator);
   }
 
   /**
@@ -185,7 +200,8 @@ export namespace Enumerator {
   }
 
   /**
-   * Depth-aware enumerator that changes style based on nesting level
+   * Depth-aware enumerator that changes style based on nesting level (throws on error - legacy)
+   * @deprecated Use depthAwareSafe for functional error handling
    */
   export function depthAware(enumerators: EnumeratorFunction[]): DepthAwareEnumeratorFunction {
     if (enumerators.length === 0) {
@@ -195,6 +211,22 @@ export namespace Enumerator {
       const enumerator = enumerators[depth % enumerators.length];
       return enumerator ? enumerator(index) : '';
     };
+  }
+
+  /**
+   * Depth-aware enumerator that changes style based on nesting level using Result type
+   * @param enumerators - Array of enumerator functions for different nesting levels
+   * @returns Result containing the depth-aware enumerator function or an error
+   */
+  export function depthAwareSafe(enumerators: EnumeratorFunction[]): Result<DepthAwareEnumeratorFunction, Error> {
+    if (enumerators.length === 0) {
+      return Result.err(new Error('Depth-aware enumerator requires at least one enumerator function'));
+    }
+    const enumerator: DepthAwareEnumeratorFunction = (index: number, depth = 0) => {
+      const selectedEnumerator = enumerators[depth % enumerators.length];
+      return selectedEnumerator ? selectedEnumerator(index) : '';
+    };
+    return Result.ok(enumerator);
   }
 }
 

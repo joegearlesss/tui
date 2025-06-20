@@ -6,6 +6,7 @@
  */
 
 import { z } from 'zod';
+import { Result } from '../../utils/result';
 import type { BorderConfig } from '../../border/types';
 import type { TableConfig, TableStyleFunction, TableValidationResult } from './types';
 
@@ -569,6 +570,80 @@ export namespace TableValidation {
       errors,
       warnings,
     };
+  };
+
+  // Result-based validation functions for functional error handling
+
+  /**
+   * Validates a complete table configuration using Result type
+   */
+  export const validateTableConfigSafe = (config: unknown): Result<TableConfig, z.ZodError> => {
+    const result = TableConfigSchema.safeParse(config);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates table cell position using Result type
+   */
+  export const validateTableCellPositionSafe = (position: unknown): Result<z.infer<typeof TableCellPositionSchema>, z.ZodError> => {
+    const result = TableCellPositionSchema.safeParse(position);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates table render options using Result type
+   */
+  export const validateTableRenderOptionsSafe = (options: unknown): Result<z.infer<typeof TableRenderOptionsSchema>, z.ZodError> => {
+    const result = TableRenderOptionsSchema.safeParse(options);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates table column configuration using Result type
+   */
+  export const validateTableColumnConfigSafe = (column: unknown): Result<z.infer<typeof TableColumnConfigSchema>, z.ZodError> => {
+    const result = TableColumnConfigSchema.safeParse(column);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates table row configuration using Result type
+   */
+  export const validateTableRowConfigSafe = (row: unknown): Result<z.infer<typeof TableRowConfigSchema>, z.ZodError> => {
+    const result = TableRowConfigSchema.safeParse(row);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates table metrics using Result type
+   */
+  export const validateTableMetricsSafe = (metrics: unknown): Result<z.infer<typeof TableMetricsSchema>, z.ZodError> => {
+    const result = TableMetricsSchema.safeParse(metrics);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates table style function using Result type
+   */
+  export const validateTableStyleFunctionSafe = (styleFunc: unknown): Result<TableStyleFunction, z.ZodError> => {
+    const result = TableStyleFunctionSchema.safeParse(styleFunc);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates table cell renderer using Result type
+   */
+  export const validateTableCellRendererSafe = (renderer: unknown): Result<z.infer<typeof TableCellRendererSchema>, z.ZodError> => {
+    const result = TableCellRendererSchema.safeParse(renderer);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates table border renderer using Result type
+   */
+  export const validateTableBorderRendererSafe = (renderer: unknown): Result<z.infer<typeof TableBorderRendererSchema>, z.ZodError> => {
+    const result = TableBorderRendererSchema.safeParse(renderer);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
   };
 }
 

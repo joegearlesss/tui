@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { Result } from '../../utils/result';
 import type { TreeNodeConfig } from './types';
 
 // Create a basic schema for StyleProperties since it's not exported
@@ -298,5 +299,53 @@ export namespace TreeValidation {
       if (childDepth > maxDepth) maxDepth = childDepth;
     }
     return 1 + maxDepth;
+  };
+
+  // Result-based validation functions for functional error handling
+
+  /**
+   * Validates a complete tree configuration using Result type
+   */
+  export const validateTreeConfigSafe = (config: unknown): Result<z.infer<typeof TreeConfigSchema>, z.ZodError> => {
+    const result = TreeConfigSchema.safeParse(config);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates a tree node configuration using Result type
+   */
+  export const validateTreeNodeConfigSafe = (node: unknown): Result<TreeNodeConfig, z.ZodError> => {
+    const result = TreeNodeConfigSchema.safeParse(node);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates tree metrics using Result type
+   */
+  export const validateTreeMetricsSafe = (metrics: unknown): Result<z.infer<typeof TreeMetricsSchema>, z.ZodError> => {
+    const result = TreeMetricsSchema.safeParse(metrics);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates enumerator function using Result type
+   */
+  export const validateEnumeratorFunctionSafe = (enumerator: unknown): Result<Function, Error> => {
+    if (typeof enumerator !== 'function') {
+      return Result.err(new Error('Enumerator must be a function'));
+    }
+
+    try {
+      const testNode = { value: 'test', children: [], style: undefined, expanded: true };
+      const result = (enumerator as any)(testNode, 0, false, false);
+      if (typeof result !== 'string') {
+        return Result.err(new Error('Enumerator function must return a string'));
+      }
+      return Result.ok(enumerator as Function);
+    } catch (error) {
+      return Result.err(
+        new Error(`Enumerator function throws an error: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      );
+    }
   };
 }

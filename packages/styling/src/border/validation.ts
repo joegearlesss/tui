@@ -13,36 +13,60 @@ import {
   BorderSidesSchema,
   CustomBorderConfigSchema,
 } from './types';
+import { Result } from '../utils/result';
 
 /**
  * Border validation namespace providing validation functions and enhanced schemas
  */
 export namespace BorderValidation {
   /**
-   * Validates a complete border configuration
+   * Validates a complete border configuration (throws on error - legacy)
    * @param data - Data to validate as BorderConfig
    * @returns Validated BorderConfig
    * @throws ZodError if validation fails
+   * @deprecated Use validateBorderConfigSafe for functional error handling
    */
   export const validateBorderConfig = (data: unknown): BorderConfig => {
     return BorderConfigSchema.parse(data);
   };
 
   /**
-   * Validates border characters configuration
+   * Validates a complete border configuration using Result type
+   * @param data - Data to validate as BorderConfig
+   * @returns Result containing validated BorderConfig or validation error
+   */
+  export const validateBorderConfigSafe = (data: unknown): Result<BorderConfig, z.ZodError> => {
+    const result = BorderConfigSchema.safeParse(data);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates border characters configuration (throws on error - legacy)
    * @param data - Data to validate as BorderChars
    * @returns Validated BorderChars
    * @throws ZodError if validation fails
+   * @deprecated Use validateBorderCharsSafe for functional error handling
    */
   export const validateBorderChars = (data: unknown): BorderChars => {
     return BorderCharsSchema.parse(data);
   };
 
   /**
-   * Validates custom border configuration
+   * Validates border characters configuration using Result type
+   * @param data - Data to validate as BorderChars
+   * @returns Result containing validated BorderChars or validation error
+   */
+  export const validateBorderCharsSafe = (data: unknown): Result<BorderChars, z.ZodError> => {
+    const result = BorderCharsSchema.safeParse(data);
+    return result.success ? Result.ok(result.data) : Result.err(result.error);
+  };
+
+  /**
+   * Validates custom border configuration (throws on error - legacy)
    * @param data - Data to validate as CustomBorderConfig
    * @returns Validated CustomBorderConfig
    * @throws ZodError if validation fails
+   * @deprecated Use validateCustomBorderConfigSafe for functional error handling
    */
   export const validateCustomBorderConfig = (data: unknown): CustomBorderConfig => {
     const parsed = CustomBorderConfigSchema.parse(data);
@@ -50,6 +74,23 @@ export namespace BorderValidation {
       chars: parsed.chars,
       ...(parsed.sides && { sides: parsed.sides }),
     } as CustomBorderConfig;
+  };
+
+  /**
+   * Validates custom border configuration using Result type
+   * @param data - Data to validate as CustomBorderConfig
+   * @returns Result containing validated CustomBorderConfig or validation error
+   */
+  export const validateCustomBorderConfigSafe = (data: unknown): Result<CustomBorderConfig, z.ZodError> => {
+    const result = CustomBorderConfigSchema.safeParse(data);
+    if (result.success) {
+      const validated: CustomBorderConfig = {
+        chars: result.data.chars,
+        ...(result.data.sides && { sides: result.data.sides }),
+      } as CustomBorderConfig;
+      return Result.ok(validated);
+    }
+    return Result.err(result.error);
   };
 
   /**

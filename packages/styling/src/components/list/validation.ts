@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { Result } from '../../utils/result';
 import type {
   EnumeratorFunction,
   ListConfig,
@@ -155,4 +156,61 @@ export function validateListMetrics(metrics: unknown): ListMetrics {
  */
 export function validateListRenderOptions(options: unknown): ListRenderOptions {
   return ListRenderOptionsSchema.parse(options);
+}
+
+// Result-based validation functions for functional error handling
+
+/**
+ * Validates a list item using Result type (throws on error - legacy)
+ * @deprecated Use validateListItemSafe for functional error handling
+ */
+export function validateListItemSafe(item: unknown): Result<ListItem, z.ZodError> {
+  const result = ListItemSchema.safeParse(item);
+  return result.success ? Result.ok(result.data) : Result.err(result.error);
+}
+
+/**
+ * Validates an enumerator function using Result type
+ */
+export function validateEnumeratorFunctionSafe(fn: unknown): Result<EnumeratorFunction, z.ZodError> {
+  const result = EnumeratorFunctionSchema.safeParse(fn);
+  return result.success ? Result.ok(result.data) : Result.err(result.error);
+}
+
+/**
+ * Validates a list configuration object using Result type
+ */
+export function validateListConfigSafe(config: unknown): Result<ListConfig, z.ZodError> {
+  // Provide defaults for missing properties
+  const configWithDefaults = {
+    items: [],
+    enumerator: () => '•',
+    itemStyle: undefined,
+    enumeratorStyle: undefined,
+    hidden: false,
+    offset: undefined,
+    indentLevel: 0,
+    indentString: '  ',
+    showEnumerators: true,
+    enumeratorSpacing: 1,
+    ...(config as Partial<ListConfig>),
+  };
+  const result = ListConfigSchema.safeParse(configWithDefaults);
+  return result.success ? Result.ok(result.data) : Result.err(result.error);
+}
+
+/**
+ * Validates list metrics using Result type
+ */
+export function validateListMetricsSafe(metrics: unknown): Result<ListMetrics, z.ZodError> {
+  const result = ListMetricsSchema.safeParse(metrics);
+  return result.success ? Result.ok(result.data) : Result.err(result.error);
+}
+
+/**
+ * Validates list render options using Result type
+ */
+export function validateListRenderOptionsSafe(options: unknown): Result<ListRenderOptions, z.ZodError> {
+  const result = ListRenderOptionsSchema.safeParse(options);
+  return result.success ? Result.ok(result.data) : Result.err(result.error);
 }

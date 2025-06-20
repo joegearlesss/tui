@@ -108,7 +108,7 @@ export namespace Layout {
 
         if (padding === 0) return line;
 
-        const leftPadding = Math.floor(padding * alignValue);
+        const leftPadding = Math.round(padding * alignValue);
         const rightPadding = padding - leftPadding;
 
         return ' '.repeat(leftPadding) + line + ' '.repeat(rightPadding);
