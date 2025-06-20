@@ -6,3 +6,4 @@ IMPLEMENTATION*.md
 .claude
 
 node_modules
+/packages/styling/lipgloss
