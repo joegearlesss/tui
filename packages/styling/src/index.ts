@@ -63,6 +63,14 @@ export {
 } from './components';
 export { Layout, Measurement } from './layout/joining';
 export { BoxModel, Position } from './layout/positioning';
+// Rendering engine exports
+export {
+  RenderingEngine,
+  AnsiGenerator,
+  TextRenderer,
+  LayoutRenderer,
+  CanvasRenderer,
+} from './rendering';
 // Core exports
 export { Style, StyleBuilder, StyleChain } from './style/style';
 // Terminal type exports
