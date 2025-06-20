@@ -11,10 +11,21 @@ import type {
 
 /**
  * Tree namespace for hierarchical data operations
+ * Provides functions for creating, manipulating, and rendering tree structures
  */
 namespace Tree {
   /**
-   * Creates an empty tree configuration
+   * Creates an empty tree configuration with default settings
+   * Returns a tree with no root node and standard default values
+   * 
+   * @returns TreeConfig with default settings and no root node
+   * 
+   * @example
+   * ```typescript
+   * const emptyTree = Tree.create();
+   * // Can add root later:
+   * const withRoot = { ...emptyTree, root: Tree.createNode('Root') };
+   * ```
    */
   export const create = (): TreeConfig => ({
     root: undefined,
@@ -27,7 +38,20 @@ namespace Tree {
   });
 
   /**
-   * Creates a tree with a root node
+   * Creates a tree configuration with a single root node
+   * Convenience function for creating a tree with one node and default settings
+   * 
+   * @param value - Display text for the root node
+   * @returns TreeConfig with the specified root node and default settings
+   * 
+   * @example
+   * ```typescript
+   * const singleNodeTree = Tree.fromRoot('Project Root');
+   * // Results in a tree with just "Project Root" as the root node
+   * 
+   * // Can add children later:
+   * const withChildren = Tree.addChild(singleNodeTree, 'src/');
+   * ```
    */
   export const fromRoot = (value: string): TreeConfig => ({
     ...create(),
@@ -35,7 +59,45 @@ namespace Tree {
   });
 
   /**
-   * Creates a tree from nested string arrays
+   * Creates a tree from nested string arrays representing hierarchical data
+   * Supports recursive nesting where arrays represent parent-child relationships
+   * 
+   * @param data - Hierarchical data where each element can be:
+   *   - A string (leaf node)
+   *   - An array where first element is the node value (string) and 
+   *     remaining elements are children (recursive structure)
+   * @returns TreeConfig with the parsed hierarchical structure
+   * 
+   * @example
+   * ```typescript
+   * // Simple flat tree
+   * const flatTree = Tree.fromStrings(['File1.txt', 'File2.txt', 'File3.txt']);
+   * 
+   * // Nested file system structure
+   * const fileSystem = Tree.fromStrings([
+   *   'project/',
+   *   ['src/', 
+   *     ['components/', 'Button.tsx', 'Input.tsx'],
+   *     ['utils/', 'helpers.ts', 'constants.ts']
+   *   ],
+   *   ['docs/', 'README.md', 'CHANGELOG.md'],
+   *   'package.json'
+   * ]);
+   * 
+   * // Results in:
+   * // project/
+   * // ├── src/
+   * // │   ├── components/
+   * // │   │   ├── Button.tsx
+   * // │   │   └── Input.tsx
+   * // │   └── utils/
+   * // │       ├── helpers.ts
+   * // │       └── constants.ts
+   * // ├── docs/
+   * // │   ├── README.md
+   * // │   └── CHANGELOG.md
+   * // └── package.json
+   * ```
    */
   export const fromStrings = (data: readonly (string | readonly unknown[])[]): TreeConfig => {
     if (data.length === 0) {
@@ -83,7 +145,35 @@ namespace Tree {
   };
 
   /**
-   * Sets the tree enumerator function
+   * Sets the tree enumerator function that controls visual tree structure symbols
+   * Returns a curried function for functional composition
+   * 
+   * @param enumerator - Function that generates tree symbols based on node position
+   * @returns Function that takes a TreeConfig and returns updated TreeConfig
+   * 
+   * @example
+   * ```typescript
+   * const tree = Tree.fromStrings(['root', ['child1', 'child2']]);
+   * 
+   * // Use built-in line enumerator
+   * const withLines = Tree.withEnumerator(Tree.TreeEnumerator.LINES)(tree);
+   * // Result: 
+   * // root
+   * // ├── child1
+   * // └── child2
+   * 
+   * // Use dots enumerator
+   * const withDots = Tree.withEnumerator(Tree.TreeEnumerator.DOTS)(tree);
+   * // Result:
+   * // root
+   * // ├─ child1  
+   * // └─ child2
+   * 
+   * // Functional composition style
+   * const styledTree = Tree.fromRoot('project')
+   *   |> Tree.withEnumerator(Tree.TreeEnumerator.LINES)
+   *   |> Tree.withIndentSize(4);
+   * ```
    */
   export const withEnumerator =
     (enumerator: TreeEnumeratorFunction) =>
@@ -113,7 +203,34 @@ namespace Tree {
     });
 
   /**
-   * Sets the indent size
+   * Sets the indentation size for each tree level
+   * Size is automatically clamped to valid range (0-20) and rounded to integer
+   * 
+   * @param size - Number of spaces to indent each level (0-20, will be clamped)
+   * @returns Function that takes a TreeConfig and returns updated TreeConfig  
+   * 
+   * @example
+   * ```typescript
+   * const tree = Tree.fromStrings(['root', ['child', ['grandchild']]]);
+   * 
+   * // Small indentation (2 spaces per level)
+   * const compact = Tree.withIndentSize(2)(tree);
+   * // Result:
+   * // root
+   * // ├─child
+   * // │ └─grandchild
+   * 
+   * // Large indentation (4 spaces per level)  
+   * const spacious = Tree.withIndentSize(4)(tree);
+   * // Result:
+   * // root
+   * // ├───child
+   * // │   └───grandchild
+   * 
+   * // Out of range values are clamped
+   * const clamped = Tree.withIndentSize(100)(tree); // Becomes 20
+   * const minimum = Tree.withIndentSize(-5)(tree);  // Becomes 0
+   * ```
    */
   export const withIndentSize =
     (size: number) =>

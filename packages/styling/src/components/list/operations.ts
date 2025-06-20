@@ -9,7 +9,22 @@ import type {
 import { validateListConfig, validateListItem } from './validation';
 
 /**
- * Converts a number to Roman numerals
+ * Converts a number to Roman numerals using traditional Roman numeral notation
+ * Supports numbers from 1 to 3999. Out-of-range values are returned as strings.
+ * 
+ * @param num - The number to convert (1-3999 for valid Roman numerals)
+ * @returns Roman numeral string representation
+ * 
+ * @example
+ * ```typescript
+ * toRoman(1)    // "I"
+ * toRoman(4)    // "IV" 
+ * toRoman(9)    // "IX"
+ * toRoman(1994) // "MCMXCIV"
+ * toRoman(0)    // "0" (fallback for out-of-range)
+ * ```
+ * 
+ * @internal Used by Roman numeral enumerators
  */
 function toRoman(num: number): string {
   if (num <= 0 || num > 3999) {
@@ -41,7 +56,18 @@ function toRoman(num: number): string {
  */
 export namespace List {
   /**
-   * Enumerator functions for convenience
+   * Pre-built enumerator functions for common list formatting patterns
+   * Each function takes an index and returns the appropriate marker string
+   * 
+   * @example
+   * ```typescript
+   * const list = List.create(['First', 'Second', 'Third']);
+   * 
+   * // Use built-in enumerators
+   * List.withEnumerator(list, List.Enumerator.ARABIC)        // "1. First"
+   * List.withEnumerator(list, List.Enumerator.ALPHA_LOWER)   // "a. First"
+   * List.withEnumerator(list, List.Enumerator.ROMAN_UPPER)   // "I. First"
+   * ```
    */
   export const Enumerator = {
     BULLET: () => '•',
@@ -63,15 +89,71 @@ export namespace List {
     SQUARE: () => '■',
     CIRCLE: () => '●',
     NONE: () => '',
+    /**
+     * Creates a cycling enumerator that repeats through symbols
+     * @param symbols - Array of symbols to cycle through (must have at least 1 symbol)
+     * @returns Enumerator function that cycles through symbols
+     * @throws Error if symbols array is empty
+     * 
+     * @example
+     * ```typescript
+     * const enumerator = List.Enumerator.cycle(['→', '▶', '●']);
+     * enumerator(0); // "→"
+     * enumerator(1); // "▶" 
+     * enumerator(2); // "●"
+     * enumerator(3); // "→" (cycles back)
+     * ```
+     */
     cycle: (symbols: string[]) => {
       if (symbols.length === 0) {
         throw new Error('Cycle enumerator requires at least one symbol');
       }
       return (index: number) => symbols[index % symbols.length];
     },
+    
+    /**
+     * Creates a custom numeric enumerator with specified prefix and suffix
+     * @param prefix - String to prepend to the number (default: '')
+     * @param suffix - String to append to the number (default: '')
+     * @returns Enumerator function with custom formatting
+     * 
+     * @example
+     * ```typescript
+     * const enumerator = List.Enumerator.custom('[', ']');
+     * enumerator(0); // "[1]"
+     * enumerator(1); // "[2]"
+     * 
+     * // For section numbering
+     * const section = List.Enumerator.custom('§', '');
+     * section(0); // "§1"
+     * ```
+     */
     custom: (prefix = '', suffix = '') => {
       return (index: number) => `${prefix}${index + 1}${suffix}`;
     },
+    
+    /**
+     * Creates a depth-aware enumerator that changes style based on nesting level
+     * Useful for hierarchical lists with different markers per level
+     * 
+     * @param enumerators - Array of enumerator functions for different nesting levels
+     * @returns Enumerator function that selects based on depth
+     * @throws Error if enumerators array is empty
+     * 
+     * @example
+     * ```typescript
+     * const enumerator = List.Enumerator.depthAware([
+     *   List.Enumerator.ARABIC,     // Level 0: "1.", "2.", "3."
+     *   List.Enumerator.ALPHA_LOWER, // Level 1: "a.", "b.", "c."
+     *   List.Enumerator.ROMAN_LOWER  // Level 2: "i.", "ii.", "iii."
+     * ]);
+     * 
+     * enumerator(0, 0); // "1." (depth 0)
+     * enumerator(0, 1); // "a." (depth 1)
+     * enumerator(0, 2); // "i." (depth 2)
+     * enumerator(0, 3); // "1." (cycles back to depth 0)
+     * ```
+     */
     depthAware: (enumerators: EnumeratorFunction[]) => {
       if (enumerators.length === 0) {
         throw new Error('Depth-aware enumerator requires at least one enumerator function');
@@ -84,7 +166,27 @@ export namespace List {
   } as const;
 
   /**
-   * Creates a new list configuration with the specified items
+   * Creates a new list configuration with the specified items and default settings
+   * All items are validated to ensure they conform to the ListItem type
+   * 
+   * @param items - Array of list items (strings or nested ListConfig objects)
+   * @returns A new validated ListConfig with default settings
+   * 
+   * @example
+   * ```typescript
+   * // Simple string list
+   * const simpleList = List.create(['First item', 'Second item', 'Third item']);
+   * 
+   * // Empty list (can add items later)
+   * const emptyList = List.create();
+   * 
+   * // Mixed list with nested items
+   * const nestedList = List.create([
+   *   'Top level item',
+   *   List.create(['Nested item 1', 'Nested item 2']),
+   *   'Another top level item'
+   * ]);
+   * ```
    */
   export function create(items: ListItem[] = []): ListConfig {
     const config: ListConfig = {
@@ -106,7 +208,22 @@ export namespace List {
   }
 
   /**
-   * Sets items on an existing list configuration
+   * Sets items on an existing list configuration, preserving all other settings
+   * All new items are validated to ensure they conform to the ListItem type
+   * 
+   * @param config - Existing list configuration to modify
+   * @param newItems - New array of list items to replace existing items
+   * @returns New ListConfig with updated items, preserving other settings
+   * 
+   * @example
+   * ```typescript
+   * const originalList = List.create(['Old item 1', 'Old item 2']);
+   * const customList = List.withEnumerator(originalList, List.Enumerator.ARABIC);
+   * 
+   * // Replace items while keeping the Arabic enumeration
+   * const updatedList = List.items(customList, ['New item 1', 'New item 2', 'New item 3']);
+   * // Result: "1. New item 1", "2. New item 2", "3. New item 3"
+   * ```
    */
   export function items(config: ListConfig, newItems: ListItem[]): ListConfig {
     return {
@@ -116,21 +233,93 @@ export namespace List {
   }
 
   /**
-   * Creates a list from an array of strings
+   * Creates a list configuration from an array of strings
+   * Convenience function equivalent to List.create() but with explicit string typing
+   * 
+   * @param strings - Array of string items to create list from
+   * @returns A new ListConfig with string items and default settings
+   * 
+   * @example
+   * ```typescript
+   * const todoList = List.fromStrings([
+   *   'Complete project documentation',
+   *   'Review pull requests', 
+   *   'Deploy to production'
+   * ]);
+   * 
+   * // Equivalent to:
+   * const equivalentList = List.create([
+   *   'Complete project documentation',
+   *   'Review pull requests',
+   *   'Deploy to production'
+   * ]);
+   * ```
    */
   export function fromStrings(strings: string[]): ListConfig {
     return create(strings);
   }
 
   /**
-   * Creates a nested list structure
+   * Creates a nested list structure from mixed string and ListConfig items
+   * Allows creation of hierarchical lists with multiple nesting levels
+   * 
+   * @param items - Array of strings and/or ListConfig objects for nesting
+   * @returns A new ListConfig containing the nested structure
+   * 
+   * @example
+   * ```typescript
+   * const fileTree = List.nested([
+   *   'src/',
+   *   List.create([
+   *     'components/',
+   *     List.create(['Button.tsx', 'Input.tsx']),
+   *     'utils/',
+   *     List.create(['helpers.ts', 'constants.ts'])
+   *   ]),
+   *   'tests/',
+   *   List.create(['unit/', 'integration/'])
+   * ]);
+   * 
+   * // Results in:
+   * // • src/
+   * //   • components/
+   * //     • Button.tsx
+   * //     • Input.tsx
+   * //   • utils/
+   * //     • helpers.ts
+   * //     • constants.ts
+   * // • tests/
+   * //   • unit/
+   * //   • integration/
+   * ```
    */
   export function nested(items: (string | ListConfig)[]): ListConfig {
     return create(items);
   }
 
   /**
-   * Sets the enumerator function for a list
+   * Sets the enumerator function for a list, controlling how items are numbered/marked
+   * Returns a new list configuration with the specified enumerator applied
+   * 
+   * @param config - Existing list configuration to modify
+   * @param enumerator - Function that generates markers for list items (index) => string
+   * @returns New ListConfig with the specified enumerator function
+   * 
+   * @example
+   * ```typescript
+   * const list = List.create(['Apple', 'Banana', 'Cherry']);
+   * 
+   * // Use different built-in enumerators
+   * const numbered = List.withEnumerator(list, List.Enumerator.ARABIC);
+   * // Result: "1. Apple", "2. Banana", "3. Cherry"
+   * 
+   * const lettered = List.withEnumerator(list, List.Enumerator.ALPHA_LOWER);
+   * // Result: "a. Apple", "b. Banana", "c. Cherry" 
+   * 
+   * // Use custom enumerator
+   * const custom = List.withEnumerator(list, (index) => `[${index + 1}]`);
+   * // Result: "[1] Apple", "[2] Banana", "[3] Cherry"
+   * ```
    */
   export function withEnumerator(config: ListConfig, enumerator: EnumeratorFunction): ListConfig {
     return validateListConfig({
@@ -229,7 +418,31 @@ export namespace List {
   }
 
   /**
-   * Inserts an item at a specific index
+   * Inserts an item at a specific index in the list
+   * All existing items at and after the index are shifted to the right
+   * 
+   * @param config - Existing list configuration to modify
+   * @param index - Zero-based index where to insert the item (0 = beginning, length = end)
+   * @param item - List item to insert (string or nested ListConfig)
+   * @returns New ListConfig with the item inserted at the specified position
+   * @throws Error if index is out of bounds (< 0 or > length)
+   * 
+   * @example
+   * ```typescript
+   * const list = List.create(['First', 'Third']);
+   * 
+   * // Insert at beginning
+   * const withFirst = List.insert(list, 0, 'Zero');
+   * // Result: ['Zero', 'First', 'Third']
+   * 
+   * // Insert in middle  
+   * const withSecond = List.insert(list, 1, 'Second');
+   * // Result: ['First', 'Second', 'Third']
+   * 
+   * // Insert at end
+   * const withLast = List.insert(list, list.items.length, 'Last');
+   * // Result: ['First', 'Third', 'Last']
+   * ```
    */
   export function insert(config: ListConfig, index: number, item: ListItem): ListConfig {
     if (index < 0 || index > config.items.length) {
